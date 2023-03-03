@@ -303,6 +303,7 @@ open class PackageServiceImpl(
         val repoName = request.repoName
         val packageKey = request.packageKey
         val tPackage = checkPackage(projectId, repoName, packageKey).apply {
+            checkRegion(this)
             name = request.name ?: name
             description = request.description ?: description
             versionTag = request.versionTag ?: versionTag
@@ -327,6 +328,7 @@ open class PackageServiceImpl(
         val tPackage = checkPackage(projectId, repoName, packageKey)
         val packageId = tPackage.id.orEmpty()
         val tPackageVersion = checkPackageVersion(packageId, versionName).apply {
+            checkRegion(this)
             size = request.size ?: size
             manifestPath = request.manifestPath ?: manifestPath
             artifactPath = request.artifactPath ?: artifactPath

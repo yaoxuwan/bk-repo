@@ -31,6 +31,7 @@ import com.tencent.bkrepo.common.api.exception.ErrorCodeException
 import com.tencent.bkrepo.common.artifact.message.ArtifactMessageCode
 import com.tencent.bkrepo.common.artifact.util.version.SemVersion
 import com.tencent.bkrepo.repository.dao.PackageDao
+import com.tencent.bkrepo.repository.model.RegionalResource
 import com.tencent.bkrepo.repository.model.TPackage
 import com.tencent.bkrepo.repository.model.TPackageVersion
 import com.tencent.bkrepo.repository.pojo.packages.request.PackagePopulateRequest
@@ -58,6 +59,13 @@ abstract class PackageBaseService(protected val packageDao: PackageDao) : Packag
      * 设置Package的region
      */
     protected open fun populateRegion(tPackage: TPackage) {
+        // do nothing
+    }
+
+    /**
+     * 检查当前请求来源节点是否允许操作资源
+     */
+    protected open fun checkRegion(regionalResource: RegionalResource) {
         // do nothing
     }
 

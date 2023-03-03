@@ -117,6 +117,10 @@ class StarCenterPackageServiceImpl(
         }
     }
 
+    override fun checkRegion(regionalResource: RegionalResource) {
+        ClusterUtils.checkIsSrcRegion(regionalResource.region)
+    }
+
     private fun createPackage(tPackage: TPackage): TPackage {
         val srcRegion = srcRegion()
         with(tPackage) {
