@@ -41,14 +41,12 @@ import com.tencent.bkrepo.repository.pojo.stage.ArtifactStageEnum
 import com.tencent.bkrepo.repository.pojo.stage.StageUpgradeRequest
 import com.tencent.bkrepo.repository.service.packages.StageService
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 /**
  * 制品晋级服务接口实现类
  */
-@Service
-class StageServiceImpl(
+open class StageServiceImpl(
     private val packageDao: PackageDao,
     private val packageVersionDao: PackageVersionDao
 ) : StageService {
@@ -75,7 +73,7 @@ class StageServiceImpl(
         }
     }
 
-    private fun findPackageVersion(
+    protected fun findPackageVersion(
         projectId: String,
         repoName: String,
         packageKey: String,
