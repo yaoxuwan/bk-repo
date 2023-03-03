@@ -31,9 +31,11 @@
 
 package com.tencent.bkrepo.repository.dao
 
+import com.mongodb.client.result.UpdateResult
 import com.tencent.bkrepo.common.mongo.dao.simple.SimpleMongoDao
 import com.tencent.bkrepo.repository.model.TPackage
 import com.tencent.bkrepo.repository.util.PackageQueryHelper
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Repository
 
 /**
@@ -53,5 +55,25 @@ class PackageDao : SimpleMongoDao<TPackage>() {
         if (key.isNotBlank()) {
             this.remove(PackageQueryHelper.packageQuery(projectId, repoName, key))
         }
+    }
+
+    fun addRegionByKey(projectId: String, repoName: String, key: String, region: String): UpdateResult? {
+        if (key.isEmpty()) {
+            return null
+        }
+
+        val query = PackageQueryHelper.packageQuery(projectId, repoName, key)
+        val update = Update().addToSet(TPackage::region.name, region)
+        return this.updateFirst(query, update)
+    }
+
+    fun removeRegionByKey(projectId: String, repoName: String, key: String, region: String): UpdateResult? {
+        if (key.isEmpty()) {
+            return null
+        }
+
+        val query = PackageQueryHelper.packageQuery(projectId, repoName, key)
+        val update = Update().pull(TPackage::region.name, region)
+        return updateFirst(query, update)
     }
 }

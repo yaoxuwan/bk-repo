@@ -27,16 +27,17 @@
 
 package com.tencent.bkrepo.repository.service.packages.impl.center
 
+import com.tencent.bkrepo.common.service.cluster.AutonomousCenterCondition
 import com.tencent.bkrepo.common.service.cluster.ClusterProperties
-import com.tencent.bkrepo.common.service.cluster.ConditionalOnCenterNode
 import com.tencent.bkrepo.repository.dao.PackageDao
 import com.tencent.bkrepo.repository.dao.PackageVersionDao
 import com.tencent.bkrepo.repository.search.packages.PackageSearchInterpreter
 import com.tencent.bkrepo.repository.service.packages.impl.PackageServiceImpl
+import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 
 @Service
-@ConditionalOnCenterNode
+@Conditional(AutonomousCenterCondition::class)
 class CenterPackageServiceImpl(
     packageDao: PackageDao,
     packageVersionDao: PackageVersionDao,
