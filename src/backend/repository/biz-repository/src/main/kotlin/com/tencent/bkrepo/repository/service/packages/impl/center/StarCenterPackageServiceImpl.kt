@@ -27,6 +27,8 @@
 
 package com.tencent.bkrepo.repository.service.packages.impl.center
 
+import com.tencent.bkrepo.common.api.exception.ErrorCodeException
+import com.tencent.bkrepo.common.api.message.CommonMessageCode
 import com.tencent.bkrepo.common.security.util.SecurityUtils
 import com.tencent.bkrepo.common.service.cluster.ClusterProperties
 import com.tencent.bkrepo.common.service.cluster.StarCenterCondition
@@ -119,6 +121,54 @@ class StarCenterPackageServiceImpl(
 
     override fun checkRegion(regionalResource: RegionalResource) {
         ClusterUtils.checkIsSrcRegion(regionalResource.region)
+    }
+
+    override fun deletePackage(projectId: String, repoName: String, packageKey: String, realIpAddress: String?) {
+        val tPackage = packageDao.findByKey(projectId, repoName, packageKey) ?: return
+        val srcRegion = srcRegion()
+
+        // 是Package唯一的region时可以直接删除
+        if (ClusterUtils.isUniqueSrcRegion(tPackage.region)) {
+            super.deletePackage(projectId, repoName, packageKey, realIpAddress)
+        }
+
+        // Package包含region，但不是Package的唯一region时只能清理单个region的值
+        if (ClusterUtils.containsSrcRegion(tPackage.region)) {
+            packageDao.removeRegionByKey(projectId, repoName, packageKey, srcRegion)
+            packageVersionDao.deleteByPackageIdAndRegion(tPackage.id!!, srcRegion)
+            logger.info("Remove package [$projectId/$repoName/$packageKey] region[$srcRegion] success")
+        }
+
+        // Package不包含region时候直接报错
+        throw ErrorCodeException(CommonMessageCode.OPERATION_CROSS_REGION_NOT_ALLOWED)
+    }
+
+    override fun deleteVersion(
+        projectId: String,
+        repoName: String,
+        packageKey: String,
+        versionName: String,
+        realIpAddress: String?
+    ) {
+        val tPackage = packageDao.findByKey(projectId, repoName, packageKey) ?: return
+        val tPackageVersion = packageVersionDao.findByName(tPackage.id.orEmpty(), versionName) ?: return
+        val srcRegion = srcRegion()
+
+        if (ClusterUtils.isUniqueSrcRegion(tPackageVersion.region)) {
+            super.deleteVersion(projectId, repoName, packageKey, versionName, realIpAddress)
+            return
+        }
+
+        if (ClusterUtils.containsSrcRegion(tPackageVersion.region)) {
+            packageVersionDao.removeRegionByKey(tPackageVersion.packageId, srcRegion)
+            if (!packageVersionDao.existsByPackageIdAndRegion(tPackageVersion.packageId, srcRegion)) {
+                packageDao.removeRegionByKey(projectId, repoName, packageKey, srcRegion)
+            }
+            return
+        }
+
+        // Package不包含region时候直接报错
+        throw ErrorCodeException(CommonMessageCode.OPERATION_CROSS_REGION_NOT_ALLOWED)
     }
 
     private fun createPackage(tPackage: TPackage): TPackage {

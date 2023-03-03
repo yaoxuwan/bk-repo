@@ -66,6 +66,10 @@ data class TPackageVersion(
     var metadata: List<TMetadata>,
     var tags: List<String>? = null,
     var extension: Map<String, Any>? = null,
+    /**
+     * PackageVersion 所在区域
+     * 由于比较版本间内容是否相似成本较高，不支持不同区域相同PackageVersion，所以目前region只会有一个值
+     */
     override var region: Set<String>? = null
 ): RegionalResource(region) {
     companion object {

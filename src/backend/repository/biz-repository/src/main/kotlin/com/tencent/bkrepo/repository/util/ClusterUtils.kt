@@ -72,6 +72,6 @@ object ClusterUtils {
      * 判断请求来源region是否是资源的唯一拥有者
      */
     fun isUniqueSrcRegion(regions: Set<String>?): Boolean {
-        return containsSrcRegion(regions) && (regions == null || regions.size == 1)
+        return containsSrcRegion(regions) && (regions == null || regions.size <= 1)
     }
 }

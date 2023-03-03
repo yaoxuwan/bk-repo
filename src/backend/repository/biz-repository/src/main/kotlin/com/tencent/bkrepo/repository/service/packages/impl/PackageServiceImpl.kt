@@ -72,7 +72,7 @@ import java.time.LocalDateTime
 
 open class PackageServiceImpl(
     packageDao: PackageDao,
-    private val packageVersionDao: PackageVersionDao,
+    protected val packageVersionDao: PackageVersionDao,
     private val packageSearchInterpreter: PackageSearchInterpreter,
     protected val clusterProperties: ClusterProperties
 ) : PackageBaseService(packageDao) {

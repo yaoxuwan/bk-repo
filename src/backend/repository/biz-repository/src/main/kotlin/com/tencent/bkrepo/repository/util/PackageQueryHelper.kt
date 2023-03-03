@@ -70,6 +70,13 @@ object PackageQueryHelper {
         return Query(criteria)
     }
 
+    fun regionQuery(packageId: String, region: String): Query {
+        val criteria = where(TPackageVersion::packageId)
+            .isEqualTo(packageId)
+            .and(TPackageVersion::region.name).inValues(region)
+        return Query(criteria)
+    }
+
     fun versionListQuery(
         packageId: String,
         name: String? = null,
