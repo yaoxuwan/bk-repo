@@ -32,11 +32,15 @@ import com.tencent.bkrepo.common.service.cluster.ClusterProperties
 import com.tencent.bkrepo.common.service.cluster.StarCenterCondition
 import com.tencent.bkrepo.repository.dao.PackageDao
 import com.tencent.bkrepo.repository.dao.PackageVersionDao
+import com.tencent.bkrepo.repository.model.RegionalResource
 import com.tencent.bkrepo.repository.model.TPackage
+import com.tencent.bkrepo.repository.model.TPackageVersion
 import com.tencent.bkrepo.repository.pojo.packages.request.PackagePopulateRequest
 import com.tencent.bkrepo.repository.pojo.packages.request.PackageVersionCreateRequest
+import com.tencent.bkrepo.repository.pojo.packages.request.PopulatedPackageVersion
 import com.tencent.bkrepo.repository.search.packages.PackageSearchInterpreter
 import com.tencent.bkrepo.repository.service.packages.impl.PackageServiceImpl
+import com.tencent.bkrepo.repository.util.ClusterUtils
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Conditional
 import org.springframework.dao.DuplicateKeyException
@@ -59,11 +63,11 @@ class StarCenterPackageServiceImpl(
     clusterProperties
 ) {
     override fun buildPackage(request: PackageVersionCreateRequest): TPackage {
-        return super.buildPackage(request).also { addSrcRegionToPackage(it) }
+        return super.buildPackage(request).also { addSrcRegionToResource(it) }
     }
 
     override fun buildPackage(request: PackagePopulateRequest): TPackage {
-        return super.buildPackage(request).also { addSrcRegionToPackage(it) }
+        return super.buildPackage(request).also { addSrcRegionToResource(it) }
     }
 
     /**
@@ -76,11 +80,39 @@ class StarCenterPackageServiceImpl(
 
             if (savedPackage != null && srcRegion.isNotEmpty() && savedPackage.region?.contains(srcRegion) == false) {
                 val result = packageDao.addRegionByKey(projectId, repoName, key, srcRegion)
-                addSrcRegionToPackage(savedPackage, srcRegion)
+                addSrcRegionToResource(savedPackage, srcRegion)
                 logger.info("Update package[$tPackage] region[$srcRegion] result[${result?.modifiedCount}]")
             }
 
             return savedPackage ?: createPackage(tPackage)
+        }
+    }
+
+    override fun buildPackageVersion(request: PackageVersionCreateRequest, packageId: String): TPackageVersion {
+        return super.buildPackageVersion(request, packageId).also { addSrcRegionToResource(it) }
+    }
+
+    override fun buildPackageVersion(
+        populatedPackageVersion: PopulatedPackageVersion,
+        packageId: String
+    ): TPackageVersion {
+        return super.buildPackageVersion(populatedPackageVersion, packageId).also { addSrcRegionToResource(it) }
+    }
+
+    /**
+     * 只允许覆盖节点自身创建的包
+     */
+    override fun checkPackageVersionOverwrite(overwrite: Boolean, packageName: String, oldVersion: TPackageVersion) {
+        ClusterUtils.checkIsSrcRegion(oldVersion.region)
+        super.checkPackageVersionOverwrite(overwrite, packageName, oldVersion)
+    }
+
+    override fun updatePackage(tPackage: TPackage, newVersion: TPackageVersion, request: PackageVersionCreateRequest) {
+        with(tPackage) {
+            super.updatePackage(tPackage, newVersion, request)
+            if (newVersion.region?.isNotEmpty() == true && tPackage.region?.containsAll(newVersion.region!!) == false) {
+                packageDao.addRegionByKey(projectId, repoName, key, newVersion.region!!)
+            }
         }
     }
 
@@ -100,9 +132,9 @@ class StarCenterPackageServiceImpl(
         }
     }
 
-    private fun addSrcRegionToPackage(tPackage: TPackage, srcRegion: String = srcRegion()) {
-        val oldRegion = tPackage.region ?: mutableSetOf()
-        tPackage.region = oldRegion + srcRegion
+    private fun addSrcRegionToResource(regionalResource: RegionalResource, srcRegion: String = srcRegion()) {
+        val oldRegion = regionalResource.region ?: mutableSetOf()
+        regionalResource.region = oldRegion + srcRegion
     }
 
     private fun srcRegion() = SecurityUtils.getRegion() ?: clusterProperties.region!!

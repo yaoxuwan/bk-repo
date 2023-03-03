@@ -66,8 +66,8 @@ data class TPackageVersion(
     var metadata: List<TMetadata>,
     var tags: List<String>? = null,
     var extension: Map<String, Any>? = null,
-    var region: String? = null
-) {
+    override var region: Set<String>? = null
+): RegionalResource(region) {
     companion object {
         const val VERSION_NAME_IDX = "version_name_idx"
         const val VERSION_METADATA_IDX = "version_metadata_idx"

@@ -27,6 +27,8 @@
 
 package com.tencent.bkrepo.repository.service.packages.impl
 
+import com.tencent.bkrepo.common.api.exception.ErrorCodeException
+import com.tencent.bkrepo.common.artifact.message.ArtifactMessageCode
 import com.tencent.bkrepo.common.artifact.util.version.SemVersion
 import com.tencent.bkrepo.repository.dao.PackageDao
 import com.tencent.bkrepo.repository.model.TPackage
@@ -41,6 +43,34 @@ import org.springframework.dao.DuplicateKeyException
 import java.time.LocalDateTime
 
 abstract class PackageBaseService(protected val packageDao: PackageDao) : PackageService {
+
+    protected open fun checkPackageVersionOverwrite(
+        overwrite: Boolean,
+        packageName: String,
+        oldVersion: TPackageVersion
+    ) {
+        if (!overwrite) {
+            throw ErrorCodeException(ArtifactMessageCode.VERSION_EXISTED, packageName, oldVersion.name)
+        }
+    }
+
+    protected open fun updatePackage(
+        tPackage: TPackage,
+        newVersion: TPackageVersion,
+        request: PackageVersionCreateRequest
+    ) {
+        with(request) {
+            // 更新包
+            tPackage.lastModifiedBy = newVersion.lastModifiedBy
+            tPackage.lastModifiedDate = newVersion.lastModifiedDate
+            tPackage.description = packageDescription?.let { packageDescription }
+            tPackage.latest = versionName
+            tPackage.extension = extension?.let { extension }
+            tPackage.versionTag = mergeVersionTag(tPackage.versionTag, versionTag)
+            tPackage.historyVersion = tPackage.historyVersion.toMutableSet().apply { add(versionName) }
+            packageDao.save(tPackage)
+        }
+    }
 
     /**
      * 查找包，不存在则创建
@@ -149,6 +179,18 @@ abstract class PackageBaseService(protected val packageDao: PackageDao) : Packag
         } catch (exception: IllegalArgumentException) {
             LOWEST_ORDINAL
         }
+    }
+
+    /**
+     * 合并version tag
+     */
+    protected fun mergeVersionTag(
+        original: Map<String, String>?,
+        extra: Map<String, String>?
+    ): Map<String, String> {
+        return original?.toMutableMap()?.apply {
+            extra?.forEach { (tag, version) -> this[tag] = version }
+        }.orEmpty()
     }
 
     companion object {

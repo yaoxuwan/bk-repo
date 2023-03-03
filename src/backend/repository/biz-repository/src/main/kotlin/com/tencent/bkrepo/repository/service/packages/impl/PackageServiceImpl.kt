@@ -195,9 +195,7 @@ open class PackageServiceImpl(
             // 检查本次上传是创建还是覆盖。
             var isOverride = false
             val newVersion = if (oldVersion != null) {
-                if (!overwrite) {
-                    throw ErrorCodeException(ArtifactMessageCode.VERSION_EXISTED, packageName, versionName)
-                }
+                checkPackageVersionOverwrite(overwrite, packageName, oldVersion)
                 // overwrite
                 isOverride = true
                 oldVersion.apply {
@@ -219,14 +217,7 @@ open class PackageServiceImpl(
             try {
                 packageVersionDao.save(newVersion)
                 // 更新包
-                tPackage.lastModifiedBy = newVersion.lastModifiedBy
-                tPackage.lastModifiedDate = newVersion.lastModifiedDate
-                tPackage.description = packageDescription?.let { packageDescription }
-                tPackage.latest = versionName
-                tPackage.extension = extension?.let { extension }
-                tPackage.versionTag = mergeVersionTag(tPackage.versionTag, versionTag)
-                tPackage.historyVersion = tPackage.historyVersion.toMutableSet().apply { add(versionName) }
-                packageDao.save(tPackage)
+                updatePackage(tPackage, newVersion, request)
 
                 if (!isOverride) {
                     publishEvent((buildCreatedEvent(request, realIpAddress ?: HttpContextHolder.getClientAddress())))
@@ -464,19 +455,6 @@ open class PackageServiceImpl(
     private fun checkPackageVersion(packageId: String, versionName: String): TPackageVersion {
         return packageVersionDao.findByName(packageId, versionName)
             ?: throw ErrorCodeException(ArtifactMessageCode.VERSION_NOT_FOUND, versionName)
-    }
-
-
-    /**
-     * 合并version tag
-     */
-    private fun mergeVersionTag(
-        original: Map<String, String>?,
-        extra: Map<String, String>?
-    ): Map<String, String> {
-        return original?.toMutableMap()?.apply {
-            extra?.forEach { (tag, version) -> this[tag] = version }
-        }.orEmpty()
     }
 
     companion object {

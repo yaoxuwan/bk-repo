@@ -58,6 +58,14 @@ class PackageDao : SimpleMongoDao<TPackage>() {
     }
 
     fun addRegionByKey(projectId: String, repoName: String, key: String, region: String): UpdateResult? {
+        return addRegionByKey(projectId, repoName, key, region as Any)
+    }
+
+    fun addRegionByKey(projectId: String, repoName: String, key: String, region: Set<String>): UpdateResult? {
+        return addRegionByKey(projectId, repoName, key, region as Any)
+    }
+
+    private fun addRegionByKey(projectId: String, repoName: String, key: String, region: Any): UpdateResult? {
         if (key.isEmpty()) {
             return null
         }
