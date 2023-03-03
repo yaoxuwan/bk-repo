@@ -32,7 +32,7 @@ import com.tencent.bkrepo.common.artifact.message.ArtifactMessageCode
 import com.tencent.bkrepo.common.artifact.path.PathUtils
 import com.tencent.bkrepo.common.security.util.SecurityUtils
 import com.tencent.bkrepo.common.service.cluster.ClusterProperties
-import com.tencent.bkrepo.common.service.cluster.StarCenterCondition
+import com.tencent.bkrepo.common.service.cluster.CommitEdgeCenterCondition
 import com.tencent.bkrepo.common.storage.core.StorageService
 import com.tencent.bkrepo.common.stream.event.supplier.MessageSupplier
 import com.tencent.bkrepo.repository.config.RepositoryProperties
@@ -50,14 +50,16 @@ import com.tencent.bkrepo.repository.service.file.FileReferenceService
 import com.tencent.bkrepo.repository.service.node.impl.NodeRestoreSupport
 import com.tencent.bkrepo.repository.service.repo.QuotaService
 import com.tencent.bkrepo.repository.service.repo.StorageCredentialService
+import com.tencent.bkrepo.repository.util.NodeQueryHelper
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Conditional
 import org.springframework.dao.DuplicateKeyException
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-@Conditional(StarCenterCondition::class)
+@Conditional(CommitEdgeCenterCondition::class)
 class StarCenterNodeServiceImpl(
     override val nodeDao: NodeDao,
     override val repositoryDao: RepositoryDao,
@@ -138,13 +140,19 @@ class StarCenterNodeServiceImpl(
             return super.createNode(createRequest)
         }
         with(createRequest) {
-            val existNode = nodeDao.findNode(projectId, repoName, PathUtils.normalizeFullPath(fullPath))
+            val normalizeFullPath = PathUtils.normalizeFullPath(fullPath)
+            val existNode = nodeDao.findNode(projectId, repoName, normalizeFullPath)
                 ?: return super.createNode(createRequest)
             if (sha256 == existNode.sha256) {
                 val regions = existNode.regions.orEmpty().toMutableSet()
                 regions.add(region)
+                val query = NodeQueryHelper.nodeQuery(projectId, repoName, normalizeFullPath)
+                if (existNode.regions.orEmpty().isEmpty()) {
+                    regions.add(clusterProperties.region.toString())
+                }
+                val update = Update().push(TNode::regions.name).each(regions)
+                nodeDao.updateFirst(query, update)
                 existNode.regions = regions
-                nodeDao.save(existNode)
                 logger.info("Create node[/$projectId/$repoName$fullPath], sha256[$sha256], region[$region] success.")
                 return convertToDetail(existNode)!!
             } else {
