@@ -107,12 +107,13 @@ class StarCenterPackageServiceImpl(
         super.checkPackageVersionOverwrite(overwrite, packageName, oldVersion)
     }
 
-    override fun updatePackage(tPackage: TPackage, newVersion: TPackageVersion, request: PackageVersionCreateRequest) {
+    override fun populateRegion(tPackage: TPackage) {
         with(tPackage) {
-            super.updatePackage(tPackage, newVersion, request)
-            if (newVersion.region?.isNotEmpty() == true && tPackage.region?.containsAll(newVersion.region!!) == false) {
-                packageDao.addRegionByKey(projectId, repoName, key, newVersion.region!!)
+            val srcRegion = srcRegion()
+            if (tPackage.region?.contains(srcRegion) == false) {
+                packageDao.addRegionByKey(projectId, repoName, key, srcRegion)
             }
+            tPackage.region = tPackage.region.orEmpty() + srcRegion
         }
     }
 

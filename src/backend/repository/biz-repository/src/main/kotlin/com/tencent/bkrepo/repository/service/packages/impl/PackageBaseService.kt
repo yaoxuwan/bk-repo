@@ -54,22 +54,11 @@ abstract class PackageBaseService(protected val packageDao: PackageDao) : Packag
         }
     }
 
-    protected open fun updatePackage(
-        tPackage: TPackage,
-        newVersion: TPackageVersion,
-        request: PackageVersionCreateRequest
-    ) {
-        with(request) {
-            // 更新包
-            tPackage.lastModifiedBy = newVersion.lastModifiedBy
-            tPackage.lastModifiedDate = newVersion.lastModifiedDate
-            tPackage.description = packageDescription?.let { packageDescription }
-            tPackage.latest = versionName
-            tPackage.extension = extension?.let { extension }
-            tPackage.versionTag = mergeVersionTag(tPackage.versionTag, versionTag)
-            tPackage.historyVersion = tPackage.historyVersion.toMutableSet().apply { add(versionName) }
-            packageDao.save(tPackage)
-        }
+    /**
+     * 设置Package的region
+     */
+    protected open fun populateRegion(tPackage: TPackage) {
+        // do nothing
     }
 
     /**

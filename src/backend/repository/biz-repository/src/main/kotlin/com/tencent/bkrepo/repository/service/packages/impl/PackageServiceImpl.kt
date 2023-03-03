@@ -217,7 +217,15 @@ open class PackageServiceImpl(
             try {
                 packageVersionDao.save(newVersion)
                 // 更新包
-                updatePackage(tPackage, newVersion, request)
+                tPackage.lastModifiedBy = newVersion.lastModifiedBy
+                tPackage.lastModifiedDate = newVersion.lastModifiedDate
+                tPackage.description = packageDescription?.let { packageDescription }
+                tPackage.latest = versionName
+                tPackage.extension = extension?.let { extension }
+                tPackage.versionTag = mergeVersionTag(tPackage.versionTag, versionTag)
+                tPackage.historyVersion = tPackage.historyVersion.toMutableSet().apply { add(versionName) }
+                packageDao.save(tPackage)
+                populateRegion(tPackage)
 
                 if (!isOverride) {
                     publishEvent((buildCreatedEvent(request, realIpAddress ?: HttpContextHolder.getClientAddress())))
@@ -432,6 +440,7 @@ open class PackageServiceImpl(
             // 更新包
             tPackage.latest = latestVersion?.name ?: tPackage.latest
             packageDao.save(tPackage)
+            populateRegion(tPackage)
             logger.info("Update package version[$tPackage] success")
         }
     }
