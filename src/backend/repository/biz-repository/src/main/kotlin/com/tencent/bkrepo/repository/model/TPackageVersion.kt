@@ -70,8 +70,16 @@ data class TPackageVersion(
      * PackageVersion 所在区域
      * 由于比较版本间内容是否相似成本较高，不支持不同区域相同PackageVersion，所以目前region只会有一个值
      */
-    override var region: Set<String>? = null
-): RegionalResource(region) {
+    var region: Set<String>? = null
+): RegionalResource {
+    override fun readRegion(): Set<String>? {
+        return this.region
+    }
+
+    override fun writeRegion(region: Set<String>) {
+        this.region = region
+    }
+
     companion object {
         const val VERSION_NAME_IDX = "version_name_idx"
         const val VERSION_METADATA_IDX = "version_metadata_idx"

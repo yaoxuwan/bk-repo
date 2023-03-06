@@ -119,7 +119,7 @@ class StarCenterPackageServiceImpl(
     }
 
     override fun checkRegion(regionalResource: RegionalResource) {
-        ClusterUtils.checkIsSrcRegion(regionalResource.region)
+        ClusterUtils.checkIsSrcRegion(regionalResource.readRegion())
     }
 
     override fun deletePackage(projectId: String, repoName: String, packageKey: String, realIpAddress: String?) {
@@ -187,8 +187,8 @@ class StarCenterPackageServiceImpl(
     }
 
     private fun addSrcRegionToResource(regionalResource: RegionalResource, srcRegion: String = srcRegion()) {
-        val oldRegion = regionalResource.region ?: mutableSetOf()
-        regionalResource.region = oldRegion + srcRegion
+        val oldRegion = regionalResource.readRegion() ?: mutableSetOf()
+        regionalResource.writeRegion(oldRegion + srcRegion)
     }
 
     private fun srcRegion() = SecurityUtils.getRegion() ?: clusterProperties.region!!

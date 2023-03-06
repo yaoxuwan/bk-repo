@@ -68,8 +68,17 @@ data class TPackage(
     var versionTag: Map<String, String>? = null,
     var extension: Map<String, Any>? = null,
     var historyVersion: Set<String> = emptySet(),
-    override var region: Set<String>? = null
-): RegionalResource(region) {
+    var region: Set<String>? = null
+): RegionalResource {
+
+    override fun readRegion(): Set<String>? {
+        return this.region
+    }
+
+    override fun writeRegion(region: Set<String>) {
+        this.region = region
+    }
+
     companion object {
         const val PACKAGE_NAME_IDX = "package_name_idx"
         const val PACKAGE_KEY_IDX = "package_key_idx"

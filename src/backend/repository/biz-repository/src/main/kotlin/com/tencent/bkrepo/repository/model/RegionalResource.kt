@@ -30,9 +30,15 @@ package com.tencent.bkrepo.repository.model
 /**
  * 区域性资源
  */
-open class RegionalResource(
+interface RegionalResource {
+
     /**
-     * 资源存在的区域
+     * 读取资源存在的区域
      */
-    open var region: Set<String>? = null
-)
+    fun readRegion(): Set<String>?
+
+    /**
+     * 设置资源所在区域
+     */
+    fun writeRegion(region: Set<String>)
+}

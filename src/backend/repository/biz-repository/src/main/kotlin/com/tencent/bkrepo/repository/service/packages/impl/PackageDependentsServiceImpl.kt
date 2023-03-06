@@ -42,7 +42,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.stereotype.Service
 
 @Service
-@ConditionalOnMissingBean
+@ConditionalOnMissingBean(type = ["PackageDependentsService"])
 class PackageDependentsServiceImpl(
     private val packageDao: PackageDao,
     private val packageDependentsDao: PackageDependentsDao
