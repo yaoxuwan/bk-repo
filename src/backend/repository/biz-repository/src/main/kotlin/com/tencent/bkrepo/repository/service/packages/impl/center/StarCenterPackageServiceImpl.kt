@@ -31,7 +31,7 @@ import com.tencent.bkrepo.common.api.exception.ErrorCodeException
 import com.tencent.bkrepo.common.api.message.CommonMessageCode
 import com.tencent.bkrepo.common.security.util.SecurityUtils
 import com.tencent.bkrepo.common.service.cluster.ClusterProperties
-import com.tencent.bkrepo.common.service.cluster.StarCenterCondition
+import com.tencent.bkrepo.common.service.cluster.CommitEdgeCenterCondition
 import com.tencent.bkrepo.repository.dao.PackageDao
 import com.tencent.bkrepo.repository.dao.PackageVersionDao
 import com.tencent.bkrepo.repository.model.RegionalResource
@@ -52,7 +52,7 @@ import org.springframework.stereotype.Service
  * Star组网方式的Center节点Package管理服务
  */
 @Service
-@Conditional(StarCenterCondition::class)
+@Conditional(CommitEdgeCenterCondition::class)
 class StarCenterPackageServiceImpl(
     packageDao: PackageDao,
     packageVersionDao: PackageVersionDao,

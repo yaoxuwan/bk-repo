@@ -27,7 +27,7 @@
 
 package com.tencent.bkrepo.repository.service.packages.impl.center
 
-import com.tencent.bkrepo.common.service.cluster.StarCenterCondition
+import com.tencent.bkrepo.common.service.cluster.CommitEdgeCenterCondition
 import com.tencent.bkrepo.repository.dao.PackageDao
 import com.tencent.bkrepo.repository.dao.PackageVersionDao
 import com.tencent.bkrepo.repository.pojo.stage.StageUpgradeRequest
@@ -37,7 +37,7 @@ import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 
 @Service
-@Conditional(StarCenterCondition::class)
+@Conditional(CommitEdgeCenterCondition::class)
 class StarCenterStageServiceImpl(
     packageDao: PackageDao,
     packageVersionDao: PackageVersionDao
