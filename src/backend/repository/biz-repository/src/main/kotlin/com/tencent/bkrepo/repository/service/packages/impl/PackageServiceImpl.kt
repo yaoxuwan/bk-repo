@@ -44,7 +44,6 @@ import com.tencent.bkrepo.common.artifact.repository.context.ArtifactDownloadCon
 import com.tencent.bkrepo.common.mongo.dao.util.Pages
 import com.tencent.bkrepo.common.query.model.QueryModel
 import com.tencent.bkrepo.common.security.util.SecurityUtils
-import com.tencent.bkrepo.common.service.cluster.ClusterProperties
 import com.tencent.bkrepo.common.service.util.HttpContextHolder
 import com.tencent.bkrepo.common.service.util.SpringContextUtils.Companion.publishEvent
 import com.tencent.bkrepo.repository.dao.PackageDao
@@ -75,11 +74,10 @@ import java.time.LocalDateTime
 
 @Service
 @ConditionalOnMissingBean(PackageService::class)
-open class PackageServiceImpl(
+class PackageServiceImpl(
     packageDao: PackageDao,
     protected val packageVersionDao: PackageVersionDao,
-    private val packageSearchInterpreter: PackageSearchInterpreter,
-    protected val clusterProperties: ClusterProperties
+    private val packageSearchInterpreter: PackageSearchInterpreter
 ) : PackageBaseService(packageDao) {
 
     override fun findPackageByKey(projectId: String, repoName: String, packageKey: String): PackageSummary? {

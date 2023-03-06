@@ -39,14 +39,19 @@ import com.tencent.bkrepo.repository.dao.PackageVersionDao
 import com.tencent.bkrepo.repository.model.TPackageVersion
 import com.tencent.bkrepo.repository.pojo.stage.ArtifactStageEnum
 import com.tencent.bkrepo.repository.pojo.stage.StageUpgradeRequest
+import com.tencent.bkrepo.repository.service.packages.PackageService
 import com.tencent.bkrepo.repository.service.packages.StageService
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 /**
  * 制品晋级服务接口实现类
  */
-open class StageServiceImpl(
+@Service
+@ConditionalOnMissingBean(PackageService::class)
+class StageServiceImpl(
     private val packageDao: PackageDao,
     private val packageVersionDao: PackageVersionDao
 ) : StageService {

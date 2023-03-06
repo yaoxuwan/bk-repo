@@ -57,12 +57,11 @@ class StarCenterPackageServiceImpl(
     packageDao: PackageDao,
     packageVersionDao: PackageVersionDao,
     packageSearchInterpreter: PackageSearchInterpreter,
-    clusterProperties: ClusterProperties
+    private val clusterProperties: ClusterProperties
 ) : PackageServiceImpl(
     packageDao,
     packageVersionDao,
     packageSearchInterpreter,
-    clusterProperties
 ) {
     override fun buildPackage(request: PackageVersionCreateRequest): TPackage {
         return super.buildPackage(request).also { addSrcRegionToResource(it) }

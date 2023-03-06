@@ -27,16 +27,24 @@
 
 package com.tencent.bkrepo.repository.service.packages.impl.center
 
-import com.tencent.bkrepo.common.service.cluster.AutonomousCenterCondition
+import com.tencent.bkrepo.common.service.cluster.CommitEdgeCenterCondition
 import com.tencent.bkrepo.repository.dao.PackageDao
-import com.tencent.bkrepo.repository.dao.PackageVersionDao
-import com.tencent.bkrepo.repository.service.packages.impl.StageServiceImpl
+import com.tencent.bkrepo.repository.dao.PackageDependentsDao
+import com.tencent.bkrepo.repository.model.TPackage
+import com.tencent.bkrepo.repository.service.packages.impl.PackageDependentsServiceImpl
+import com.tencent.bkrepo.repository.util.ClusterUtils
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 
 @Service
-@Conditional(AutonomousCenterCondition::class)
-class CenterStageServiceImpl(
-    packageDao: PackageDao,
-    packageVersionDao: PackageVersionDao
-) : StageServiceImpl(packageDao, packageVersionDao)
+@Conditional(CommitEdgeCenterCondition::class)
+class StarCenterPackageDependentsServiceImpl(
+    private val packageDao: PackageDao,
+    private val packageDependentsDao: PackageDependentsDao
+) : PackageDependentsServiceImpl(
+    packageDao, packageDependentsDao
+) {
+    override fun checkPackage(projectId: String, repoName: String, packageKey: String): TPackage? {
+        return packageDao.findByKey(projectId, repoName, packageKey)?.also { ClusterUtils.checkIsSrcRegion(it.region) }
+    }
+}

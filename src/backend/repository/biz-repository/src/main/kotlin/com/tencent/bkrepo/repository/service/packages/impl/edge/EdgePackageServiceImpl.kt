@@ -48,12 +48,11 @@ class EdgePackageServiceImpl(
     packageDao: PackageDao,
     packageVersionDao: PackageVersionDao,
     packageSearchInterpreter: PackageSearchInterpreter,
-    clusterProperties: ClusterProperties
+    private val clusterProperties: ClusterProperties
 ) : PackageServiceImpl(
     packageDao,
     packageVersionDao,
-    packageSearchInterpreter,
-    clusterProperties
+    packageSearchInterpreter
 ) {
 
     private val centerPackageClient: PackageClient
