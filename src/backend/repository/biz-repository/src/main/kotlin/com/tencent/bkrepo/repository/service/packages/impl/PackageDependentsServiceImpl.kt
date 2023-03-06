@@ -31,6 +31,7 @@
 
 package com.tencent.bkrepo.repository.service.packages.impl
 
+import com.tencent.bkrepo.common.service.cluster.DefaultCondition
 import com.tencent.bkrepo.repository.dao.PackageDao
 import com.tencent.bkrepo.repository.dao.PackageDependentsDao
 import com.tencent.bkrepo.repository.model.TPackage
@@ -38,11 +39,11 @@ import com.tencent.bkrepo.repository.pojo.dependent.PackageDependentsRelation
 import com.tencent.bkrepo.repository.service.packages.PackageDependentsService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 
 @Service
-@ConditionalOnMissingBean(type = ["PackageDependentsService"])
+@Conditional(DefaultCondition::class)
 class PackageDependentsServiceImpl(
     private val packageDao: PackageDao,
     private val packageDependentsDao: PackageDependentsDao
