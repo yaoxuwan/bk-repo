@@ -38,7 +38,9 @@ import com.tencent.bkrepo.common.mongo.dao.util.Pages
 import com.tencent.bkrepo.repository.model.TNode
 import com.tencent.bkrepo.repository.pojo.node.NodeListOption
 import com.tencent.bkrepo.repository.util.NodeQueryHelper
+import org.bson.types.ObjectId
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.FindAndModifyOptions
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
@@ -140,6 +142,29 @@ class NodeDao : HashShardingMongoDao<TNode>() {
         }
 
         return pageWithoutShardingKey(pageRequest, query)
+    }
+
+    /**
+     * 查询最后修改时间大于指定时间的节点
+     */
+    fun findChangedNode(
+        projectId: String,
+        repoName: String,
+        time: LocalDateTime,
+        limit: Int,
+        id: String? = null
+    ): List<TNode> {
+        val criteria = where(TNode::projectId).isEqualTo(projectId)
+            .and(TNode::repoName).isEqualTo(repoName)
+            .apply {
+                id?.let { and(ID).gt(ObjectId(id)) }
+            }
+            .andOperator(
+                where(TNode::lastModifiedDate).gte(time)
+                    .orOperator(where(TNode::deleted).gte(time))
+            )
+        val query = Query(criteria).with(Sort.by(Sort.DEFAULT_DIRECTION, ID)).limit(limit)
+        return this.find(query)
     }
 
     companion object {

@@ -53,6 +53,7 @@ import com.tencent.bkrepo.fs.server.utils.ReactiveSecurityUtils
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataSaveRequest
 import com.tencent.bkrepo.repository.pojo.node.NodeSizeInfo
+import com.tencent.bkrepo.repository.pojo.node.service.NodeChangeRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeDeleteRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeRenameRequest
@@ -289,6 +290,12 @@ class NodeOperationsHandler(
             rRepositoryClient.setLength(nodeSetLengthRequest).awaitSingle()
             return ReactiveResponseBuilder.success()
         }
+    }
+
+    suspend fun getChangeNodes(request: ServerRequest): ServerResponse {
+        val nodeChangeRequest = request.bodyToMono(NodeChangeRequest::class.java).awaitSingle()
+        val data = rRepositoryClient.getChangeNodes(nodeChangeRequest).awaitSingle().data ?: emptyList()
+        return ReactiveResponseBuilder.success(data)
     }
 
     private val statCache = Caffeine.newBuilder()

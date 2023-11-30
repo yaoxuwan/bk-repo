@@ -36,6 +36,7 @@ import com.tencent.bkrepo.repository.pojo.node.NodeDetail
 import com.tencent.bkrepo.repository.pojo.node.NodeInfo
 import com.tencent.bkrepo.repository.pojo.node.NodeListOption
 import com.tencent.bkrepo.repository.pojo.node.NodeSizeInfo
+import com.tencent.bkrepo.repository.pojo.node.service.NodeChangeRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeDeleteRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeRenameRequest
@@ -119,4 +120,9 @@ interface RRepositoryClient {
         @PathVariable projectId: String,
         @PathVariable repoName: String,
     ): Mono<Response<NodeSizeInfo>>
+
+    @PostMapping("/node/fs/change")
+    fun getChangeNodes(
+        @RequestBody nodeChangeRequest: NodeChangeRequest
+    ): Mono<Response<List<NodeDetail>>>
 }

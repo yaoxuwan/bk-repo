@@ -98,6 +98,7 @@ class RouteConfiguration(
             GET("/stat$DEFAULT_MAPPING_URI", nodeOperationsHandler::getStat)
             GET("/info$DEFAULT_MAPPING_URI", nodeOperationsHandler::info)
             GET("/page$DEFAULT_MAPPING_URI", nodeOperationsHandler::listNodes)
+            POST("/change$DEFAULT_MAPPING_URI", nodeOperationsHandler::getChangeNodes)
             GET(DEFAULT_MAPPING_URI, nodeOperationsHandler::getNode)
         }
 

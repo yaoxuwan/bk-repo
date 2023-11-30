@@ -38,6 +38,7 @@ import com.tencent.bkrepo.fs.server.constant.FAKE_SHA256
 import com.tencent.bkrepo.repository.dao.NodeDao
 import com.tencent.bkrepo.repository.model.TNode
 import com.tencent.bkrepo.repository.pojo.node.NodeDetail
+import com.tencent.bkrepo.repository.pojo.node.service.NodeChangeRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeSetLengthRequest
 import com.tencent.bkrepo.repository.service.fs.FsService
@@ -108,6 +109,13 @@ class FsServiceImpl(
             val selfUpdate = NodeQueryHelper.nodeSetLength(newLength, operator)
             nodeDao.updateFirst(selfQuery, selfUpdate)
             logger.info("Set node length [$this] success.")
+        }
+    }
+
+    override fun findChangeNodes(changeRequest: NodeChangeRequest): List<NodeDetail> {
+        with(changeRequest) {
+            return nodeDao.findChangedNode(projectId, repoName, time, limit, id)
+                .map { NodeBaseService.convertToDetail(it)!! }
         }
     }
 

@@ -28,6 +28,7 @@
 package com.tencent.bkrepo.repository.service.fs
 
 import com.tencent.bkrepo.repository.pojo.node.NodeDetail
+import com.tencent.bkrepo.repository.pojo.node.service.NodeChangeRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeSetLengthRequest
 
@@ -35,4 +36,6 @@ interface FsService {
     fun createNode(createRequest: NodeCreateRequest): NodeDetail
 
     fun setLength(setLengthRequest: NodeSetLengthRequest)
+
+    fun findChangeNodes(changeRequest: NodeChangeRequest): List<NodeDetail>
 }

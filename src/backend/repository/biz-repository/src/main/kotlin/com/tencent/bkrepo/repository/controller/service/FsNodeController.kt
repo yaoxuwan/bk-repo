@@ -31,6 +31,7 @@ import com.tencent.bkrepo.common.api.pojo.Response
 import com.tencent.bkrepo.common.service.util.ResponseBuilder
 import com.tencent.bkrepo.repository.api.FsNodeClient
 import com.tencent.bkrepo.repository.pojo.node.NodeDetail
+import com.tencent.bkrepo.repository.pojo.node.service.NodeChangeRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeSetLengthRequest
 import com.tencent.bkrepo.repository.service.fs.FsService
@@ -48,5 +49,9 @@ class FsNodeController(
 
     override fun createNode(createRequest: NodeCreateRequest): Response<NodeDetail> {
         return ResponseBuilder.success(fsService.createNode(createRequest))
+    }
+
+    override fun getChangeNodes(changeRequest: NodeChangeRequest): Response<List<NodeDetail>> {
+        return ResponseBuilder.success(fsService.findChangeNodes(changeRequest))
     }
 }

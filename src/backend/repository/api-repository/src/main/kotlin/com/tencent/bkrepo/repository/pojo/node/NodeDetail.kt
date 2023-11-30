@@ -31,6 +31,7 @@
 
 package com.tencent.bkrepo.repository.pojo.node
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.tencent.bkrepo.common.artifact.constant.METADATA_KEY_PACKAGE_NAME
 import com.tencent.bkrepo.common.artifact.constant.METADATA_KEY_PACKAGE_VERSION
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
@@ -45,7 +46,7 @@ data class NodeDetail(
     @ApiModelProperty("节点基本信息")
     @Deprecated("冗余信息，nodeInfo信息已包含在NodeDetail字段中，nodeInfo将来会删除")
     val nodeInfo: NodeInfo,
-
+    val id: String? = nodeInfo.id,
     @ApiModelProperty("创建者")
     val createdBy: String = nodeInfo.createdBy,
     @ApiModelProperty("创建时间")
@@ -85,6 +86,9 @@ data class NodeDetail(
     val clusterNames: Set<String>? = nodeInfo.clusterNames,
     @ApiModelProperty("是否归档")
     val archived: Boolean? = nodeInfo.archived,
+    @ApiModelProperty("删除时间")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val deleted: String? = nodeInfo.deleted
 ) {
     /**
      * 获取node所属package的name

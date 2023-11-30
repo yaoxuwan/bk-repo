@@ -30,6 +30,7 @@ package com.tencent.bkrepo.repository.api
 import com.tencent.bkrepo.common.api.constant.REPOSITORY_SERVICE_NAME
 import com.tencent.bkrepo.common.api.pojo.Response
 import com.tencent.bkrepo.repository.pojo.node.NodeDetail
+import com.tencent.bkrepo.repository.pojo.node.service.NodeChangeRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeSetLengthRequest
 import org.springframework.cloud.openfeign.FeignClient
@@ -49,4 +50,7 @@ interface FsNodeClient {
 
     @PostMapping("/create")
     fun createNode(@RequestBody createRequest: NodeCreateRequest): Response<NodeDetail>
+
+    @PostMapping("/change")
+    fun getChangeNodes(@RequestBody changeRequest: NodeChangeRequest): Response<List<NodeDetail>>
 }
