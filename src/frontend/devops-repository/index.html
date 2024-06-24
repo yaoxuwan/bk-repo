@@ -95,8 +95,9 @@
         const redirect = search.get('redirect')
         if (redirect) {
             search.delete('redirect')
-
             const redirectUrl = new URL(/^https?/.test(redirect) ? redirect : location.origin + redirect)
+            redirectUrl.protocol = 'https:'
+            console.info(redirectUrl)
             if (!search.toString()) {
                 // 兼容之前的预览链接格式
                 redirectUrl.searchParams.set('preview', true)
