@@ -66,6 +66,7 @@ class CoArtifactFile(
         val path = storageCredentials.upload.location.toPath()
         receiver = CoArtifactDataReceiver(
             storageProperties.receive,
+            storageProperties.monitor,
             path
         )
         monitor.add(receiver)
