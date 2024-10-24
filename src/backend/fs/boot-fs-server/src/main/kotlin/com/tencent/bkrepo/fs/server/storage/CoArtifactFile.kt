@@ -109,7 +109,7 @@ class CoArtifactFile(
     }
 
     override fun isFallback(): Boolean {
-        return false
+        return receiver.fallback
     }
 
     override fun isInLocalDisk(): Boolean {
