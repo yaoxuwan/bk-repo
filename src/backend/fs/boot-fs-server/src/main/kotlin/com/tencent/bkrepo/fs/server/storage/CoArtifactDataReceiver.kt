@@ -224,41 +224,44 @@ class CoArtifactDataReceiver(
         }
         if (fallBackPath == null || fallBackPath == path) {
             logger.info("Fallback path is null or equals to primary path, skip transfer data")
-            hasTransferred = true
+//            hasTransferred = true
             return
         }
-        // originalPath表示NFS位置， fallBackPath表示本地磁盘位置
-        val originalPath = path
-        // 更新当前path为本地磁盘
-        path = fallBackPath!!
-        // transfer date
-        if (!inMemory) {
-            // 当文件已经落到NFS
-            if (enableTransfer) {
-                // 开Transfer功能时，从NFS转移到本地盘
-                cleanOriginalChannel()
-                val originalFile = originalPath.resolve(fileName)
-                val filePath = this.filePath.apply { this.createFile() }
-                val dataBuffer = DataBufferUtils.read(originalPath, DefaultDataBufferFactory(), bufferSize)
-                channel = withContext(Dispatchers.IO) {
-                    AsynchronousFileChannel.open(
-                        filePath,
-                        StandardOpenOption.WRITE,
-                        StandardOpenOption.CREATE_NEW,
-                    )
-                }
-                DataBufferUtils.write(dataBuffer, channel, 0).awaitSingle()
-                withContext(Dispatchers.IO) {
-                    Files.deleteIfExists(originalFile)
-                }
-                logger.info("Success to transfer data from [$originalPath] to [$path]")
-            } else {
-                // 禁用Transfer功能时，忽略操作，继续使用NFS
-                path = originalPath
-                fallback = false
-            }
+        if (inMemory) {
+            path = fallBackPath!!
         }
-        hasTransferred = true
+//        // originalPath表示NFS位置， fallBackPath表示本地磁盘位置
+//        val originalPath = path
+//        // 更新当前path为本地磁盘
+//        path = fallBackPath!!
+//        // transfer date
+//        if (!inMemory) {
+//            // 当文件已经落到NFS
+//            if (enableTransfer) {
+//                // 开Transfer功能时，从NFS转移到本地盘
+//                cleanOriginalChannel()
+//                val originalFile = originalPath.resolve(fileName)
+//                val filePath = this.filePath.apply { this.createFile() }
+//                val dataBuffer = DataBufferUtils.read(originalPath, DefaultDataBufferFactory(), bufferSize)
+//                channel = withContext(Dispatchers.IO) {
+//                    AsynchronousFileChannel.open(
+//                        filePath,
+//                        StandardOpenOption.WRITE,
+//                        StandardOpenOption.CREATE_NEW,
+//                    )
+//                }
+//                DataBufferUtils.write(dataBuffer, channel, 0).awaitSingle()
+//                withContext(Dispatchers.IO) {
+//                    Files.deleteIfExists(originalFile)
+//                }
+//                logger.info("Success to transfer data from [$originalPath] to [$path]")
+//            } else {
+//                // 禁用Transfer功能时，忽略操作，继续使用NFS
+//                path = originalPath
+//                fallback = false
+//            }
+//        }
+//        hasTransferred = true
     }
 
     /**

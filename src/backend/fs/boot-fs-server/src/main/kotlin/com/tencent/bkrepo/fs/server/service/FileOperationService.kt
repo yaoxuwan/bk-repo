@@ -125,6 +125,7 @@ class FileOperationService(
     ): Boolean {
         val blockSize = reactiveArtifactFile.getSize()
         return if (blockSize >= streamProperties.blockSize.toBytes() || lastBlock) {
+            reactiveArtifactFile.monitor.changeToUnhealthy()
             reactiveArtifactFile.finish()
             val blockNode = TBlockNode(
                 createdBy = user,

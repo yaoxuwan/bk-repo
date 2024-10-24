@@ -218,7 +218,7 @@ class StorageHealthMonitor(
         }
     }
 
-    private fun changeToUnhealthy() {
+    fun changeToUnhealthy() {
         // 修改状态
         if (healthy.compareAndSet(true, false)) {
             logger.error("Path[${getPrimaryPath()}] change to unhealthy, reason: $fallBackReason")
