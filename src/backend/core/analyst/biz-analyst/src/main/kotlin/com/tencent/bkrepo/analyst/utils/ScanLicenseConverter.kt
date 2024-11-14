@@ -29,11 +29,6 @@
 
 package com.tencent.bkrepo.analyst.utils
 
-import com.tencent.bkrepo.common.analysis.pojo.scanner.Level
-import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseNature
-import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey
-import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey.NIL
-import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey.TOTAL
 import com.tencent.bkrepo.analyst.model.SubScanTaskDefinition
 import com.tencent.bkrepo.analyst.model.TPlanArtifactLatestSubScanTask
 import com.tencent.bkrepo.analyst.model.TScanPlan
@@ -41,6 +36,11 @@ import com.tencent.bkrepo.analyst.model.TScanTask
 import com.tencent.bkrepo.analyst.pojo.ScanStatus
 import com.tencent.bkrepo.analyst.pojo.response.FileLicensesResultOverview
 import com.tencent.bkrepo.analyst.pojo.response.ScanLicensePlanInfo
+import com.tencent.bkrepo.common.analysis.pojo.scanner.Level
+import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseNature
+import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey
+import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey.NIL
+import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey.TOTAL
 import java.time.format.DateTimeFormatter
 
 object ScanLicenseConverter {

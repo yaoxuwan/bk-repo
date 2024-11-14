@@ -29,10 +29,10 @@ package com.tencent.bkrepo.common.metadata.service.repo.impl
 
 import com.tencent.bkrepo.common.api.exception.ErrorCodeException
 import com.tencent.bkrepo.common.api.message.CommonMessageCode
+import com.tencent.bkrepo.common.metadata.service.repo.StorageCredentialsUpdater
 import com.tencent.bkrepo.common.storage.credentials.InnerCosCredentials
 import com.tencent.bkrepo.common.storage.credentials.StorageCredentials
 import com.tencent.bkrepo.repository.pojo.credendials.StorageCredentialsUpdateRequest
-import com.tencent.bkrepo.common.metadata.service.repo.StorageCredentialsUpdater
 import org.springframework.stereotype.Component
 
 @Component("InnerCosCredentialsUpdater")

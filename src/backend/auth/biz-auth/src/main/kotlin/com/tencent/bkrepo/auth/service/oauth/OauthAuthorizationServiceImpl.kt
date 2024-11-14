@@ -31,6 +31,7 @@ import cn.hutool.core.codec.Base64Decoder
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.tencent.bkrepo.auth.config.OauthProperties
 import com.tencent.bkrepo.auth.dao.AccountDao
+import com.tencent.bkrepo.auth.dao.repository.OauthTokenRepository
 import com.tencent.bkrepo.auth.message.AuthMessageCode
 import com.tencent.bkrepo.auth.model.TAccount
 import com.tencent.bkrepo.auth.model.TOauthToken
@@ -42,7 +43,6 @@ import com.tencent.bkrepo.auth.pojo.oauth.IdToken
 import com.tencent.bkrepo.auth.pojo.oauth.JsonWebKey
 import com.tencent.bkrepo.auth.pojo.oauth.JsonWebKeySet
 import com.tencent.bkrepo.auth.pojo.oauth.OauthToken
-import com.tencent.bkrepo.auth.dao.repository.OauthTokenRepository
 import com.tencent.bkrepo.auth.pojo.oauth.OidcConfiguration
 import com.tencent.bkrepo.auth.pojo.oauth.UserInfo
 import com.tencent.bkrepo.auth.service.OauthAuthorizationService

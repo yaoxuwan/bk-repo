@@ -33,9 +33,9 @@ package com.tencent.bkrepo.npm.service
 
 import com.tencent.bkrepo.npm.artifact.NpmArtifactInfo
 import com.tencent.bkrepo.npm.pojo.NpmDomainInfo
+import com.tencent.bkrepo.npm.pojo.user.PackageVersionInfo
 import com.tencent.bkrepo.npm.pojo.user.request.PackageDeleteRequest
 import com.tencent.bkrepo.npm.pojo.user.request.PackageVersionDeleteRequest
-import com.tencent.bkrepo.npm.pojo.user.PackageVersionInfo
 
 interface NpmWebService {
 

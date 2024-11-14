@@ -31,18 +31,18 @@ import com.tencent.bkrepo.auth.api.ServiceBkiamV3ResourceClient
 import com.tencent.bkrepo.auth.api.ServiceRoleClient
 import com.tencent.bkrepo.auth.api.ServiceUserClient
 import com.tencent.bkrepo.common.api.constant.ANONYMOUS_USER
+import com.tencent.bkrepo.common.api.constant.CLOSED_SOURCE_PREFIX
+import com.tencent.bkrepo.common.api.constant.CODE_PROJECT_PREFIX
 import com.tencent.bkrepo.common.artifact.event.project.ProjectCreatedEvent
 import com.tencent.bkrepo.common.artifact.event.repo.RepoCreatedEvent
 import com.tencent.bkrepo.common.artifact.event.repo.RepoDeletedEvent
 import com.tencent.bkrepo.common.artifact.event.repo.RepoUpdatedEvent
+import com.tencent.bkrepo.common.metadata.condition.SyncCondition
 import com.tencent.bkrepo.repository.constant.SYSTEM_USER
+import org.springframework.context.annotation.Conditional
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
-import com.tencent.bkrepo.common.api.constant.CODE_PROJECT_PREFIX
-import com.tencent.bkrepo.common.api.constant.CLOSED_SOURCE_PREFIX
-import com.tencent.bkrepo.common.metadata.condition.SyncCondition
-import org.springframework.context.annotation.Conditional
 
 /**
  * 用于创建资源权限的时间监听器

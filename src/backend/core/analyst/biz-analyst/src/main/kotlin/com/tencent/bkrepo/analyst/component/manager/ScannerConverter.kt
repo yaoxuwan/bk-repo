@@ -27,15 +27,15 @@
 
 package com.tencent.bkrepo.analyst.component.manager
 
-import com.tencent.bkrepo.common.api.pojo.Page
-import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey
-import com.tencent.bkrepo.common.analysis.pojo.scanner.ScanExecutorResult
 import com.tencent.bkrepo.analyst.pojo.request.ArtifactVulnerabilityRequest
 import com.tencent.bkrepo.analyst.pojo.request.LoadResultArguments
 import com.tencent.bkrepo.analyst.pojo.request.scancodetoolkit.ArtifactLicensesDetailRequest
 import com.tencent.bkrepo.analyst.pojo.response.ArtifactVulnerabilityInfo
 import com.tencent.bkrepo.analyst.pojo.response.FileLicensesResultDetail
-import java.lang.UnsupportedOperationException
+import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey
+import com.tencent.bkrepo.common.analysis.pojo.scanner.ScanExecutorResult
+import com.tencent.bkrepo.common.api.pojo.Page
+
 /**
  * 接口数据格式转换
  */

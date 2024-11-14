@@ -28,8 +28,8 @@
 package com.tencent.bkrepo.analyst.service
 
 import com.tencent.bkrepo.analyst.pojo.request.ScanQualityUpdateRequest
-import com.tencent.bkrepo.common.analysis.pojo.scanner.Scanner
 import com.tencent.bkrepo.analyst.pojo.response.ScanQuality
+import com.tencent.bkrepo.common.analysis.pojo.scanner.Scanner
 
 interface ScanQualityService {
     /**

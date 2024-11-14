@@ -27,18 +27,18 @@
 
 package com.tencent.bkrepo.analysis.executor.dependencycheck
 
-import com.tencent.bkrepo.common.api.util.toJsonString
-import com.tencent.bkrepo.common.checker.pojo.DependencyInfo
-import com.tencent.bkrepo.common.checker.util.DependencyCheckerUtils
+import com.tencent.bkrepo.analysis.executor.ScanExecutor
+import com.tencent.bkrepo.analysis.executor.pojo.ScanExecutorTask
 import com.tencent.bkrepo.common.analysis.pojo.scanner.ScanExecutorResult
 import com.tencent.bkrepo.common.analysis.pojo.scanner.SubScanTaskStatus
 import com.tencent.bkrepo.common.analysis.pojo.scanner.dependencycheck.result.DependencyItem
 import com.tencent.bkrepo.common.analysis.pojo.scanner.dependencycheck.result.DependencyScanExecutorResult
 import com.tencent.bkrepo.common.analysis.pojo.scanner.dependencycheck.scanner.DependencyScanner
 import com.tencent.bkrepo.common.analysis.pojo.scanner.utils.normalizedLevel
+import com.tencent.bkrepo.common.api.util.toJsonString
+import com.tencent.bkrepo.common.checker.pojo.DependencyInfo
+import com.tencent.bkrepo.common.checker.util.DependencyCheckerUtils
 import com.tencent.bkrepo.common.storage.config.StorageProperties
-import com.tencent.bkrepo.analysis.executor.ScanExecutor
-import com.tencent.bkrepo.analysis.executor.pojo.ScanExecutorTask
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component

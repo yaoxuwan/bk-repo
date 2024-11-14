@@ -1,7 +1,7 @@
 /*
  * Tencent is pleased to support the open source community by making BK-CI 蓝鲸持续集成平台 available.
  *
- * Copyright (C) 2019 THL A29 Limited, a Tencent company.  All rights reserved.
+ * Copyright (C) 2024 THL A29 Limited, a Tencent company.  All rights reserved.
  *
  * BK-CI 蓝鲸持续集成平台 is licensed under the MIT license.
  *
@@ -25,9 +25,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-dependencies {
-    api(project(":common:common-mongo"))
-    api(project(":common:common-security"))
-    api(project(":common:common-metadata:metadata-service"))
+package com.tencent.bkrepo.common.api.util
 
+import io.micrometer.context.ContextExecutorService
+import io.micrometer.context.ContextScheduledExecutorService
+import io.micrometer.context.ContextSnapshotFactory
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.ScheduledExecutorService
+
+object AsyncUtils {
+
+    private val factory = ContextSnapshotFactory.builder().build()
+
+    fun Runnable.trace(): Runnable {
+        return factory.captureAll().wrap(this)
+    }
+
+    fun <T> Callable<T>.trace(): Callable<T> {
+        return factory.captureAll().wrap(this)
+    }
+
+    fun ExecutorService.trace(): ExecutorService {
+        return ContextExecutorService.wrap(this, factory::captureAll)
+    }
+
+    fun ScheduledExecutorService.trace(): ScheduledExecutorService {
+        return ContextScheduledExecutorService.wrap(this, factory::captureAll)
+    }
 }

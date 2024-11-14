@@ -27,8 +27,8 @@
 
 package com.tencent.bkrepo.router.model
 
-import java.time.LocalDateTime
 import org.springframework.data.mongodb.core.mapping.Document
+import java.time.LocalDateTime
 
 /**
  * 路由策略

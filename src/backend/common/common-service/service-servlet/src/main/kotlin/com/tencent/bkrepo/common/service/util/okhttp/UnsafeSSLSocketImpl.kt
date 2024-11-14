@@ -28,7 +28,8 @@
 package com.tencent.bkrepo.common.service.util.okhttp
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import com.tencent.bkrepo.common.service.otel.util.AsyncUtils.trace
+import com.tencent.bkrepo.common.api.util.AsyncUtils.trace
+import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.io.InputStream
 import java.io.OutputStream
@@ -42,8 +43,6 @@ import javax.net.ssl.SSLParameters
 import javax.net.ssl.SSLSession
 import javax.net.ssl.SSLSocket
 import kotlin.system.measureNanoTime
-import org.slf4j.LoggerFactory
-import sun.security.ssl.SSLSocketImpl
 
 /**
  * 不安全的ssl socket。重写了SSLSocketImpl的close方法，允许强势关闭连接。
@@ -209,7 +208,7 @@ class UnsafeSSLSocketImpl(private val delegate: SSLSocket, private val closeTime
                 return
             }
             val timeoutFuture = threadPool.schedule(
-                Runnable { closeImmediately() }.trace(),
+                Runnable { closeImmediately() },
                 closeTimeout,
                 TimeUnit.SECONDS,
             )
@@ -226,7 +225,7 @@ class UnsafeSSLSocketImpl(private val delegate: SSLSocket, private val closeTime
     @Synchronized
     fun closeImmediately() {
         try {
-            val clazz = SSLSocketImpl::class.java
+            val clazz = SSLSocket::class.java
             val closeSocketMethod = clazz.getDeclaredMethod("closeSocket", Boolean::class.java)
             closeSocketMethod.isAccessible = true
             if (!delegate.isClosed) {
@@ -254,6 +253,6 @@ class UnsafeSSLSocketImpl(private val delegate: SSLSocket, private val closeTime
         private val logger = LoggerFactory.getLogger(UnsafeSSLSocketImpl::class.java)
         private val defaultFactory =
             ThreadFactoryBuilder().setNameFormat("unsafe-sslSocket-watchDog-%d").setDaemon(true).build()
-        private val threadPool = Executors.newSingleThreadScheduledExecutor(defaultFactory)
+        private val threadPool = Executors.newSingleThreadScheduledExecutor(defaultFactory).trace()
     }
 }

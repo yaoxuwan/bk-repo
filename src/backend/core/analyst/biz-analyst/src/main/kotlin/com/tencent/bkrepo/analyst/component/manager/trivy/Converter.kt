@@ -27,10 +27,10 @@
 
 package com.tencent.bkrepo.analyst.component.manager.trivy
 
+import com.tencent.bkrepo.analyst.component.manager.knowledgebase.TCve
 import com.tencent.bkrepo.common.analysis.pojo.scanner.trivy.TrivyScanner
 import com.tencent.bkrepo.common.analysis.pojo.scanner.trivy.VulnerabilityItem
 import com.tencent.bkrepo.repository.constant.SYSTEM_USER
-import com.tencent.bkrepo.analyst.component.manager.knowledgebase.TCve
 import java.time.LocalDateTime
 import java.util.Locale
 

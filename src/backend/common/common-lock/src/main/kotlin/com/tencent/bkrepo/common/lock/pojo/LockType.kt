@@ -27,10 +27,12 @@
 
 package com.tencent.bkrepo.common.lock.pojo
 
+import java.util.Locale
+
 enum class LockType {
     REDIS,
     MONGODB;
 
-    fun id() = this.name.toLowerCase()
+    fun id() = this.name.lowercase(Locale.getDefault())
 }
 

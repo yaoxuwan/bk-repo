@@ -27,9 +27,9 @@
 
 package com.tencent.bkrepo.analyst.service.impl
 
+import com.tencent.bkrepo.analyst.service.LicenseScanQualityService
 import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseNature
 import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey
-import com.tencent.bkrepo.analyst.service.LicenseScanQualityService
 import org.springframework.stereotype.Service
 
 @Service

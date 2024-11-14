@@ -41,13 +41,13 @@ import com.tencent.bkrepo.common.api.message.CommonMessageCode
 import com.tencent.bkrepo.common.api.pojo.Response
 import com.tencent.bkrepo.common.artifact.api.ArtifactFile
 import com.tencent.bkrepo.common.artifact.api.ArtifactPathVariable
+import com.tencent.bkrepo.common.artifact.audit.ActionAuditContent
+import com.tencent.bkrepo.common.artifact.audit.NODE_CREATE_ACTION
+import com.tencent.bkrepo.common.artifact.audit.NODE_DOWNLOAD_ACTION
+import com.tencent.bkrepo.common.artifact.audit.NODE_RESOURCE
 import com.tencent.bkrepo.common.artifact.metrics.ChunkArtifactTransferMetrics
 import com.tencent.bkrepo.common.artifact.router.Router
 import com.tencent.bkrepo.common.metadata.permission.PermissionManager
-import com.tencent.bkrepo.common.artifact.audit.ActionAuditContent
-import com.tencent.bkrepo.common.artifact.audit.NODE_DOWNLOAD_ACTION
-import com.tencent.bkrepo.common.artifact.audit.NODE_RESOURCE
-import com.tencent.bkrepo.common.artifact.audit.NODE_CREATE_ACTION
 import com.tencent.bkrepo.common.security.permission.Principal
 import com.tencent.bkrepo.common.security.permission.PrincipalType
 import com.tencent.bkrepo.common.service.util.HttpContextHolder
@@ -71,7 +71,7 @@ import com.tencent.bkrepo.generic.pojo.TemporaryUrlCreateRequest
 import com.tencent.bkrepo.generic.pojo.UploadTransactionInfo
 import com.tencent.bkrepo.generic.service.TemporaryAccessService
 import com.tencent.bkrepo.generic.service.UploadService
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpMethod
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -140,7 +140,7 @@ class TemporaryAccessController(
         scopeId = "#artifactInfo?.projectId",
         content = ActionAuditContent.NODE_SHARE_DOWNLOAD_CONTENT
     )
-    @ApiOperation("下载分享文件")
+    @Operation(summary = "下载分享文件")
     @Router
     @CrossOrigin
     @GetMapping("/share/$GENERIC_MAPPING_URI")
@@ -294,7 +294,7 @@ class TemporaryAccessController(
         temporaryAccessService.uploadArtifact(artifactInfo, artifactFile)
 
         // TODO 如果PUT请求没有发起，token如何让其失效
-        if (HttpContextHolder.getRequest().method == HttpMethod.PUT.name) {
+        if (HttpContextHolder.getRequest().method == HttpMethod.PUT.name()) {
             temporaryAccessService.decrementPermits(tokenInfo)
         }
     }

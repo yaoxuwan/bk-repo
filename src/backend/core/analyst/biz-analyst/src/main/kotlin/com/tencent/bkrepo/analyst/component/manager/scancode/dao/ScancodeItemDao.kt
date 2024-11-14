@@ -27,11 +27,11 @@
 
 package com.tencent.bkrepo.analyst.component.manager.scancode.dao
 
-import com.tencent.bkrepo.common.analysis.pojo.scanner.scanCodeCheck.result.ScancodeItem
 import com.tencent.bkrepo.analyst.component.manager.ResultItemDao
 import com.tencent.bkrepo.analyst.component.manager.scancode.model.TScancodeItem
 import com.tencent.bkrepo.analyst.pojo.request.LoadResultArguments
 import com.tencent.bkrepo.analyst.pojo.request.scancodetoolkit.ScancodeToolkitResultArguments
+import com.tencent.bkrepo.common.analysis.pojo.scanner.scanCodeCheck.result.ScancodeItem
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.inValues
 import org.springframework.stereotype.Repository

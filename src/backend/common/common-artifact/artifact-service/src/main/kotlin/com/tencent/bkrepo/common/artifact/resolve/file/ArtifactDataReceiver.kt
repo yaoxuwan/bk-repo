@@ -45,6 +45,7 @@ import com.tencent.bkrepo.common.storage.monitor.StorageHealthMonitor
 import com.tencent.bkrepo.common.storage.monitor.Throughput
 import com.tencent.bkrepo.common.storage.util.createFile
 import com.tencent.bkrepo.common.storage.util.delete
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -59,7 +60,6 @@ import java.security.SecureRandom
 import java.time.Duration
 import kotlin.math.abs
 import kotlin.system.measureTimeMillis
-import org.slf4j.LoggerFactory
 
 /**
  * artifact数据接收类，作用：

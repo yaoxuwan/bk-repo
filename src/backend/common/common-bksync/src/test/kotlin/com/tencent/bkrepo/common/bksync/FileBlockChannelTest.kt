@@ -1,10 +1,10 @@
 package com.tencent.bkrepo.common.bksync
 
-import java.io.ByteArrayOutputStream
-import java.nio.channels.Channels
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.io.ByteArrayOutputStream
+import java.nio.channels.Channels
 
 class FileBlockChannelTest {
 

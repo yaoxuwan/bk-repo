@@ -33,6 +33,8 @@ package com.tencent.bkrepo.repository.pojo.stage
 
 import com.tencent.bkrepo.common.api.constant.CharPool
 import com.tencent.bkrepo.common.api.constant.ensurePrefix
+import com.tencent.bkrepo.repository.pojo.stage.ArtifactStageEnum.values
+import java.util.Locale
 
 /**
  * 制品晋级阶段枚举类
@@ -82,7 +84,7 @@ enum class ArtifactStageEnum(
             if (tag.isNullOrBlank()) {
                 return NONE
             }
-            val normalizedTag = tag.ensurePrefix(CharPool.AT).toLowerCase()
+            val normalizedTag = tag.ensurePrefix(CharPool.AT).lowercase(Locale.getDefault())
             return values().find { stage -> stage.tag == normalizedTag } ?: NONE
         }
 

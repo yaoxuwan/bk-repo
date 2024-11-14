@@ -43,9 +43,9 @@ import com.tencent.bkrepo.router.repository.NodeLocationRepository
 import com.tencent.bkrepo.router.repository.RouterNodeRepository
 import com.tencent.bkrepo.router.repository.RouterPolicyRepository
 import com.tencent.bkrepo.router.service.RouterAdminService
-import java.time.LocalDateTime
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class RouterAdminServiceImpl(

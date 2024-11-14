@@ -31,9 +31,9 @@
 
 package com.tencent.bkrepo.common.metadata.search.node
 
+import com.tencent.bkrepo.common.metadata.search.common.CommonQueryContext
 import com.tencent.bkrepo.common.query.builder.MongoQueryInterpreter
 import com.tencent.bkrepo.common.query.model.QueryModel
-import com.tencent.bkrepo.common.metadata.search.common.CommonQueryContext
 import org.springframework.data.mongodb.core.query.Query
 
 class NodeQueryContext(

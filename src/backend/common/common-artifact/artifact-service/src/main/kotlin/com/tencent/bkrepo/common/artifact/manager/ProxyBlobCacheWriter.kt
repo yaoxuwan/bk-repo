@@ -36,10 +36,10 @@ import com.tencent.bkrepo.common.artifact.stream.StreamReadListener
 import com.tencent.bkrepo.common.artifact.stream.closeQuietly
 import com.tencent.bkrepo.common.storage.core.StorageService
 import com.tencent.bkrepo.common.storage.util.createNewOutputStream
+import org.slf4j.LoggerFactory
 import java.io.OutputStream
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.Files
-import org.slf4j.LoggerFactory
 
 /**
  * 代理拉取数据写入缓存

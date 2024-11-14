@@ -45,9 +45,6 @@ import com.tencent.bkrepo.job.batch.base.JobContext
 import com.tencent.bkrepo.job.batch.utils.RepositoryCommonUtils
 import com.tencent.bkrepo.job.config.properties.SystemGcJobProperties
 import org.apache.commons.text.similarity.HammingDistance
-import java.time.Duration
-import java.time.LocalDateTime
-import kotlin.math.abs
 import org.bson.types.ObjectId
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -57,6 +54,9 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Component
+import java.time.Duration
+import java.time.LocalDateTime
+import kotlin.math.abs
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.system.measureNanoTime
 

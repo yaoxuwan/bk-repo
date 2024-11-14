@@ -120,6 +120,7 @@ import com.tencent.bkrepo.repository.pojo.node.NodeListOption
 import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeDeleteRequest
 import com.tencent.bkrepo.repository.pojo.repo.RepositoryInfo
+import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
@@ -129,7 +130,6 @@ import java.util.Base64
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import javax.servlet.http.HttpServletRequest
 import kotlin.reflect.full.memberProperties
 
 @Component
@@ -777,8 +777,8 @@ class GenericLocalRepository(
     private fun chunkedUpload(context: ArtifactUploadContext) {
         logger.info("chunked upload method ${context.request.method} ")
         val responseProperty = when (context.request.method) {
-            HttpMethod.PATCH.name -> patchUpload(context)
-            HttpMethod.PUT.name -> putUpload(context)
+            HttpMethod.PATCH.name() -> patchUpload(context)
+            HttpMethod.PUT.name() -> putUpload(context)
             else -> null
         } ?: return
         uploadResponse(responseProperty, context.response)

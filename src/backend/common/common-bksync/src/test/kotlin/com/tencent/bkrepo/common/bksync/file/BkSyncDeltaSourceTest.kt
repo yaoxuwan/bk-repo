@@ -3,12 +3,12 @@ package com.tencent.bkrepo.common.bksync.file
 import com.tencent.bkrepo.common.api.stream.readInt
 import com.tencent.bkrepo.common.api.stream.readLong
 import com.tencent.bkrepo.common.bksync.file.BkSyncDeltaSource.Companion.toBkSyncDeltaSource
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.util.zip.CRC32
 import kotlin.random.Random
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
 
 class BkSyncDeltaSourceTest {
     @Test

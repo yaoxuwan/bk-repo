@@ -27,9 +27,9 @@
 
 package com.tencent.bkrepo.auth.job
 
+import com.tencent.bkrepo.auth.dao.ProxyDao
 import com.tencent.bkrepo.auth.model.TProxy
 import com.tencent.bkrepo.auth.pojo.proxy.ProxyStatus
-import com.tencent.bkrepo.auth.dao.ProxyDao
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update

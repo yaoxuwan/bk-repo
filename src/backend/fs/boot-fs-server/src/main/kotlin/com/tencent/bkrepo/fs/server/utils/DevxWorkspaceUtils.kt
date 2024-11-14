@@ -54,7 +54,6 @@ import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 import reactor.core.publisher.Mono
-import reactor.core.publisher.toMono
 import reactor.netty.http.client.HttpClient
 import reactor.netty.http.client.PrematureCloseException
 import reactor.netty.resources.ConnectionProvider
@@ -102,7 +101,7 @@ class DevxWorkspaceUtils(
         }
 
         fun getIpList(projectId: String): Mono<Set<String>> {
-            return projectIpsCache[projectId].toMono()
+            return Mono.fromFuture(projectIpsCache[projectId])
         }
 
         /**

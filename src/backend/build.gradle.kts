@@ -48,12 +48,10 @@ allprojects {
         imports {
             mavenBom("org.springframework.cloud:spring-cloud-sleuth-otel-dependencies:${Versions.SleuthOtel}")
             // 升级devops boot版本后，stream启动报错。参考https://github.com/spring-cloud/spring-cloud-function/issues/940
-            mavenBom("org.springframework.cloud:spring-cloud-function-dependencies:${Versions.SpringCloudFunction}")
+//            mavenBom("org.springframework.cloud:spring-cloud-function-dependencies:${Versions.SpringCloudFunction}")
         }
         dependencies {
             dependency("com.github.zafarkhaja:java-semver:${Versions.JavaSemver}")
-            dependency("org.apache.skywalking:apm-toolkit-logback-1.x:${Versions.SkyWalkingApmToolkit}")
-            dependency("org.apache.skywalking:apm-toolkit-trace:${Versions.SkyWalkingApmToolkit}")
             dependency("net.javacrumbs.shedlock:shedlock-spring:${Versions.Shedlock}")
             dependency("net.javacrumbs.shedlock:shedlock-provider-mongo:${Versions.Shedlock}")
             dependency("com.google.code.gson:gson:${Versions.Gson}")
@@ -69,7 +67,7 @@ allprojects {
             dependency("org.apache.commons:commons-text:${Versions.CommonsText}")
             dependency("org.mockito.kotlin:mockito-kotlin:${Versions.MockitoKotlin}")
             dependency("io.mockk:mockk:${Versions.Mockk}")
-            dependencySet("io.swagger:${Versions.Swagger}") {
+            dependencySet("io.swagger.core.v3:${Versions.Swagger}") {
                 entry("swagger-annotations")
                 entry("swagger-models")
             }
@@ -82,6 +80,7 @@ allprojects {
             dependency("com.tencent.devops:devops-schedule-server:${Versions.DevopsBootSNAPSHOT}")
             dependency("com.tencent.devops:devops-schedule-model-mongodb:${Versions.DevopsBootSNAPSHOT}")
             dependency("com.tencent.devops:devops-schedule-worker:${Versions.DevopsBootSNAPSHOT}")
+            dependency("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:${Versions.EmbeddedMongo}")
         }
     }
 
@@ -89,12 +88,11 @@ allprojects {
         exclude(group = "log4j", module = "log4j")
         exclude(group = "org.slf4j", module = "slf4j-log4j12")
         exclude(group = "commons-logging", module = "commons-logging")
+        exclude(group = "io.swagger")
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-java-parameters")
-        }
+        compilerOptions.freeCompilerArgs = listOf("-java-parameters")
     }
 
     tasks.withType<JacocoReport> {
@@ -103,6 +101,10 @@ allprojects {
             html.required.set(true)
         }
         dependsOn(tasks.getByName("test"))
+    }
+
+    tasks.test {
+        jvmArgs = listOf("-Xshare:off")
     }
 
     if (isBootProject(this)) {

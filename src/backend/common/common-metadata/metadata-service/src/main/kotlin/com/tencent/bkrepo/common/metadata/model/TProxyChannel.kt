@@ -32,10 +32,10 @@
 package com.tencent.bkrepo.common.metadata.model
 
 import com.tencent.bkrepo.common.artifact.pojo.RepositoryType
-import java.time.LocalDateTime
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.index.CompoundIndexes
 import org.springframework.data.mongodb.core.mapping.Document
+import java.time.LocalDateTime
 
 /**
  * 代理源模型

@@ -28,8 +28,8 @@
 package com.tencent.bkrepo.auth.controller.cluster
 
 import com.tencent.bkrepo.auth.api.cluster.ClusterUserClient
-import com.tencent.bkrepo.auth.pojo.user.UserInfo
 import com.tencent.bkrepo.auth.controller.OpenResource
+import com.tencent.bkrepo.auth.pojo.user.UserInfo
 import com.tencent.bkrepo.auth.service.PermissionService
 import com.tencent.bkrepo.auth.service.UserService
 import com.tencent.bkrepo.common.api.pojo.Response

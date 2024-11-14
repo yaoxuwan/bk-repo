@@ -4,13 +4,12 @@ import com.google.common.primitives.Ints
 import com.google.common.primitives.Longs
 import com.tencent.bkrepo.common.api.stream.readInt
 import com.tencent.bkrepo.common.api.stream.readLong
-import com.tencent.bkrepo.common.bksync.file.BkSyncDeltaSource.Companion.toBkSyncDeltaSource
+import org.apache.commons.codec.binary.Hex
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.zip.CRC32
-import org.apache.commons.codec.binary.Hex
 
 /**
  * bd抽象资源

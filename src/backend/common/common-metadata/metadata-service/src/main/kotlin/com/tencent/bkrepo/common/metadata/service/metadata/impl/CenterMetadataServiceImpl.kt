@@ -28,12 +28,12 @@
 package com.tencent.bkrepo.common.metadata.service.metadata.impl
 
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
-import com.tencent.bkrepo.common.metadata.util.ClusterUtils
-import com.tencent.bkrepo.common.security.manager.ci.CIPermissionManager
-import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeCenterCondition
 import com.tencent.bkrepo.common.metadata.config.RepositoryProperties
 import com.tencent.bkrepo.common.metadata.dao.node.NodeDao
 import com.tencent.bkrepo.common.metadata.model.TNode
+import com.tencent.bkrepo.common.metadata.util.ClusterUtils
+import com.tencent.bkrepo.common.security.manager.ci.CIPermissionManager
+import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeCenterCondition
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 

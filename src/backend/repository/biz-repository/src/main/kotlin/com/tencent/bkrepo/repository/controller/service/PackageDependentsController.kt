@@ -32,10 +32,10 @@
 package com.tencent.bkrepo.repository.controller.service
 
 import com.tencent.bkrepo.common.api.pojo.Response
+import com.tencent.bkrepo.common.metadata.service.packages.PackageDependentsService
 import com.tencent.bkrepo.common.service.util.ResponseBuilder
 import com.tencent.bkrepo.repository.api.PackageDependentsClient
 import com.tencent.bkrepo.repository.pojo.dependent.PackageDependentsRelation
-import com.tencent.bkrepo.common.metadata.service.packages.PackageDependentsService
 import org.springframework.web.bind.annotation.RestController
 
 @RestController

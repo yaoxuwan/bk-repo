@@ -31,22 +31,22 @@
 
 package com.tencent.bkrepo.repository.service
 
-import com.tencent.bkrepo.repository.UT_PACKAGE_KEY
-import com.tencent.bkrepo.repository.UT_PACKAGE_VERSION
-import com.tencent.bkrepo.repository.UT_PROJECT_ID
-import com.tencent.bkrepo.repository.UT_REPO_NAME
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageDao
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageDownloadsDao
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageVersionDao
 import com.tencent.bkrepo.common.metadata.model.TPackage
 import com.tencent.bkrepo.common.metadata.model.TPackageVersion
-import com.tencent.bkrepo.repository.pojo.download.DetailsQueryRequest
-import com.tencent.bkrepo.repository.pojo.download.PackageDownloadRecord
 import com.tencent.bkrepo.common.metadata.search.packages.PackageSearchInterpreter
-import com.tencent.bkrepo.repository.service.PackageServiceTest.Companion.buildCreateRequest
 import com.tencent.bkrepo.common.metadata.service.packages.PackageDownloadsService
 import com.tencent.bkrepo.common.metadata.service.packages.PackageService
 import com.tencent.bkrepo.common.metadata.service.repo.RepositoryService
+import com.tencent.bkrepo.repository.UT_PACKAGE_KEY
+import com.tencent.bkrepo.repository.UT_PACKAGE_VERSION
+import com.tencent.bkrepo.repository.UT_PROJECT_ID
+import com.tencent.bkrepo.repository.UT_REPO_NAME
+import com.tencent.bkrepo.repository.pojo.download.DetailsQueryRequest
+import com.tencent.bkrepo.repository.pojo.download.PackageDownloadRecord
+import com.tencent.bkrepo.repository.service.PackageServiceTest.Companion.buildCreateRequest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach

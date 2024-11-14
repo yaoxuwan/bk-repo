@@ -27,8 +27,8 @@
 
 package com.tencent.bkrepo.analyst.dao
 
-import com.tencent.bkrepo.common.api.pojo.Page
 import com.tencent.bkrepo.analyst.model.TProjectScanConfiguration
+import com.tencent.bkrepo.common.api.pojo.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query

@@ -6,8 +6,8 @@ import com.google.common.cache.LoadingCache
 import com.google.common.cache.RemovalListener
 import com.tencent.bkrepo.common.artifact.stream.Range
 import com.tencent.bkrepo.common.bksync.BkSync
-import com.tencent.bkrepo.common.bksync.file.BkSyncDeltaSource
 import com.tencent.bkrepo.common.bksync.file.BDUtils
+import com.tencent.bkrepo.common.bksync.file.BkSyncDeltaSource
 import com.tencent.bkrepo.common.bksync.transfer.exception.TooLowerReuseRateException
 import com.tencent.bkrepo.common.storage.credentials.StorageCredentials
 import com.tencent.bkrepo.common.storage.message.StorageErrorException
@@ -15,12 +15,12 @@ import com.tencent.bkrepo.common.storage.message.StorageMessageCode
 import com.tencent.bkrepo.common.storage.monitor.Throughput
 import com.tencent.bkrepo.common.storage.util.StorageUtils
 import com.tencent.bkrepo.common.storage.util.createFile
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
-import org.slf4j.LoggerFactory
 import kotlin.system.measureNanoTime
 
 /**

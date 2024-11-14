@@ -31,17 +31,17 @@ import com.tencent.bkrepo.auth.api.ServiceBkiamV3ResourceClient
 import com.tencent.bkrepo.auth.api.ServicePermissionClient
 import com.tencent.bkrepo.common.artifact.message.ArtifactMessageCode
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
+import com.tencent.bkrepo.common.metadata.dao.project.ProjectDao
+import com.tencent.bkrepo.common.metadata.dao.project.ProjectMetricsDao
+import com.tencent.bkrepo.common.metadata.service.repo.StorageCredentialService
 import com.tencent.bkrepo.common.metadata.util.ClusterUtils.reportMetadataToCenter
 import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeEdgeCondition
 import com.tencent.bkrepo.common.service.cluster.properties.ClusterProperties
 import com.tencent.bkrepo.common.service.exception.RemoteErrorCodeException
 import com.tencent.bkrepo.common.service.feign.FeignClientFactory
 import com.tencent.bkrepo.repository.api.cluster.ClusterProjectClient
-import com.tencent.bkrepo.common.metadata.dao.project.ProjectDao
-import com.tencent.bkrepo.common.metadata.dao.project.ProjectMetricsDao
 import com.tencent.bkrepo.repository.pojo.project.ProjectCreateRequest
 import com.tencent.bkrepo.repository.pojo.project.ProjectInfo
-import com.tencent.bkrepo.common.metadata.service.repo.StorageCredentialService
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 

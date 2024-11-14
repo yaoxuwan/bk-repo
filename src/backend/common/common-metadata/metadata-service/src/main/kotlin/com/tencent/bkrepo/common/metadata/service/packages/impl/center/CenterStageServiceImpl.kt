@@ -28,12 +28,12 @@
 package com.tencent.bkrepo.common.metadata.service.packages.impl.center
 
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
-import com.tencent.bkrepo.common.metadata.util.ClusterUtils
-import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeCenterPackageCondition
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageDao
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageVersionDao
-import com.tencent.bkrepo.repository.pojo.stage.StageUpgradeRequest
 import com.tencent.bkrepo.common.metadata.service.packages.impl.StageServiceImpl
+import com.tencent.bkrepo.common.metadata.util.ClusterUtils
+import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeCenterPackageCondition
+import com.tencent.bkrepo.repository.pojo.stage.StageUpgradeRequest
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service

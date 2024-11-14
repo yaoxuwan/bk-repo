@@ -36,7 +36,6 @@ import com.tencent.bkrepo.common.ratelimiter.rule.common.ResInfo
 import com.tencent.bkrepo.common.ratelimiter.rule.common.ResourceLimit
 import com.tencent.bkrepo.common.ratelimiter.rule.usage.user.UserUploadUsageRateLimitRule
 import com.tencent.bkrepo.common.ratelimiter.service.AbstractRateLimiterServiceTest
-import java.time.Duration
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -45,6 +44,7 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.servlet.HandlerMapping
+import java.time.Duration
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UserUploadUsageRateLimiterServiceTest : AbstractRateLimiterServiceTest() {

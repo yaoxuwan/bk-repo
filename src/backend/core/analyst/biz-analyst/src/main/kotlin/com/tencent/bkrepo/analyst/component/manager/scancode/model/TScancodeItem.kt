@@ -27,8 +27,8 @@
 
 package com.tencent.bkrepo.analyst.component.manager.scancode.model
 
-import com.tencent.bkrepo.common.analysis.pojo.scanner.scanCodeCheck.result.ScancodeItem
 import com.tencent.bkrepo.analyst.component.manager.ResultItem
+import com.tencent.bkrepo.common.analysis.pojo.scanner.scanCodeCheck.result.ScancodeItem
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document("scancode_item")

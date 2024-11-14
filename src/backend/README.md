@@ -26,11 +26,11 @@
  
 ### swagger开关
 
-通过配置`springfox.documentation.enabled=false`可以关闭`swagger`功能，生产环境中可以关闭。
+通过配置`springdoc.api-docs.enabled=false`可以关闭`swagger`功能，生产环境中可以关闭。
 
 ### swagger地址
 
-${base-path}/v2/api-docs
+${base-path}/v3/api-docs
 
 配合chrome浏览器插件`Swagger UI Console`使用
 

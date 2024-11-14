@@ -27,14 +27,6 @@
 
 package com.tencent.bkrepo.analyst.component.manager.trivy
 
-import com.tencent.bkrepo.common.api.pojo.Page
-import com.tencent.bkrepo.common.mongo.dao.util.Pages
-import com.tencent.bkrepo.common.query.model.PageLimit
-import com.tencent.bkrepo.common.analysis.pojo.scanner.CveOverviewKey
-import com.tencent.bkrepo.common.analysis.pojo.scanner.Level
-import com.tencent.bkrepo.common.analysis.pojo.scanner.ScanExecutorResult
-import com.tencent.bkrepo.common.analysis.pojo.scanner.trivy.TrivyScanExecutorResult
-import com.tencent.bkrepo.common.analysis.pojo.scanner.trivy.TrivyScanner
 import com.tencent.bkrepo.analyst.component.manager.ScannerConverter
 import com.tencent.bkrepo.analyst.component.manager.trivy.model.TVulnerabilityItem
 import com.tencent.bkrepo.analyst.pojo.request.ArtifactVulnerabilityRequest
@@ -42,6 +34,14 @@ import com.tencent.bkrepo.analyst.pojo.request.LoadResultArguments
 import com.tencent.bkrepo.analyst.pojo.request.trivy.TrivyLoadResultArguments
 import com.tencent.bkrepo.analyst.pojo.response.ArtifactVulnerabilityInfo
 import com.tencent.bkrepo.analyst.utils.ScanPlanConverter
+import com.tencent.bkrepo.common.analysis.pojo.scanner.CveOverviewKey
+import com.tencent.bkrepo.common.analysis.pojo.scanner.Level
+import com.tencent.bkrepo.common.analysis.pojo.scanner.ScanExecutorResult
+import com.tencent.bkrepo.common.analysis.pojo.scanner.trivy.TrivyScanExecutorResult
+import com.tencent.bkrepo.common.analysis.pojo.scanner.trivy.TrivyScanner
+import com.tencent.bkrepo.common.api.pojo.Page
+import com.tencent.bkrepo.common.mongo.dao.util.Pages
+import com.tencent.bkrepo.common.query.model.PageLimit
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 import java.util.Locale

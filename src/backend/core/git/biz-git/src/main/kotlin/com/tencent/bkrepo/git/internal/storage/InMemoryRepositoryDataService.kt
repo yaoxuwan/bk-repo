@@ -1,11 +1,11 @@
 package com.tencent.bkrepo.git.internal.storage
 
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
-import java.nio.ByteBuffer
 import org.eclipse.jgit.internal.storage.dfs.DfsOutputStream
 import org.eclipse.jgit.internal.storage.dfs.DfsPackDescription
 import org.eclipse.jgit.internal.storage.dfs.ReadableChannel
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
+import java.nio.ByteBuffer
 
 class InMemoryRepositoryDataService : RepositoryDataService {
 

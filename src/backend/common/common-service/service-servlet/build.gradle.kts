@@ -37,8 +37,8 @@ dependencies {
 
     api("com.google.guava:guava")
 
-    api("org.springframework.cloud:spring-cloud-sleuth-otel-autoconfigure")
-    implementation("io.opentelemetry:opentelemetry-sdk-extension-resources")
+//    api("org.springframework.cloud:spring-cloud-sleuth-otel-autoconfigure")
+//    implementation("io.opentelemetry:opentelemetry-sdk-extension-resources")
     // 默认不添加otel exporter
     if (otelExporterEnabled.toBoolean()) {
         implementation("io.opentelemetry:opentelemetry-exporter-otlp")
@@ -48,11 +48,14 @@ dependencies {
     compileOnly(project(":common:common-mongo"))
 
     val assemblyMode = project.findPropertyOrNull("devops.assemblyMode")
-    if (assemblyMode == null || assemblyMode.toUpperCase() == "CONSUL") {
+    if (assemblyMode == null || assemblyMode.uppercase() == "CONSUL") {
         api("org.springframework.cloud:spring-cloud-starter-config")
     }
     api("org.springframework.retry:spring-retry")
     api("com.github.ulisesbocchio:jasypt-spring-boot-starter:${Versions.Jasypt}")
 
     api(project(":common:common-service:service-base"))
+    api("org.springframework.boot:spring-boot-starter-aop")
+    api("org.springframework.boot:spring-boot-actuator-autoconfigure")
+    runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
 }

@@ -28,15 +28,15 @@
 package com.tencent.bkrepo.common.service.otel.mongodb
 
 import com.mongodb.client.internal.MongoClientImpl
+import io.micrometer.tracing.Tracer
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.cloud.sleuth.otel.bridge.OtelTracer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(value = ["spring.sleuth.enabled"], matchIfMissing = true)
-@ConditionalOnClass(OtelTracer::class, MongoClientImpl::class)
+@ConditionalOnClass(Tracer::class, MongoClientImpl::class)
 class OtelMongoConfiguration {
 
     @Bean

@@ -3,12 +3,12 @@ package com.tencent.bkrepo.common.bksync
 import com.google.common.hash.Hashing
 import com.google.common.primitives.Ints
 import com.google.common.primitives.Longs
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.util.zip.Adler32
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
 
 class ChecksumIndexTest {
 

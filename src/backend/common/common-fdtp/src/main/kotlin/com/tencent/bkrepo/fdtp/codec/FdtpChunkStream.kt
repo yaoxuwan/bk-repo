@@ -45,6 +45,7 @@ class FdtpChunkStream(val input: ChunkedInput<ByteBuf>, val stream: FdtpFrameStr
         input.close()
     }
 
+    @Deprecated("use readChunk(ByteBufAllocator)")
     override fun readChunk(ctx: ChannelHandlerContext): FdtpDataFrame? {
         return readChunk(ctx.alloc())
     }

@@ -43,7 +43,6 @@ import com.tencent.bkrepo.common.ratelimiter.rule.url.user.UserUrlRepoRateLimitR
 import com.tencent.bkrepo.common.ratelimiter.service.AbstractRateLimiterServiceTest
 import com.tencent.bkrepo.repository.pojo.repo.UserRepoCreateRequest
 import com.tencent.bkrepo.repository.pojo.search.NodeQueryBuilder
-import java.time.Duration
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -53,6 +52,7 @@ import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.servlet.HandlerMapping
 import org.springframework.web.servlet.HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE
+import java.time.Duration
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UserUrlRepoRateLimiterServiceTest : AbstractRateLimiterServiceTest() {

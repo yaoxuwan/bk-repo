@@ -27,13 +27,13 @@
 
 package com.tencent.bkrepo.auth.service.impl
 
+import com.tencent.bkrepo.auth.dao.repository.ExternalPermissionRepository
 import com.tencent.bkrepo.auth.message.AuthMessageCode
 import com.tencent.bkrepo.auth.model.TExternalPermission
 import com.tencent.bkrepo.auth.pojo.externalPermission.CreateExtPermissionRequest
 import com.tencent.bkrepo.auth.pojo.externalPermission.ExternalPermission
 import com.tencent.bkrepo.auth.pojo.externalPermission.ListExtPermissionOption
 import com.tencent.bkrepo.auth.pojo.externalPermission.UpdateExtPermissionRequest
-import com.tencent.bkrepo.auth.dao.repository.ExternalPermissionRepository
 import com.tencent.bkrepo.auth.service.ExternalPermissionService
 import com.tencent.bkrepo.common.api.exception.NotFoundException
 import com.tencent.bkrepo.common.api.pojo.Page

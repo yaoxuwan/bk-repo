@@ -49,12 +49,12 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.isEqualTo
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.io.FileNotFoundException
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
@@ -65,7 +65,7 @@ class MigrateFailedNodeExecutorTest @Autowired constructor(
     private val executor: MigrateFailedNodeExecutor,
 ) : ExecutorBaseTest() {
 
-    @MockBean
+    @MockitoBean
     private lateinit var migrateFailedNodeAutoFixStrategy: MigrateFailedNodeAutoFixStrategy
 
     @AfterAll

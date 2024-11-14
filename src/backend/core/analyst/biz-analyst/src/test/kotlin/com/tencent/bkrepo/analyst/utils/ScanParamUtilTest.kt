@@ -27,11 +27,11 @@
 
 package com.tencent.bkrepo.analyst.utils
 
-import com.tencent.bkrepo.common.api.exception.ErrorCodeException
-import com.tencent.bkrepo.common.artifact.pojo.RepositoryType
 import com.tencent.bkrepo.analyst.NODE_FULL_PATH
 import com.tencent.bkrepo.analyst.PACKAGE_KEY
 import com.tencent.bkrepo.analyst.PACKAGE_VERSION
+import com.tencent.bkrepo.common.api.exception.ErrorCodeException
+import com.tencent.bkrepo.common.artifact.pojo.RepositoryType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

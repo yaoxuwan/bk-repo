@@ -29,9 +29,8 @@ package com.tencent.bkrepo.ddc.utils
 
 import com.tencent.bkrepo.ddc.utils.BlakeUtils.hex
 import com.tencent.bkrepo.ddc.utils.BlakeUtils.toBlake3InputStream
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 

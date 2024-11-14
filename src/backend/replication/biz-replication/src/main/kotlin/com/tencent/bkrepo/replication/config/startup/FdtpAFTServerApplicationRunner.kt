@@ -29,13 +29,13 @@ package com.tencent.bkrepo.replication.config.startup
 
 import com.tencent.bkrepo.common.api.util.HumanReadable
 import com.tencent.bkrepo.replication.fdtp.FdtpAFTServer
-import kotlin.system.measureNanoTime
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
+import kotlin.system.measureNanoTime
 
 @Component
 @ConditionalOnProperty("fdtp.server.enabled")

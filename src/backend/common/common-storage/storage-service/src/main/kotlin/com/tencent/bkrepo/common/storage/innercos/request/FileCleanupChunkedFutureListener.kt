@@ -1,10 +1,10 @@
 package com.tencent.bkrepo.common.storage.innercos.request
 
 import com.tencent.bkrepo.common.api.stream.ChunkedFutureListener
+import org.apache.commons.logging.LogFactory
 import java.io.File
 import java.nio.file.Files
 import java.util.concurrent.Future
-import org.apache.commons.logging.LogFactory
 
 class FileCleanupChunkedFutureListener : ChunkedFutureListener<File> {
     override fun done(future: Future<File>?, getInputStreamTime: Long) {

@@ -23,7 +23,6 @@ import com.tencent.bkrepo.repository.pojo.packages.PackageVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
-import kotlin.streams.toList
 
 object NugetV3RegistrationUtils {
 

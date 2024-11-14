@@ -33,8 +33,8 @@ package com.tencent.bkrepo.repository.job.base
 
 import com.tencent.bkrepo.common.api.util.HumanReadable
 import com.tencent.bkrepo.common.api.util.executeAndMeasureTime
-import com.tencent.bkrepo.common.service.log.LoggerHolder
 import com.tencent.bkrepo.common.metadata.config.RepositoryProperties
+import com.tencent.bkrepo.common.service.log.LoggerHolder
 import org.springframework.beans.factory.annotation.Autowired
 
 /**

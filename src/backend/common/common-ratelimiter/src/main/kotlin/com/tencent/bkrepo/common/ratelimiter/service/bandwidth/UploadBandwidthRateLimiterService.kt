@@ -38,9 +38,9 @@ import com.tencent.bkrepo.common.ratelimiter.rule.bandwidth.UploadBandwidthRateL
 import com.tencent.bkrepo.common.ratelimiter.rule.common.ResourceLimit
 import com.tencent.bkrepo.common.ratelimiter.service.AbstractBandwidthRateLimiterService
 import com.tencent.bkrepo.common.ratelimiter.service.user.RateLimiterConfigService
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
-import javax.servlet.http.HttpServletRequest
 
 /**
  * 上传带宽限流器实现, 针对project/repo进行限流

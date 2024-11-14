@@ -36,9 +36,9 @@ import com.tencent.bkrepo.common.security.http.core.HttpAuthSecurityCustomizer
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
-import org.springframework.context.annotation.Primary
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration

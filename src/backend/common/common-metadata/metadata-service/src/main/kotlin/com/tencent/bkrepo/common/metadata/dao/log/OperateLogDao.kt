@@ -28,8 +28,8 @@
 package com.tencent.bkrepo.common.metadata.dao.log
 
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
-import com.tencent.bkrepo.common.mongo.dao.sharding.MonthRangeShardingMongoDao
 import com.tencent.bkrepo.common.metadata.model.TOperateLog
+import com.tencent.bkrepo.common.mongo.dao.sharding.MonthRangeShardingMongoDao
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Repository
 

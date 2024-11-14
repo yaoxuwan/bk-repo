@@ -77,7 +77,7 @@ import com.tencent.bkrepo.repository.pojo.packages.VersionListOption
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import kotlin.streams.toList
+import java.util.Locale
 
 @Suppress("TooManyFunctions")
 @Component
@@ -179,7 +179,7 @@ class NugetLocalRepository(
         // 校验版本是否存在，存在则冲突
         with(context.artifactInfo as NugetPublishArtifactInfo) {
             packageService.findVersionByName(
-                projectId, repoName, PackageKeys.ofNuget(packageName.toLowerCase()), version
+                projectId, repoName, PackageKeys.ofNuget(packageName.lowercase(Locale.getDefault())), version
             )?.let {
                 throw ErrorCodeException(
                     messageCode = NugetMessageCode.VERSION_EXISTED,

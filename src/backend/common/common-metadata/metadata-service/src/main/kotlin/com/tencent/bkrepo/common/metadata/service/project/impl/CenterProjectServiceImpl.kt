@@ -30,10 +30,10 @@ package com.tencent.bkrepo.common.metadata.service.project.impl
 import com.tencent.bkrepo.auth.api.ServiceBkiamV3ResourceClient
 import com.tencent.bkrepo.auth.api.ServicePermissionClient
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
-import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeCenterCondition
 import com.tencent.bkrepo.common.metadata.dao.project.ProjectDao
 import com.tencent.bkrepo.common.metadata.dao.project.ProjectMetricsDao
 import com.tencent.bkrepo.common.metadata.service.repo.StorageCredentialService
+import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeCenterCondition
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 

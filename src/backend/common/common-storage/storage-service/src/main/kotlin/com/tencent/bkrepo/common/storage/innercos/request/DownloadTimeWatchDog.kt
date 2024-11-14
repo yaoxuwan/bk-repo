@@ -1,13 +1,13 @@
 package com.tencent.bkrepo.common.storage.innercos.request
 
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import org.apache.commons.logging.LogFactory
 import java.util.LinkedList
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 class DownloadTimeWatchDog(
     private val name: String,

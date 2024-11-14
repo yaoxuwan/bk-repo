@@ -28,7 +28,6 @@
 dependencies {
     api(project(":common:common-service:service-base"))
     api("com.tencent.devops:devops-boot-starter-service-reactive")
-    api("org.springframework.cloud:spring-cloud-sleuth-brave")
     api(project(":common:common-security")) {
         exclude(module = "service-servlet")
     }

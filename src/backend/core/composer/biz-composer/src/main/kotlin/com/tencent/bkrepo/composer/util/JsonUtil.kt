@@ -38,16 +38,15 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.tencent.bkrepo.common.api.exception.ErrorCodeException
 import com.tencent.bkrepo.common.api.message.CommonMessageCode
-import java.lang.Exception
 
 object JsonUtil {
 
-    val mapper: ObjectMapper = ObjectMapper().registerModule(KotlinModule())
-    private const val packages = "packages"
-    private const val dist = "dist"
-    private const val url = "url"
-    private const val downloadRedirectUrl = "providers-lazy-url"
-    private const val search = "search"
+    val mapper: ObjectMapper = ObjectMapper().registerModule(KotlinModule.Builder().build())
+    private const val PACKAGES = "packages"
+    private const val DIST = "dist"
+    private const val URL = "url"
+    private const val DOWNLOAD_REDIRECT_URL = "providers-lazy-url"
+    private const val SEARCH = "search"
 
     init {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -61,7 +60,7 @@ object JsonUtil {
         val jsonObject = JsonParser.parseString(this).asJsonObject
         try {
             return jsonObject.get(param).asString
-        } catch (exception: IllegalStateException) {
+        } catch (_: IllegalStateException) {
             throw ErrorCodeException(CommonMessageCode.PARAMETER_MISSING, "composer.json `$param`")
         }
     }
@@ -75,11 +74,11 @@ object JsonUtil {
     @Throws(Exception::class)
     fun String.wrapperJson(host: String, packageName: String): String {
         val jsonObject = JsonParser.parseString(this).asJsonObject
-        val versions = jsonObject.get(packages).asJsonObject.get(packageName).asJsonObject
+        val versions = jsonObject.get(PACKAGES).asJsonObject.get(packageName).asJsonObject
         for (it in versions.entrySet()) {
-            val uri = it.value.asJsonObject.get(dist).asJsonObject.get(url).asString
+            val uri = it.value.asJsonObject.get(DIST).asJsonObject.get(URL).asString
             val downloadUrl = "$host/$uri"
-            it.value.asJsonObject.get(dist).asJsonObject.addProperty(url, downloadUrl)
+            it.value.asJsonObject.get(DIST).asJsonObject.addProperty(URL, downloadUrl)
         }
         return GsonBuilder().create().toJson(jsonObject)
     }
@@ -91,11 +90,11 @@ object JsonUtil {
     @Throws(Exception::class)
     fun String.wrapperPackageJson(host: String): String {
         val jsonObject = JsonParser.parseString(this).asJsonObject
-        jsonObject.get(search).asString?.let {
-            jsonObject.addProperty(search, "$host$it")
+        jsonObject.get(SEARCH).asString?.let {
+            jsonObject.addProperty(SEARCH, "$host$it")
         }
-        jsonObject.get(downloadRedirectUrl).asString?.let {
-            jsonObject.addProperty(downloadRedirectUrl, "$host$it")
+        jsonObject.get(DOWNLOAD_REDIRECT_URL).asString?.let {
+            jsonObject.addProperty(DOWNLOAD_REDIRECT_URL, "$host$it")
         }
         return GsonBuilder().create().toJson(jsonObject)
     }
@@ -110,7 +109,7 @@ object JsonUtil {
     @Throws(Exception::class)
     fun addComposerVersion(versionJson: String, uploadFileJson: String, name: String, version: String): String {
         val jsonObject = JsonParser.parseString(versionJson).asJsonObject
-        val nameParam = jsonObject.getAsJsonObject(packages).getAsJsonObject(name)
+        val nameParam = jsonObject.getAsJsonObject(PACKAGES).getAsJsonObject(name)
         // 覆盖重复版本信息
         nameParam.add(version, JsonParser.parseString(uploadFileJson))
         return GsonBuilder().create().toJson(jsonObject)
@@ -118,7 +117,7 @@ object JsonUtil {
 
     fun deleteComposerVersion(versionJson: String, name: String, version: String): String {
         val jsonObject = JsonParser.parseString(versionJson).asJsonObject
-        val nameParam = jsonObject.getAsJsonObject(packages).getAsJsonObject(name)
+        val nameParam = jsonObject.getAsJsonObject(PACKAGES).getAsJsonObject(name)
         nameParam.remove(version)
         return GsonBuilder().create().toJson(jsonObject)
     }

@@ -27,8 +27,8 @@
 
 package com.tencent.bkrepo.analysis.executor
 
-import com.tencent.bkrepo.common.api.exception.NotFoundException
 import com.tencent.bkrepo.analyst.message.ScannerMessageCode
+import com.tencent.bkrepo.common.api.exception.NotFoundException
 import org.springframework.stereotype.Component
 
 @Component

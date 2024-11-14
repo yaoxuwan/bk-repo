@@ -33,8 +33,8 @@ import com.tencent.bkrepo.analyst.event.ScanTaskStatusChangedEvent
 import com.tencent.bkrepo.analyst.extension.ScanResultNotifyContext
 import com.tencent.bkrepo.analyst.extension.ScanResultNotifyExtension
 import com.tencent.bkrepo.analyst.message.ScannerMessageCode.SCAN_REPORT_NOTIFY_MESSAGE_CVE
-import com.tencent.bkrepo.analyst.message.ScannerMessageCode.SCAN_REPORT_NOTIFY_MESSAGE_LICENSE
 import com.tencent.bkrepo.analyst.message.ScannerMessageCode.SCAN_REPORT_NOTIFY_MESSAGE_DETAIL
+import com.tencent.bkrepo.analyst.message.ScannerMessageCode.SCAN_REPORT_NOTIFY_MESSAGE_LICENSE
 import com.tencent.bkrepo.analyst.message.ScannerMessageCode.SCAN_REPORT_NOTIFY_MESSAGE_SCANNED
 import com.tencent.bkrepo.analyst.message.ScannerMessageCode.SCAN_REPORT_NOTIFY_MESSAGE_SENSITIVE
 import com.tencent.bkrepo.analyst.message.ScannerMessageCode.SCAN_REPORT_NOTIFY_MESSAGE_TITLE

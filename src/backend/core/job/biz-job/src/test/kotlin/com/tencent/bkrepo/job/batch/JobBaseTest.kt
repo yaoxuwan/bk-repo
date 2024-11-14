@@ -37,6 +37,7 @@ import com.tencent.bkrepo.common.storage.StorageAutoConfiguration
 import com.tencent.bkrepo.common.stream.event.supplier.MessageSupplier
 import com.tencent.bkrepo.job.batch.file.ExpireFileResolverConfig
 import com.tencent.bkrepo.job.config.JobConfig
+import io.micrometer.tracing.Tracer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -47,8 +48,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration
 import org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration
-import org.springframework.cloud.sleuth.Tracer
-import org.springframework.cloud.sleuth.otel.bridge.OtelTracer
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
 import org.springframework.context.annotation.Import
@@ -86,7 +85,7 @@ import org.springframework.test.context.TestPropertySource
 class JobBaseTest {
     @BeforeAll
     fun commonMock() {
-        val tracer = mockk<OtelTracer>()
+        val tracer = mockk<Tracer>()
         mockkObject(SpringContextUtils.Companion)
         every { SpringContextUtils.getBean<Tracer>() } returns tracer
         every { tracer.currentSpan() } returns null

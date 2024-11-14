@@ -32,13 +32,17 @@
 package com.tencent.bkrepo.common.storage.innercos.http
 
 import com.tencent.bkrepo.common.storage.innercos.exception.InnerCosException
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.internal.threadFactory
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.nio.charset.Charset
+import java.util.concurrent.SynchronousQueue
+import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 object CosHttpClient {
@@ -51,6 +55,18 @@ object CosHttpClient {
         .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
         .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
         .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+        .dispatcher(
+            Dispatcher(
+                ThreadPoolExecutor(
+                    0,
+                    Int.MAX_VALUE,
+                    60L,
+                    TimeUnit.SECONDS,
+                    SynchronousQueue(),
+                    threadFactory("Cos OkHttp Dispatcher", false),
+                )
+            )
+        )
         .build()
 
     fun request(request: Request): Response {

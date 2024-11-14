@@ -27,6 +27,9 @@
 
 package com.tencent.bkrepo.auth.pojo.enums
 
+import com.tencent.bkrepo.auth.pojo.enums.ActionTypeMapping.values
+import java.util.Locale
+
 /**
  * 权限中心v3 action映射关系
  */
@@ -49,7 +52,7 @@ enum class ActionTypeMapping(val resType: String, val pAction: String) {
     NODE_WRITE(ResourceType.NODE.name, PermissionAction.WRITE.name),
     NODE_DELETE(ResourceType.NODE.name, PermissionAction.DELETE.name);
 
-    fun id() = this.name.toLowerCase()
+    fun id() = this.name.lowercase(Locale.getDefault())
 
     companion object {
 

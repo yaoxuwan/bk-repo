@@ -28,8 +28,8 @@
 package com.tencent.bkrepo.router.model
 
 import com.tencent.bkrepo.router.enum.RouterNodeType
-import java.time.LocalDateTime
 import org.springframework.data.mongodb.core.mapping.Document
+import java.time.LocalDateTime
 
 /**
  * 路由节点

@@ -46,7 +46,6 @@ dependencies {
     api(project(":common:common-metadata:metadata-service"))
     api(project(":common:common-mongo"))
 
-    api("org.springframework.boot:spring-boot-starter-aop")
     api("io.micrometer:micrometer-registry-prometheus")
     api("org.influxdb:influxdb-java")
     api("org.apache.commons:commons-text")

@@ -28,14 +28,14 @@
 package com.tencent.bkrepo.common.metadata.service.packages.impl.edge
 
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
-import com.tencent.bkrepo.common.service.cluster.properties.ClusterProperties
-import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeEdgePackageCondition
-import com.tencent.bkrepo.common.service.feign.FeignClientFactory
-import com.tencent.bkrepo.repository.api.cluster.ClusterPackageDependentsClient
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageDao
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageDependentsDao
-import com.tencent.bkrepo.repository.pojo.dependent.PackageDependentsRelation
 import com.tencent.bkrepo.common.metadata.service.packages.impl.PackageDependentsServiceImpl
+import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeEdgePackageCondition
+import com.tencent.bkrepo.common.service.cluster.properties.ClusterProperties
+import com.tencent.bkrepo.common.service.feign.FeignClientFactory
+import com.tencent.bkrepo.repository.api.cluster.ClusterPackageDependentsClient
+import com.tencent.bkrepo.repository.pojo.dependent.PackageDependentsRelation
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service

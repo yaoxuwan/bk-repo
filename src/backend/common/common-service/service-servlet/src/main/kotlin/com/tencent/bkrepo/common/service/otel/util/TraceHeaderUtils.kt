@@ -30,8 +30,8 @@ package com.tencent.bkrepo.common.service.otel.util
 import com.tencent.bkrepo.common.api.constant.BKREPO_TRACE
 import com.tencent.bkrepo.common.service.util.HttpContextHolder
 import com.tencent.bkrepo.common.service.util.SpringContextUtils
+import io.micrometer.tracing.Tracer
 import org.springframework.beans.BeansException
-import org.springframework.cloud.sleuth.Tracer
 
 object TraceHeaderUtils {
 

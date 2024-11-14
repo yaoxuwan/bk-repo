@@ -42,6 +42,7 @@ import com.tencent.bkrepo.common.api.pojo.Response
 import com.tencent.bkrepo.common.service.log.LoggerHolder
 import com.tencent.bkrepo.common.service.util.HttpContextHolder
 import com.tencent.bkrepo.common.service.util.LocaleMessageUtils
+import com.tencent.bkrepo.common.service.util.ResponseBuilder
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -54,6 +55,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException
 import org.springframework.web.context.request.async.DeferredResult
+import org.springframework.web.servlet.resource.NoResourceFoundException
 
 /**
  * 全局统一异常处理
@@ -161,6 +163,12 @@ class GlobalExceptionHandler : AbstractExceptionHandler() {
             HttpContextHolder.getResponse().contentType = MediaTypes.APPLICATION_JSON_WITHOUT_CHARSET
             return response(exception)
         }
+    }
+
+    @ExceptionHandler(NoResourceFoundException::class)
+    fun handleException(exception: NoResourceFoundException): Response<Void> {
+        HttpContextHolder.getResponse().status = HttpStatus.NOT_FOUND.value
+        return ResponseBuilder.fail(CommonMessageCode.RESOURCE_NOT_FOUND.getCode(), exception.localizedMessage)
     }
 
     @ExceptionHandler(Exception::class)

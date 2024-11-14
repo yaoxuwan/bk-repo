@@ -31,8 +31,8 @@
 
 package com.tencent.bkrepo.auth.util
 
-import java.security.MessageDigest
 import com.tencent.bk.sdk.crypto.util.SM3Util
+import java.security.MessageDigest
 
 object DataDigestUtils {
 

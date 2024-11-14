@@ -6,10 +6,10 @@ import com.tencent.bkrepo.archive.model.TArchiveFile.Companion.SHA256_IDX
 import com.tencent.bkrepo.archive.model.TArchiveFile.Companion.SHA256_IDX_DEF
 import com.tencent.bkrepo.archive.model.TArchiveFile.Companion.STATUS_IDX
 import com.tencent.bkrepo.archive.model.TArchiveFile.Companion.STATUS_IDX_DEF
-import java.time.LocalDateTime
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.index.CompoundIndexes
 import org.springframework.data.mongodb.core.mapping.Document
+import java.time.LocalDateTime
 
 @Document("archive_file")
 @CompoundIndexes(

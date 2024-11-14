@@ -28,6 +28,8 @@
 package com.tencent.bkrepo.common.metadata.service.metadata.impl
 
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
+import com.tencent.bkrepo.common.metadata.config.RepositoryProperties
+import com.tencent.bkrepo.common.metadata.dao.node.NodeDao
 import com.tencent.bkrepo.common.metadata.util.ClusterUtils.ignoreException
 import com.tencent.bkrepo.common.metadata.util.ClusterUtils.nodeLevelNotFoundError
 import com.tencent.bkrepo.common.security.manager.ci.CIPermissionManager
@@ -35,8 +37,6 @@ import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeEdgeConditi
 import com.tencent.bkrepo.common.service.cluster.properties.ClusterProperties
 import com.tencent.bkrepo.common.service.feign.FeignClientFactory
 import com.tencent.bkrepo.repository.api.cluster.ClusterMetadataClient
-import com.tencent.bkrepo.common.metadata.config.RepositoryProperties
-import com.tencent.bkrepo.common.metadata.dao.node.NodeDao
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataDeleteRequest
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataSaveRequest
 import org.springframework.context.annotation.Conditional

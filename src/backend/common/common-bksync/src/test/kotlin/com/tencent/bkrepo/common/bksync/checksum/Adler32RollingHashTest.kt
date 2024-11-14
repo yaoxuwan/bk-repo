@@ -1,9 +1,9 @@
 package com.tencent.bkrepo.common.bksync.checksum
 
-import java.util.zip.Adler32
-import kotlin.random.Random
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.util.zip.Adler32
+import kotlin.random.Random
 
 class Adler32RollingHashTest {
     @Test

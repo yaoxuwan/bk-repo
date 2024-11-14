@@ -40,21 +40,22 @@ import com.tencent.bkrepo.auth.pojo.enums.ResourceType
 import com.tencent.bkrepo.common.api.exception.ErrorCodeException
 import com.tencent.bkrepo.common.api.pojo.Page
 import com.tencent.bkrepo.common.api.pojo.Response
+import com.tencent.bkrepo.common.api.util.AsyncUtils.trace
 import com.tencent.bkrepo.common.api.util.Preconditions
 import com.tencent.bkrepo.common.artifact.api.ArtifactFile
 import com.tencent.bkrepo.common.artifact.api.ArtifactInfo
 import com.tencent.bkrepo.common.artifact.api.ArtifactPathVariable
 import com.tencent.bkrepo.common.artifact.api.DefaultArtifactInfo
+import com.tencent.bkrepo.common.artifact.audit.ActionAuditContent
+import com.tencent.bkrepo.common.artifact.audit.NODE_CREATE_ACTION
+import com.tencent.bkrepo.common.artifact.audit.NODE_DELETE_ACTION
+import com.tencent.bkrepo.common.artifact.audit.NODE_DOWNLOAD_ACTION
+import com.tencent.bkrepo.common.artifact.audit.NODE_RESOURCE
 import com.tencent.bkrepo.common.artifact.constant.ARTIFACT_INFO_KEY
 import com.tencent.bkrepo.common.artifact.message.ArtifactMessageCode
 import com.tencent.bkrepo.common.artifact.router.Router
 import com.tencent.bkrepo.common.artifact.util.PipelineRepoUtils
 import com.tencent.bkrepo.common.metadata.permission.PermissionManager
-import com.tencent.bkrepo.common.artifact.audit.ActionAuditContent
-import com.tencent.bkrepo.common.artifact.audit.NODE_DELETE_ACTION
-import com.tencent.bkrepo.common.artifact.audit.NODE_DOWNLOAD_ACTION
-import com.tencent.bkrepo.common.artifact.audit.NODE_RESOURCE
-import com.tencent.bkrepo.common.artifact.audit.NODE_CREATE_ACTION
 import com.tencent.bkrepo.common.mongo.dao.util.Pages
 import com.tencent.bkrepo.common.query.model.QueryModel
 import com.tencent.bkrepo.common.security.permission.Permission
@@ -72,7 +73,8 @@ import com.tencent.bkrepo.generic.pojo.UploadTransactionInfo
 import com.tencent.bkrepo.generic.service.CompressedFileService
 import com.tencent.bkrepo.generic.service.DownloadService
 import com.tencent.bkrepo.generic.service.UploadService
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -85,6 +87,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.concurrent.Executors
 
 @RestController
 class GenericController(
@@ -289,7 +292,7 @@ class GenericController(
         return ResponseBuilder.success(downloadService.allowDownload(artifactInfo, ip, fromApp))
     }
 
-    @ApiOperation("根据路径查看节点详情")
+    @Operation(summary = "根据路径查看节点详情")
     @Permission(type = ResourceType.NODE, action = PermissionAction.READ)
     @GetMapping("/detail/${DefaultArtifactInfo.DEFAULT_MAPPING_URI}")
     fun query(@ArtifactPathVariable artifactInfo: GenericArtifactInfo): Response<Any> {
@@ -299,7 +302,7 @@ class GenericController(
     }
 
 
-    @ApiOperation("自定义查询节点")
+    @Operation(summary = "自定义查询节点")
     @PostMapping("/{projectId}/{repoName}/search")
     @Permission(ResourceType.REPO, PermissionAction.READ)
     fun search(
@@ -312,5 +315,16 @@ class GenericController(
         val pageRequest = Pages.ofRequest(queryModel.page.pageNumber, queryModel.page.pageSize)
         val page = Pages.ofResponse(pageRequest, 0L, downloadService.search(queryModel))
         return ResponseBuilder.success(page)
+    }
+
+    @GetMapping("/test")
+    fun test() {
+        logger.info("test")
+        threadPoolExecutor.execute(Runnable{ logger.info("test2") }.trace())
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(GenericController::class.java)
+        val threadPoolExecutor = Executors.newFixedThreadPool(1)
     }
 }

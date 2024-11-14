@@ -31,10 +31,12 @@
 
 package com.tencent.bkrepo.repository.pojo.favorite
 
+import java.util.Locale
+
 
 enum class FavoriteType {
     USER,
     PROJECT;
 
-    fun id() = this.name.toLowerCase()
+    fun id() = this.name.lowercase(Locale.getDefault())
 }

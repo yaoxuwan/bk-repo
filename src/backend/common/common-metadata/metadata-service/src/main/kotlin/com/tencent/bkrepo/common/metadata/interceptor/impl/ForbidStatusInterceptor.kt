@@ -29,8 +29,8 @@ package com.tencent.bkrepo.common.metadata.interceptor.impl
 
 import com.tencent.bkrepo.common.api.exception.ErrorCodeException
 import com.tencent.bkrepo.common.artifact.constant.FORBID_STATUS
-import com.tencent.bkrepo.common.metadata.interceptor.DownloadInterceptor
 import com.tencent.bkrepo.common.artifact.message.ArtifactMessageCode
+import com.tencent.bkrepo.common.metadata.interceptor.DownloadInterceptor
 
 /**
  * 制品禁用拦截器

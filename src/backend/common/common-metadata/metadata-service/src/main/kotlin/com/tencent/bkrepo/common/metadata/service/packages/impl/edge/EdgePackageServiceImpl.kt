@@ -28,18 +28,18 @@
 package com.tencent.bkrepo.common.metadata.service.packages.impl.edge
 
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
-import com.tencent.bkrepo.common.service.cluster.properties.ClusterProperties
-import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeEdgePackageCondition
-import com.tencent.bkrepo.common.service.feign.FeignClientFactory
-import com.tencent.bkrepo.repository.api.cluster.ClusterPackageClient
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageDao
 import com.tencent.bkrepo.common.metadata.dao.packages.PackageVersionDao
 import com.tencent.bkrepo.common.metadata.dao.repo.RepositoryDao
+import com.tencent.bkrepo.common.metadata.search.packages.PackageSearchInterpreter
+import com.tencent.bkrepo.common.metadata.service.packages.impl.PackageServiceImpl
+import com.tencent.bkrepo.common.service.cluster.condition.CommitEdgeEdgePackageCondition
+import com.tencent.bkrepo.common.service.cluster.properties.ClusterProperties
+import com.tencent.bkrepo.common.service.feign.FeignClientFactory
+import com.tencent.bkrepo.repository.api.cluster.ClusterPackageClient
 import com.tencent.bkrepo.repository.pojo.packages.request.PackageUpdateRequest
 import com.tencent.bkrepo.repository.pojo.packages.request.PackageVersionCreateRequest
 import com.tencent.bkrepo.repository.pojo.packages.request.PackageVersionUpdateRequest
-import com.tencent.bkrepo.common.metadata.search.packages.PackageSearchInterpreter
-import com.tencent.bkrepo.common.metadata.service.packages.impl.PackageServiceImpl
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service

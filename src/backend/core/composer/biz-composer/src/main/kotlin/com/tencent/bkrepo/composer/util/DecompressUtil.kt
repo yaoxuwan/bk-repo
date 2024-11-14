@@ -35,16 +35,16 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.tencent.bkrepo.common.api.util.DecompressUtils
-import com.tencent.bkrepo.composer.DIRECT_DISTS
 import com.tencent.bkrepo.composer.COMPOSER_JSON
+import com.tencent.bkrepo.composer.DIRECT_DISTS
 import com.tencent.bkrepo.composer.exception.ComposerUnSupportCompressException
 import com.tencent.bkrepo.composer.util.JsonUtil.jsonValue
+import com.tencent.bkrepo.composer.util.pojo.ComposerArtifact
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
 import java.io.InputStream
-import java.util.zip.GZIPInputStream
-import com.tencent.bkrepo.composer.util.pojo.ComposerArtifact
 import java.util.UUID
+import java.util.zip.GZIPInputStream
 import kotlin.math.abs
 
 object DecompressUtil {

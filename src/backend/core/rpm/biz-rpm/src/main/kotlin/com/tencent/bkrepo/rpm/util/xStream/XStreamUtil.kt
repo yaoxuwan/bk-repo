@@ -32,12 +32,12 @@
 package com.tencent.bkrepo.rpm.util.xStream
 
 import com.tencent.bkrepo.rpm.pojo.IndexType
-import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmMetadata
 import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmEntry
 import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmFile
+import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmMetadata
+import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmPackage
 import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmPackageChangeLog
 import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmPackageFileList
-import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmPackage
 import com.tencent.bkrepo.rpm.util.xStream.repomd.Repomd
 import com.thoughtworks.xstream.XStream
 import com.thoughtworks.xstream.XStreamException

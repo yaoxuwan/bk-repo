@@ -32,15 +32,15 @@ import com.tencent.bkrepo.common.api.constant.MediaTypes
 import com.tencent.bkrepo.common.api.util.toJsonString
 import com.tencent.bkrepo.common.service.util.ResponseBuilder
 import io.undertow.servlet.spec.HttpServletRequestImpl
+import jakarta.servlet.Filter
+import jakarta.servlet.FilterChain
+import jakarta.servlet.ServletRequest
+import jakarta.servlet.ServletResponse
+import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import java.net.URI
 import java.net.URLDecoder
 import java.net.URLEncoder
-import javax.servlet.Filter
-import javax.servlet.FilterChain
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.http.HttpServletResponse
 
 class OtelWebFilter : Filter {
 

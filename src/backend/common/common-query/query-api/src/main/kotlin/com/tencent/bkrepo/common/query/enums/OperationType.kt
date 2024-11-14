@@ -31,7 +31,9 @@
 
 package com.tencent.bkrepo.common.query.enums
 
+import com.tencent.bkrepo.common.query.enums.OperationType.values
 import java.time.LocalDateTime
+import java.util.Locale
 import kotlin.reflect.KClass
 
 /**
@@ -61,7 +63,7 @@ enum class OperationType(val valueType: KClass<*>) {
         val DEFAULT = EQ
 
         fun lookup(value: String): OperationType {
-            val upperCase = value.toUpperCase()
+            val upperCase = value.uppercase(Locale.getDefault())
             return values().find { it.name == upperCase } ?: DEFAULT
         }
     }

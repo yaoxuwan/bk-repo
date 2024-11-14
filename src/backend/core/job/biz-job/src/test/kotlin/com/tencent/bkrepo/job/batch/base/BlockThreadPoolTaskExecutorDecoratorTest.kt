@@ -33,15 +33,15 @@ import com.tencent.bkrepo.job.executor.IdentityTask
 import io.mockk.every
 import io.mockk.mockkObject
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.thread
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.assertThrows
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 
 class BlockThreadPoolTaskExecutorDecoratorTest {
 

@@ -47,8 +47,8 @@ import com.tencent.bkrepo.nuget.pojo.v3.metadata.leaf.RegistrationLeaf
 import com.tencent.bkrepo.nuget.pojo.v3.metadata.page.RegistrationPage
 import com.tencent.bkrepo.nuget.util.NugetUtils
 import com.tencent.bkrepo.nuget.util.NugetV3RegistrationUtils
-import com.tencent.bkrepo.nuget.util.RemoteRegistrationUtils
 import com.tencent.bkrepo.nuget.util.NugetVersionUtils
+import com.tencent.bkrepo.nuget.util.RemoteRegistrationUtils
 import com.tencent.bkrepo.repository.pojo.packages.VersionListOption
 import com.tencent.bkrepo.repository.pojo.repo.RepositoryDetail
 import org.slf4j.Logger
@@ -56,7 +56,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.Objects
 import java.util.stream.Stream
-import kotlin.streams.toList
 
 @Component
 class NugetVirtualRepository(

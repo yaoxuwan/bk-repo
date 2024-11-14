@@ -34,9 +34,9 @@ package com.tencent.bkrepo.common.ratelimiter.service.user
 import com.tencent.bkrepo.common.ratelimiter.model.RateLimitCreatOrUpdateRequest
 import com.tencent.bkrepo.common.ratelimiter.model.TRateLimit
 import com.tencent.bkrepo.common.ratelimiter.repository.RateLimitRepository
-import java.time.Duration
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.time.Duration
 
 @Service
 class RateLimiterConfigService(

@@ -27,8 +27,8 @@
 
 package com.tencent.bkrepo.analyst.event
 
-import com.tencent.bkrepo.common.analysis.pojo.scanner.SubScanTaskStatus
 import com.tencent.bkrepo.analyst.model.TPlanArtifactLatestSubScanTask
+import com.tencent.bkrepo.common.analysis.pojo.scanner.SubScanTaskStatus
 
 data class SubtaskStatusChangedEvent(
     val oldStatus: SubScanTaskStatus? = null,

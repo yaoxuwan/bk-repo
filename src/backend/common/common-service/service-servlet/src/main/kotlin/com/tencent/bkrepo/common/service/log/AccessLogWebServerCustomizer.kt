@@ -38,8 +38,8 @@ import io.undertow.server.handlers.accesslog.AccessLogReceiver
 import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer
 import org.springframework.boot.web.embedded.undertow.UndertowDeploymentInfoCustomizer
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory
-import org.springframework.context.annotation.Configuration
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
+import org.springframework.context.annotation.Configuration
 
 @Configuration
 class AccessLogWebServerCustomizer : WebServerFactoryCustomizer<UndertowServletWebServerFactory> {

@@ -47,9 +47,9 @@ import com.tencent.bkrepo.conan.pojo.artifact.ConanArtifactInfo.Companion.CONAN_
 import com.tencent.bkrepo.conan.pojo.artifact.ConanArtifactInfo.Companion.CONAN_VERSION_DELETE_URL
 import com.tencent.bkrepo.conan.pojo.artifact.ConanArtifactInfo.Companion.CONAN_VERSION_DETAIL
 import com.tencent.bkrepo.conan.service.ConanDeleteService
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestAttribute
@@ -58,23 +58,23 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @Suppress("MVCPathVariableInspection")
-@Api("conan产品接口")
+@Tag(name = "conan产品接口")
 @RestController
 @RequestMapping("/ext")
 class UserConanController(
     private val conanDeleteService: ConanDeleteService,
 ) {
 
-    @ApiOperation("查询包的版本详情")
+    @Operation(summary = "查询包的版本详情")
     @GetMapping(CONAN_VERSION_DETAIL)
     @Permission(type = ResourceType.REPO, action = PermissionAction.READ)
     fun detailVersion(
         @RequestAttribute
         userId: String,
         @ArtifactPathVariable artifactInfo: ConanArtifactInfo,
-        @ApiParam(value = "包唯一Key", required = true)
+        @Parameter(name = "包唯一Key", required = true)
         @RequestParam packageKey: String,
-        @ApiParam(value = "包版本", required = true)
+        @Parameter(name = "包版本", required = true)
         @RequestParam version: String
     ): Response<PackageVersionInfo> {
         return ResponseBuilder.success(conanDeleteService.detailVersion(artifactInfo, packageKey, version))
@@ -97,13 +97,13 @@ class UserConanController(
         scopeId = "#artifactInfo?.projectId",
         content = ActionAuditContent.REPO_PACKAGE_DELETE_CONTENT
     )
-    @ApiOperation("删除仓库下的包")
+    @Operation(summary = "删除仓库下的包")
     @DeleteMapping(CONAN_PACKAGE_DELETE_URL)
     @Permission(type = ResourceType.REPO, action = PermissionAction.DELETE)
     fun deletePackage(
         @RequestAttribute userId: String,
         artifactInfo: ConanArtifactInfo,
-        @ApiParam(value = "包唯一key", required = true)
+        @Parameter(name = "包唯一key", required = true)
         @RequestParam packageKey: String
     ): Response<Void> {
         conanDeleteService.removePackageByKey(artifactInfo, packageKey)
@@ -129,22 +129,22 @@ class UserConanController(
         scopeId = "#artifactInfo?.projectId",
         content = ActionAuditContent.REPO_PACKAGE_VERSION_DELETE_CONTENT
     )
-    @ApiOperation("删除仓库下的包版本")
+    @Operation(summary = "删除仓库下的包版本")
     @DeleteMapping(CONAN_VERSION_DELETE_URL)
     @Permission(type = ResourceType.REPO, action = PermissionAction.DELETE)
     fun deleteVersion(
         @RequestAttribute userId: String,
         artifactInfo: ConanArtifactInfo,
-        @ApiParam(value = "包唯一key", required = true)
+        @Parameter(name = "包唯一key", required = true)
         @RequestParam packageKey: String,
-        @ApiParam(value = "包版本", required = true)
+        @Parameter(name = "包版本", required = true)
         @RequestParam version: String
     ): Response<Void> {
         conanDeleteService.removePackageVersion(artifactInfo, packageKey, version)
         return ResponseBuilder.success()
     }
 
-    @ApiOperation("获取conan域名地址")
+    @Operation(summary = "获取conan域名地址")
     @GetMapping("/address")
     fun getRegistryDomain(): Response<ConanDomainInfo> {
         return ResponseBuilder.success(conanDeleteService.getDomain())

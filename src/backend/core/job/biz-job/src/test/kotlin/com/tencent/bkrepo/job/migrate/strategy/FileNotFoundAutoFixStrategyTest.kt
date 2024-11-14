@@ -1,6 +1,6 @@
 package com.tencent.bkrepo.job.migrate.strategy
 
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream
+import com.google.common.io.ByteSource
 import com.tencent.bkrepo.common.artifact.stream.Range
 import com.tencent.bkrepo.common.artifact.stream.artifactStream
 import com.tencent.bkrepo.common.metadata.service.file.FileReferenceService
@@ -121,7 +121,7 @@ class FileNotFoundAutoFixStrategyTest @Autowired constructor(
     @Test
     fun testCopyFromOtherStorage() {
         whenever(storageService.load(anyString(), any(), anyOrNull()))
-            .thenReturn(ByteInputStream(ByteArray(1), 1).artifactStream(Range.full(1)))
+            .thenReturn(ByteSource.wrap(ByteArray(1)).openStream().artifactStream(Range.full(1)))
         doNothing().whenever(storageService).copy(anyString(), anyOrNull(), anyOrNull())
         val node = mongoTemplate.createNode()
         val failedNode = migrateFailedNodeDao.insertFailedNode(node.fullPath)

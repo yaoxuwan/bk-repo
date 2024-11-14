@@ -29,9 +29,9 @@ package com.tencent.bkrepo.fs.server.filter
 
 import com.tencent.bkrepo.common.api.constant.HttpHeaders
 import com.tencent.bkrepo.common.api.util.BasicAuthUtils
+import com.tencent.bkrepo.common.metadata.client.RAuthClient
 import com.tencent.bkrepo.common.security.exception.AuthenticationException
 import com.tencent.bkrepo.common.security.exception.PermissionException
-import com.tencent.bkrepo.common.metadata.client.RAuthClient
 import com.tencent.bkrepo.fs.server.filterAndAwait
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.util.AntPathMatcher

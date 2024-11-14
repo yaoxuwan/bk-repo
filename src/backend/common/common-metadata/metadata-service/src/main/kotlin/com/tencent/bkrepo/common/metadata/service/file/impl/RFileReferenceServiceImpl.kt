@@ -36,9 +36,9 @@ import com.tencent.bkrepo.common.artifact.message.ArtifactMessageCode
 import com.tencent.bkrepo.common.metadata.condition.ReactiveCondition
 import com.tencent.bkrepo.common.metadata.dao.file.RFileReferenceDao
 import com.tencent.bkrepo.common.metadata.model.TFileReference
+import com.tencent.bkrepo.common.metadata.pojo.file.FileReference
 import com.tencent.bkrepo.common.metadata.service.file.RFileReferenceService
 import com.tencent.bkrepo.common.metadata.util.FileReferenceQueryHelper.buildQuery
-import com.tencent.bkrepo.common.metadata.pojo.file.FileReference
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Conditional
 import org.springframework.dao.DuplicateKeyException

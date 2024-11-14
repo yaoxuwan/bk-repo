@@ -26,6 +26,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.util.Locale
 import java.util.StringJoiner
 
 @Component
@@ -67,7 +68,7 @@ class NugetPackageHandler {
                     projectId = projectId,
                     repoName = repoName,
                     packageName = id,
-                    packageKey = PackageKeys.ofNuget(id.toLowerCase()),
+                    packageKey = PackageKeys.ofNuget(id.lowercase(Locale.getDefault())),
                     packageType = PackageType.NUGET,
                     packageDescription = description,
                     versionName = version,

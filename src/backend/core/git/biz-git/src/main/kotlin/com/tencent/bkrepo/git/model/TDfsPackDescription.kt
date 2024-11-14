@@ -2,9 +2,9 @@ package com.tencent.bkrepo.git.model
 
 import com.tencent.bkrepo.git.model.TDfsPackDescription.Companion.PACK_NAME_IDX
 import com.tencent.bkrepo.git.model.TDfsPackDescription.Companion.PACK_NAME_IDX_DEF
-import java.time.LocalDateTime
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.mapping.Document
+import java.time.LocalDateTime
 
 @Document("code_pack_desc")
 @CompoundIndex(def = PACK_NAME_IDX_DEF, name = PACK_NAME_IDX, background = true, unique = true)

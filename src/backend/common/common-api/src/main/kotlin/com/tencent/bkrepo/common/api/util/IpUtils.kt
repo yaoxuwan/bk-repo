@@ -27,7 +27,8 @@
 
 package com.tencent.bkrepo.common.api.util
 
-import sun.net.util.IPAddressUtil
+import java.net.Inet4Address
+import java.net.UnknownHostException
 
 object IpUtils {
 
@@ -45,7 +46,11 @@ object IpUtils {
     }
 
     fun ipv4ToLong(ip: String): Long {
-        val bytes = IPAddressUtil.textToNumericFormatV4(ip) ?: throw IllegalArgumentException("$ip is invalid")
+        val bytes = try {
+            Inet4Address.getByName(ip).address
+        } catch (_: UnknownHostException) {
+            throw IllegalArgumentException("$ip is invalid")
+        }
         var ret = 0L
         bytes.forEach {
             ret = ret shl 8 or (it.toInt() and 0xFF).toLong()

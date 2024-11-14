@@ -27,10 +27,10 @@
 
 package com.tencent.bkrepo.common.service.message
 
-import java.io.IOException
-import java.util.Properties
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import java.io.IOException
+import java.util.Properties
 
 /**
  * SpringBoot默认使用基于JDK{@link java.util.ResourceBundle}实现的ResourceBundleMessageSource

@@ -14,8 +14,7 @@ import com.tencent.devops.schedule.pojo.job.JobExecutionResult
 class JobHandlerAdapter<C : com.tencent.bkrepo.job.batch.base.JobContext>(
     private val batchJob: BatchJob<C>,
     private val jobRpcClient: JobRpcClient,
-) :
-    JobHandler {
+) : JobHandler {
     override fun execute(context: JobContext): JobExecutionResult {
         with(context) {
             val jobExecuteContext = JobExecuteContext(

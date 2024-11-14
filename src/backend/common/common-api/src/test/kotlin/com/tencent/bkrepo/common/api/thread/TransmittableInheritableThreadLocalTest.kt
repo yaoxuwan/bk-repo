@@ -1,9 +1,9 @@
 package com.tencent.bkrepo.common.api.thread
 
-import java.util.concurrent.Executors
-import kotlin.concurrent.thread
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.util.concurrent.Executors
+import kotlin.concurrent.thread
 
 class TransmittableInheritableThreadLocalTest {
     @Test

@@ -5,9 +5,9 @@ import com.tencent.bkrepo.common.artifact.repository.core.ArtifactService
 import com.tencent.bkrepo.common.service.util.SpringContextUtils
 import com.tencent.bkrepo.git.artifact.GitContentArtifactInfo
 import com.tencent.bkrepo.git.artifact.GitRepositoryArtifactInfo
+import com.tencent.bkrepo.git.context.UserHolder
 import com.tencent.bkrepo.git.internal.CodeRepositoryResolver
 import com.tencent.bkrepo.git.listener.SyncRepositoryEvent
-import com.tencent.bkrepo.git.context.UserHolder
 import org.springframework.stereotype.Service
 
 /**

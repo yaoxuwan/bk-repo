@@ -2,9 +2,9 @@ package com.tencent.bkrepo.archive.repository
 
 import com.tencent.bkrepo.archive.ArchiveStatus
 import com.tencent.bkrepo.archive.model.TArchiveFile
-import java.time.LocalDateTime
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 interface ArchiveFileRepository : MongoRepository<TArchiveFile, String> {

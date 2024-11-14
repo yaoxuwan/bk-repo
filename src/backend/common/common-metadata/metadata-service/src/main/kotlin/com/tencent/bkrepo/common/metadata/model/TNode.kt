@@ -33,7 +33,6 @@ package com.tencent.bkrepo.common.metadata.model
 
 import com.tencent.bkrepo.common.api.mongo.ShardingDocument
 import com.tencent.bkrepo.common.api.mongo.ShardingKey
-import com.tencent.bkrepo.repository.constant.SHARDING_COUNT
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.ARCHIVED_IDX
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.ARCHIVED_IDX_DEF
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.CLUSTER_NAMES_IDX
@@ -52,6 +51,7 @@ import com.tencent.bkrepo.common.metadata.model.TNode.Companion.PATH_IDX
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.PATH_IDX_DEF
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.SHA256_IDX
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.SHA256_IDX_DEF
+import com.tencent.bkrepo.repository.constant.SHARDING_COUNT
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.index.CompoundIndexes
 import java.time.LocalDateTime

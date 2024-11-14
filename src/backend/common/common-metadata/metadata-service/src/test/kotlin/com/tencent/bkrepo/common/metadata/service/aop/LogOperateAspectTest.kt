@@ -30,8 +30,8 @@ package com.tencent.bkrepo.common.metadata.service.aop
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import com.tencent.bkrepo.common.metadata.aop.LogOperateAspect
-import com.tencent.bkrepo.common.metadata.service.log.OperateLogService
 import com.tencent.bkrepo.common.metadata.pojo.log.OperateLog
+import com.tencent.bkrepo.common.metadata.service.log.OperateLogService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any

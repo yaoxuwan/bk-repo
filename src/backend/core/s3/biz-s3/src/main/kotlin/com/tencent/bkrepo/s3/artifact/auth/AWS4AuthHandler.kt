@@ -41,9 +41,9 @@ import com.tencent.bkrepo.s3.constant.AWS4_AUTH_PREFIX
 import com.tencent.bkrepo.s3.constant.S3HttpHeaders
 import com.tencent.bkrepo.s3.constant.SIGN_NOT_MATCH
 import com.tencent.bkrepo.s3.exception.AWS4AuthenticationException
+import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import javax.servlet.http.HttpServletRequest
 
 /**
  * AWS4 Http 认证方式

@@ -7,6 +7,7 @@ import com.tencent.bkrepo.common.bksync.BkSync
 import com.tencent.bkrepo.common.bksync.file.BkSyncDeltaSource.Companion.toBkSyncDeltaSource
 import com.tencent.bkrepo.common.bksync.transfer.exception.InterruptedRollingException
 import com.tencent.bkrepo.common.bksync.transfer.exception.TooLowerReuseRateException
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.channels.FileChannel
 import java.nio.file.Files
@@ -14,7 +15,6 @@ import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.security.DigestInputStream
 import java.security.MessageDigest
-import org.slf4j.LoggerFactory
 
 /**
  * BD压缩工具

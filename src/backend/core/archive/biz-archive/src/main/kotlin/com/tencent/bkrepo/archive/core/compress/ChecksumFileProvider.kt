@@ -1,8 +1,8 @@
 package com.tencent.bkrepo.archive.core.compress
 
+import com.tencent.bkrepo.archive.core.mapPriority
 import com.tencent.bkrepo.archive.core.provider.FileProvider
 import com.tencent.bkrepo.archive.core.provider.FileProviderProxy
-import com.tencent.bkrepo.archive.core.mapPriority
 import com.tencent.bkrepo.common.bksync.BkSync
 import com.tencent.bkrepo.common.storage.monitor.measureThroughput
 import org.slf4j.LoggerFactory

@@ -30,9 +30,9 @@ package com.tencent.bkrepo.replication.fdtp
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
+import org.slf4j.LoggerFactory
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import org.slf4j.LoggerFactory
 
 /**
  * 处理fdtp-aft协议的client认证

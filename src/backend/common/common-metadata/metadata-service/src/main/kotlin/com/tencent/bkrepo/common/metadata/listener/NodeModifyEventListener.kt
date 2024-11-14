@@ -46,11 +46,11 @@ import com.tencent.bkrepo.common.artifact.event.node.NodeRenamedEvent
 import com.tencent.bkrepo.common.artifact.path.PathUtils
 import com.tencent.bkrepo.common.artifact.path.PathUtils.combineFullPath
 import com.tencent.bkrepo.common.metadata.condition.SyncCondition
-import com.tencent.bkrepo.common.mongo.dao.AbstractMongoDao
-import com.tencent.bkrepo.common.mongo.dao.util.Pages
 import com.tencent.bkrepo.common.metadata.dao.node.NodeDao
 import com.tencent.bkrepo.common.metadata.model.TNode
 import com.tencent.bkrepo.common.metadata.service.node.NodeService
+import com.tencent.bkrepo.common.mongo.dao.AbstractMongoDao
+import com.tencent.bkrepo.common.mongo.dao.util.Pages
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.event.EventListener
@@ -88,8 +88,8 @@ class NodeModifyEventListener(
                 projectId = it.key!!.first,
                 repoName = it.key!!.second,
                 fullPath = it.key!!.third,
-                size = it.value.first.sumThenReset(),
-                nodeNum = it.value.second.sumThenReset()
+                size = it.value!!.first.sumThenReset(),
+                nodeNum = it.value!!.second.sumThenReset()
             )
         }
         .build(CacheLoader.from { _ -> Pair(LongAdder(), LongAdder()) })

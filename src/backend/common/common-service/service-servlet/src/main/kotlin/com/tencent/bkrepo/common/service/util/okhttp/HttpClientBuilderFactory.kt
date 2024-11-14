@@ -33,8 +33,6 @@ import com.tencent.bkrepo.common.service.util.okhttp.CertTrustManager.trustAllHo
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.internal.threadFactory
-import org.springframework.beans.factory.BeanFactory
-import org.springframework.cloud.sleuth.instrument.async.TraceableExecutorService
 import java.util.concurrent.SynchronousQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -59,7 +57,6 @@ object HttpClientBuilderFactory {
     fun create(
         certificate: String? = null,
         neverReadTimeout: Boolean = false,
-        beanFactory: BeanFactory? = null,
         closeTimeout: Long = 0,
     ): OkHttpClient.Builder {
         return defaultClient.newBuilder()
@@ -81,9 +78,8 @@ object HttpClientBuilderFactory {
 
                 writeTimeout(0, TimeUnit.MILLISECONDS)
 
-                beanFactory?.let {
-                    val traceableExecutorService = TraceableExecutorService(
-                        beanFactory,
+                dispatcher(
+                    Dispatcher(
                         ThreadPoolExecutor(
                             0,
                             Int.MAX_VALUE,
@@ -91,10 +87,9 @@ object HttpClientBuilderFactory {
                             TimeUnit.SECONDS,
                             SynchronousQueue(),
                             threadFactory("OkHttp Dispatcher", false),
-                        ),
+                        )
                     )
-                    dispatcher(Dispatcher(traceableExecutorService))
-                }
+                )
             }
     }
 }

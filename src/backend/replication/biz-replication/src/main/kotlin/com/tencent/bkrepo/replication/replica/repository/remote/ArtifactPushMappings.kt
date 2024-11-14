@@ -29,10 +29,10 @@ package com.tencent.bkrepo.replication.replica.repository.remote
 
 import com.tencent.bkrepo.common.artifact.pojo.RepositoryType
 import com.tencent.bkrepo.common.service.util.SpringContextUtils
+import com.tencent.bkrepo.replication.replica.context.ReplicaContext
 import com.tencent.bkrepo.replication.replica.repository.remote.base.PushClient
 import com.tencent.bkrepo.replication.replica.repository.remote.type.helm.HelmArtifactPushClient
 import com.tencent.bkrepo.replication.replica.repository.remote.type.oci.OciArtifactPushClient
-import com.tencent.bkrepo.replication.replica.context.ReplicaContext
 import com.tencent.bkrepo.repository.pojo.packages.PackageSummary
 import com.tencent.bkrepo.repository.pojo.packages.PackageVersion
 

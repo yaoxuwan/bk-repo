@@ -15,7 +15,7 @@ import com.tencent.bkrepo.repository.pojo.packages.PackageSummary
 import com.tencent.bkrepo.repository.pojo.packages.VersionListOption
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import kotlin.streams.toList
+import java.util.Locale
 
 @Service
 class NugetSearchServiceImpl(
@@ -41,7 +41,8 @@ class NugetSearchServiceImpl(
                     buildSearchResponseData(it, this, v3RegistrationUrl)
                 }.filter {
                     packageType.isNullOrBlank() ||
-                            it.packageTypes.map { type -> type.name.toLowerCase() }.contains(packageType.toLowerCase())
+                            it.packageTypes.map { type -> type.name.lowercase(Locale.getDefault()) }
+                                .contains(packageType.lowercase(Locale.getDefault()))
                 }
                 searchResponseDataList.addAll(pageResult)
             }

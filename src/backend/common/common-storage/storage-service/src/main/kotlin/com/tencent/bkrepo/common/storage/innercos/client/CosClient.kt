@@ -42,6 +42,7 @@ import com.tencent.bkrepo.common.api.constant.retry
 import com.tencent.bkrepo.common.api.stream.ChunkedFuture
 import com.tencent.bkrepo.common.api.stream.ChunkedFutureInputStream
 import com.tencent.bkrepo.common.api.stream.EnhanceFileChunkedFutureWrapper
+import com.tencent.bkrepo.common.api.util.AsyncUtils.trace
 import com.tencent.bkrepo.common.artifact.stream.DelegateInputStream
 import com.tencent.bkrepo.common.storage.credentials.InnerCosCredentials
 import com.tencent.bkrepo.common.storage.innercos.exception.InnerCosException
@@ -117,7 +118,7 @@ class CosClient(val credentials: InnerCosCredentials) {
     /**
      * 分片上传使用的执行器
      */
-    private val uploadThreadPool = Executors.newFixedThreadPool(config.uploadWorkers)
+    private val uploadThreadPool = Executors.newFixedThreadPool(config.uploadWorkers).trace()
 
     /**
      * 分块下载使用的执行器。可以为null,为null则不使用分块下载
@@ -354,7 +355,7 @@ class CosClient(val credentials: InnerCosCredentials) {
                     PartETag(partNumber, CosHttpClient.execute(putObjectRequest, UploadPartResponseHandler()).eTag)
                 }
             }
-        }
+        }.trace()
     }
 
     private fun multipartUpload(key: String, file: File, storageClass: String?): PutObjectResponse {
@@ -396,7 +397,7 @@ class CosClient(val credentials: InnerCosCredentials) {
                     CosHttpClient.execute(httpRequest, UploadPartResponseHandler().enableSpeedSlowLog())
                 PartETag(cosRequest.partNumber, uploadPartResponse.eTag)
             }
-        }
+        }.trace()
     }
 
     private fun completeMultipartUpload(

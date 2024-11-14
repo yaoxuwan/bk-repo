@@ -31,10 +31,12 @@
 
 package com.tencent.bkrepo.common.service.async
 
-import org.springframework.boot.task.TaskExecutorCustomizer
-import org.springframework.boot.task.TaskSchedulerCustomizer
+import com.tencent.bkrepo.common.api.util.AsyncUtils.trace
+import org.springframework.boot.task.ThreadPoolTaskExecutorCustomizer
+import org.springframework.boot.task.ThreadPoolTaskSchedulerCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.task.TaskDecorator
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy
@@ -46,16 +48,24 @@ import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy
 class AsyncConfiguration {
 
     @Bean
-    fun taskExecutorCustomizer(): TaskExecutorCustomizer {
-        return TaskExecutorCustomizer {
+    fun taskExecutorCustomizer(): ThreadPoolTaskExecutorCustomizer {
+        return ThreadPoolTaskExecutorCustomizer {
+            it.setTaskDecorator(taskDecorator())
             it.setRejectedExecutionHandler(CallerRunsPolicy())
         }
     }
 
     @Bean
-    fun taskSchedulerCustomizer(): TaskSchedulerCustomizer {
-        return TaskSchedulerCustomizer {
+    fun taskSchedulerCustomizer(): ThreadPoolTaskSchedulerCustomizer {
+        return ThreadPoolTaskSchedulerCustomizer {
+            it.setTaskDecorator(taskDecorator())
             it.setRejectedExecutionHandler(CallerRunsPolicy())
+        }
+    }
+
+    fun taskDecorator(): TaskDecorator {
+        return TaskDecorator {
+            it.trace()
         }
     }
 }

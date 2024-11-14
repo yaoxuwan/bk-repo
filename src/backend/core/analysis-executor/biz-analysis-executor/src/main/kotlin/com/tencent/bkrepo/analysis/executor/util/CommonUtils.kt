@@ -27,9 +27,9 @@
 
 package com.tencent.bkrepo.analysis.executor.util
 
-import com.tencent.bkrepo.common.api.util.readJsonString
-import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey
 import com.tencent.bkrepo.analysis.executor.pojo.ScanExecutorTask
+import com.tencent.bkrepo.common.analysis.pojo.scanner.LicenseOverviewKey
+import com.tencent.bkrepo.common.api.util.readJsonString
 import org.slf4j.LoggerFactory
 import java.io.File
 

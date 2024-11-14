@@ -27,8 +27,8 @@
 
 package com.tencent.bkrepo.fs.server.io
 
-import java.io.InputStream
 import org.springframework.core.io.InputStreamResource
+import java.io.InputStream
 
 /**
  * 普通InputStreamResource不支持Range读取，

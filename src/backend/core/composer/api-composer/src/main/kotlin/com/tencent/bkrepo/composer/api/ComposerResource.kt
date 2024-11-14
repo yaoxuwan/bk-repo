@@ -38,30 +38,30 @@ import com.tencent.bkrepo.composer.artifact.ComposerArtifactInfo.Companion.COMPO
 import com.tencent.bkrepo.composer.artifact.ComposerArtifactInfo.Companion.COMPOSER_INSTALL
 import com.tencent.bkrepo.composer.artifact.ComposerArtifactInfo.Companion.COMPOSER_JSON
 import com.tencent.bkrepo.composer.artifact.ComposerArtifactInfo.Companion.COMPOSER_PACKAGES
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 
-@Api("composer http协议接口")
+@Tag(name = "composer http协议接口")
 interface ComposerResource {
 
-    @ApiOperation("install")
+    @Schema(title = "install")
     @GetMapping(COMPOSER_INSTALL)
     fun installRequire(
         @ArtifactPathVariable composerArtifactInfo: ComposerArtifactInfo
     )
 
-    @ApiOperation("packages.json")
+    @Schema(title = "packages.json")
     @GetMapping(COMPOSER_PACKAGES, produces = [MediaType.APPLICATION_JSON_VALUE])
     fun packages(@ArtifactPathVariable composerArtifactInfo: ComposerArtifactInfo)
 
-    @ApiOperation("%package%.json")
+    @Schema(title = "%package%.json")
     @GetMapping(COMPOSER_JSON, produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getJson(@ArtifactPathVariable composerArtifactInfo: ComposerArtifactInfo)
 
-    @ApiOperation("deploy")
+    @Schema(title = "deploy")
     @PutMapping(COMPOSER_DEPLOY, produces = [MediaType.APPLICATION_JSON_VALUE])
     fun deploy(@ArtifactPathVariable composerArtifactInfo: ComposerArtifactInfo, file: ArtifactFile)
 }

@@ -1,7 +1,7 @@
 /*
  * Tencent is pleased to support the open source community by making BK-CI 蓝鲸持续集成平台 available.
  *
- * Copyright (C) 2019 THL A29 Limited, a Tencent company.  All rights reserved.
+ * Copyright (C) 2024 THL A29 Limited, a Tencent company.  All rights reserved.
  *
  * BK-CI 蓝鲸持续集成平台 is licensed under the MIT license.
  *
@@ -25,34 +25,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.tencent.bkrepo.common.service.otel.util
+package com.tencent.bkrepo.common.service
 
+import com.tencent.bkrepo.common.service.actuator.ActuatorConfiguration
+import com.tencent.bkrepo.common.service.exception.GlobalExceptionHandler
+import com.tencent.bkrepo.common.service.feign.ErrorCodeDecoder
+import com.tencent.bkrepo.common.service.feign.RClientConfiguration
+import com.tencent.bkrepo.common.service.log.NettyWebServerAccessLogCustomizer
+import com.tencent.bkrepo.common.service.message.MessageSourceConfiguration
 import com.tencent.bkrepo.common.service.util.SpringContextUtils
-import org.springframework.beans.BeansException
-import org.springframework.cloud.sleuth.SpanNamer
-import org.springframework.cloud.sleuth.Tracer
-import org.springframework.cloud.sleuth.instrument.async.TraceCallable
-import org.springframework.cloud.sleuth.instrument.async.TraceRunnable
-import java.util.concurrent.Callable
+import com.tencent.devops.service.config.ServiceProperties
+import org.springframework.boot.autoconfigure.AutoConfigureOrder
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
+import org.springframework.core.Ordered
 
-object AsyncUtils {
-    fun Runnable.trace(): Runnable {
-        return try {
-            val tracer = SpringContextUtils.getBean<Tracer>()
-            val spanNamer = SpringContextUtils.getBean<SpanNamer>()
-            TraceRunnable(tracer, spanNamer, this)
-        } catch (_: BeansException) {
-            this
-        }
-    }
-
-    fun <T> Callable<T>.trace(): Callable<T> {
-        return try {
-            val tracer = SpringContextUtils.getBean<Tracer>()
-            val spanNamer = SpringContextUtils.getBean<SpanNamer>()
-            TraceCallable(tracer, spanNamer, this)
-        } catch (_: BeansException) {
-            this
-        }
-    }
-}
+@Configuration
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@ConditionalOnWebApplication
+@Import(
+    ServiceProperties::class,
+    MessageSourceConfiguration::class,
+    SpringContextUtils::class,
+    GlobalExceptionHandler::class,
+    ActuatorConfiguration::class,
+    ErrorCodeDecoder::class,
+    NettyWebServerAccessLogCustomizer::class,
+    RClientConfiguration::class
+)
+class ServiceAutoConfiguration

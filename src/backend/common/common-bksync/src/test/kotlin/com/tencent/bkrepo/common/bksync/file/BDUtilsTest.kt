@@ -1,14 +1,14 @@
 package com.tencent.bkrepo.common.bksync.file
 
 import com.tencent.bkrepo.common.bksync.file.BkSyncDeltaSource.Companion.toBkSyncDeltaSource
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.security.MessageDigest
-import kotlin.random.Random
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.security.MessageDigest
+import kotlin.random.Random
 
 class BDUtilsTest {
     private val worDir = Paths.get(System.getProperty("java.io.tmpdir"), "bksync-ut")

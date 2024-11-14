@@ -30,8 +30,8 @@ package com.tencent.bkrepo.webhook.payload.builder.test
 import com.tencent.bkrepo.common.artifact.event.base.ArtifactEvent
 import com.tencent.bkrepo.common.artifact.event.base.EventType
 import com.tencent.bkrepo.webhook.event.WebHookTestEvent
-import com.tencent.bkrepo.webhook.pojo.payload.test.WebHookTestEventPayload
 import com.tencent.bkrepo.webhook.payload.builder.EventPayloadBuilder
+import com.tencent.bkrepo.webhook.pojo.payload.test.WebHookTestEventPayload
 import org.springframework.stereotype.Component
 
 @Component

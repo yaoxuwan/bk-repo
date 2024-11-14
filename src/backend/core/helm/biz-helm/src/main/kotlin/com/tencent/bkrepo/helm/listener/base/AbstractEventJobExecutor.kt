@@ -30,10 +30,10 @@ package com.tencent.bkrepo.helm.listener.base
 import com.tencent.bkrepo.helm.pool.EventHandlerThreadPoolExecutor
 import com.tencent.bkrepo.replication.pojo.record.ExecutionResult
 import com.tencent.bkrepo.replication.pojo.record.ExecutionStatus
-import java.util.concurrent.Future
-import java.util.concurrent.ThreadPoolExecutor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.Future
+import java.util.concurrent.ThreadPoolExecutor
 
 open class AbstractEventJobExecutor {
     private val threadPoolExecutor: ThreadPoolExecutor = EventHandlerThreadPoolExecutor.instance

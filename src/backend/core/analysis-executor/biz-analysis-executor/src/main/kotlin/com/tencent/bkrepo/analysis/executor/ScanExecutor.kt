@@ -27,8 +27,8 @@
 
 package com.tencent.bkrepo.analysis.executor
 
-import com.tencent.bkrepo.common.analysis.pojo.scanner.ScanExecutorResult
 import com.tencent.bkrepo.analysis.executor.pojo.ScanExecutorTask
+import com.tencent.bkrepo.common.analysis.pojo.scanner.ScanExecutorResult
 
 interface ScanExecutor {
     fun scan(task: ScanExecutorTask): ScanExecutorResult

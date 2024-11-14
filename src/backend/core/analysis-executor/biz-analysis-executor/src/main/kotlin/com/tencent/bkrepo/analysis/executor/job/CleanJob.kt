@@ -29,10 +29,10 @@ package com.tencent.bkrepo.analysis.executor.job
 
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.model.PruneType
-import com.tencent.bkrepo.common.api.constant.CharPool.DOT
 import com.tencent.bkrepo.analysis.executor.ExecutorScheduler
 import com.tencent.bkrepo.analysis.executor.configuration.ScannerExecutorProperties
 import com.tencent.bkrepo.analysis.executor.util.FileUtils
+import com.tencent.bkrepo.common.api.constant.CharPool.DOT
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component

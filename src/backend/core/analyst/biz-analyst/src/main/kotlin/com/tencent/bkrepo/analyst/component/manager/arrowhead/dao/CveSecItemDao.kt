@@ -27,12 +27,12 @@
 
 package com.tencent.bkrepo.analyst.component.manager.arrowhead.dao
 
-import com.tencent.bkrepo.common.api.constant.CharPool.DASH
 import com.tencent.bkrepo.analyst.component.manager.ResultItemDao
 import com.tencent.bkrepo.analyst.component.manager.arrowhead.model.TCveSecItem
 import com.tencent.bkrepo.analyst.component.manager.arrowhead.model.TCveSecItemData
 import com.tencent.bkrepo.analyst.pojo.request.ArrowheadLoadResultArguments
 import com.tencent.bkrepo.analyst.pojo.request.LoadResultArguments
+import com.tencent.bkrepo.common.api.constant.CharPool.DASH
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.inValues
 import org.springframework.stereotype.Repository

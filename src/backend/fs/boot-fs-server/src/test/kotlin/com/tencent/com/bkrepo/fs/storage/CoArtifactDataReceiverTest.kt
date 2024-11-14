@@ -32,8 +32,6 @@ import com.tencent.bkrepo.common.storage.config.MonitorProperties
 import com.tencent.bkrepo.common.storage.config.ReceiveProperties
 import com.tencent.bkrepo.common.storage.util.toPath
 import com.tencent.bkrepo.fs.server.storage.CoArtifactDataReceiver
-import java.io.ByteArrayOutputStream
-import java.nio.file.Files
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -41,6 +39,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.core.io.buffer.DefaultDataBufferFactory
 import org.springframework.util.unit.DataSize
+import java.io.ByteArrayOutputStream
+import java.nio.file.Files
 
 class CoArtifactDataReceiverTest {
     private val primaryPath = "temp".toPath()

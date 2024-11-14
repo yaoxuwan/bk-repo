@@ -73,6 +73,7 @@ import com.tencent.bkrepo.repository.pojo.project.ProjectInfo
 import com.tencent.bkrepo.repository.pojo.repo.RepoCreateRequest
 import com.tencent.bkrepo.repository.pojo.repo.RepositoryDetail
 import com.tencent.bkrepo.router.api.RouterControllerClient
+import io.micrometer.tracing.Tracer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -83,8 +84,6 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.cloud.sleuth.Tracer
-import org.springframework.cloud.sleuth.otel.bridge.OtelTracer
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.TestPropertySource
@@ -154,7 +153,7 @@ open class ServiceBaseTest {
     lateinit var operateLogService: OperateLogService
 
     fun initMock() {
-        val tracer = mockk<OtelTracer>()
+        val tracer = mockk<Tracer>()
         mockkObject(SpringContextUtils.Companion)
         every { SpringContextUtils.getBean<Tracer>() } returns tracer
         every { tracer.currentSpan() } returns null

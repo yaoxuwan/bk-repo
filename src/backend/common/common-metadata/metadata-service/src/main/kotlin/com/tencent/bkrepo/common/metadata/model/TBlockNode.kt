@@ -28,10 +28,10 @@
 package com.tencent.bkrepo.common.metadata.model
 
 import com.tencent.bkrepo.common.api.mongo.ShardingDocument
+import com.tencent.bkrepo.common.api.mongo.ShardingKey
 import com.tencent.bkrepo.common.metadata.constant.SHARDING_COUNT
 import com.tencent.bkrepo.common.metadata.model.TBlockNode.Companion.BLOCK_IDX
 import com.tencent.bkrepo.common.metadata.model.TBlockNode.Companion.BLOCK_IDX_DEF
-import com.tencent.bkrepo.common.api.mongo.ShardingKey
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.index.CompoundIndexes
 import java.time.LocalDateTime

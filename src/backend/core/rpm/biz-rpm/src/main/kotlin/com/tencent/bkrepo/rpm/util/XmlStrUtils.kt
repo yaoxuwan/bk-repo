@@ -32,10 +32,10 @@
 package com.tencent.bkrepo.rpm.util
 
 import com.tencent.bkrepo.common.api.constant.StringPool.DASH
+import com.tencent.bkrepo.rpm.pojo.Index
 import com.tencent.bkrepo.rpm.pojo.IndexType
 import com.tencent.bkrepo.rpm.pojo.RepoDataPojo
 import com.tencent.bkrepo.rpm.pojo.XmlIndex
-import com.tencent.bkrepo.rpm.pojo.Index
 import com.tencent.bkrepo.rpm.util.xStream.pojo.RpmXmlMetadata
 import org.slf4j.LoggerFactory
 import org.springframework.util.StopWatch

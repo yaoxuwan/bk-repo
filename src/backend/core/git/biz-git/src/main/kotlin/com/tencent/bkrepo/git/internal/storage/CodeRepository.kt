@@ -4,7 +4,6 @@ import com.tencent.bkrepo.common.storage.credentials.StorageCredentials
 import com.tencent.bkrepo.git.constant.DEFAULT_BRANCH
 import com.tencent.bkrepo.git.constant.HEAD
 import com.tencent.bkrepo.git.exception.LockFailedException
-import java.time.Duration
 import net.javacrumbs.shedlock.core.LockConfiguration
 import net.javacrumbs.shedlock.core.LockProvider
 import net.javacrumbs.shedlock.core.SimpleLock
@@ -14,6 +13,7 @@ import org.eclipse.jgit.internal.storage.dfs.DfsRepositoryBuilder
 import org.eclipse.jgit.lib.ProgressMonitor
 import org.eclipse.jgit.lib.RefDatabase
 import org.slf4j.LoggerFactory
+import java.time.Duration
 
 /**
  * Git DFS repository

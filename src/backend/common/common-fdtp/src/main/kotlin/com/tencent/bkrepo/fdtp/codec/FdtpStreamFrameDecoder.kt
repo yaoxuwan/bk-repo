@@ -27,9 +27,9 @@
 
 package com.tencent.bkrepo.fdtp.codec
 
-import com.tencent.bkrepo.fdtp.FdtpError
 import com.tencent.bkrepo.fdtp.FdtpCodecUtil
 import com.tencent.bkrepo.fdtp.FdtpCodecUtil.MAX_FRAME_SIZE
+import com.tencent.bkrepo.fdtp.FdtpError
 import com.tencent.bkrepo.fdtp.codec.FdtpFrameType.DATA
 import com.tencent.bkrepo.fdtp.codec.FdtpFrameType.HEADER
 import com.tencent.bkrepo.fdtp.codec.FdtpStreamFrameDecoder.State

@@ -31,6 +31,8 @@
 
 package com.tencent.bkrepo.auth.pojo.enums
 
+import java.util.Locale
+
 enum class PermissionAction {
     MANAGE,
     WRITE,
@@ -40,5 +42,5 @@ enum class PermissionAction {
     UPDATE,
     DELETE;
 
-    fun id() = this.name.toLowerCase()
+    fun id() = this.name.lowercase(Locale.getDefault())
 }

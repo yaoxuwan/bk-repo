@@ -27,6 +27,8 @@
 
 package com.tencent.bkrepo.auth.pojo.oauth
 
+import java.util.Locale
+
 enum class AuthorizationGrantType {
     // 授权码模式
     AUTHORIZATION_CODE,
@@ -40,6 +42,6 @@ enum class AuthorizationGrantType {
     PLATFORM;
 
     fun value(): String {
-        return this.name.toLowerCase()
+        return this.name.lowercase(Locale.getDefault())
     }
 }

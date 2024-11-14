@@ -37,9 +37,9 @@ import com.tencent.bkrepo.common.api.message.CommonMessageCode.PARAMETER_INVALID
 import com.tencent.bkrepo.common.artifact.api.ArtifactFile
 import com.tencent.bkrepo.common.artifact.api.ArtifactPathVariable
 import com.tencent.bkrepo.common.artifact.audit.ActionAuditContent
+import com.tencent.bkrepo.common.artifact.audit.NODE_CREATE_ACTION
 import com.tencent.bkrepo.common.artifact.audit.NODE_DOWNLOAD_ACTION
 import com.tencent.bkrepo.common.artifact.audit.NODE_RESOURCE
-import com.tencent.bkrepo.common.artifact.audit.NODE_CREATE_ACTION
 import com.tencent.bkrepo.common.service.util.HttpContextHolder
 import com.tencent.bkrepo.ddc.artifact.ReferenceArtifactInfo
 import com.tencent.bkrepo.ddc.artifact.repository.DdcLocalRepository.Companion.HEADER_NAME_HASH
@@ -48,8 +48,8 @@ import com.tencent.bkrepo.ddc.service.ReferenceArtifactService
 import com.tencent.bkrepo.ddc.utils.MEDIA_TYPE_JUPITER_INLINED_PAYLOAD
 import com.tencent.bkrepo.ddc.utils.MEDIA_TYPE_UNREAL_COMPACT_BINARY
 import com.tencent.bkrepo.ddc.utils.MEDIA_TYPE_UNREAL_COMPACT_BINARY_PACKAGE
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Schema
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -83,7 +83,7 @@ class ReferencesController(
         scopeId = "#artifactInfo?.projectId",
         content = ActionAuditContent.NODE_DOWNLOAD_CONTENT
     )
-    @ApiOperation("获取ref")
+    @Schema(title = "获取ref")
     @GetMapping(
         "/{repoName}/{$PATH_VARIABLE_BUCKET}/{$PATH_VARIABLE_REF_ID}",
         produces = [
@@ -95,7 +95,7 @@ class ReferencesController(
         ]
     )
     fun getRef(
-        @ApiParam(value = "ddc ref", required = true)
+        @Parameter(name = "ddc ref", required = true)
         @ArtifactPathVariable
         artifactInfo: ReferenceArtifactInfo,
     ) {
@@ -121,12 +121,12 @@ class ReferencesController(
         scopeId = "#artifactInfo?.projectId",
         content = ActionAuditContent.NODE_UPLOAD_CONTENT
     )
-    @ApiOperation("开始创建ref")
+    @Schema(title = "开始创建ref")
     @PutMapping(
         "/{repoName}/{$PATH_VARIABLE_BUCKET}/{$PATH_VARIABLE_REF_ID}",
     )
     fun putObject(
-        @ApiParam(value = "ddc ref", required = true)
+        @Parameter(name = "ddc ref", required = true)
         @ArtifactPathVariable
         artifactInfo: ReferenceArtifactInfo,
         file: ArtifactFile
@@ -137,15 +137,15 @@ class ReferencesController(
         referenceArtifactService.createRef(artifactInfo, file)
     }
 
-    @ApiOperation("结束ref创建")
+    @Schema(title = "结束ref创建")
     @PostMapping(
         "/{repoName}/{$PATH_VARIABLE_BUCKET}/{$PATH_VARIABLE_REF_ID}/finalize/{hash}",
     )
     fun finalizeObject(
-        @ApiParam(value = "ddc ref", required = true)
+        @Parameter(name = "ddc ref", required = true)
         @ArtifactPathVariable
         artifactInfo: ReferenceArtifactInfo,
-        @ApiParam("blob hash", required = true)
+        @Parameter(name = "blob hash", required = true)
         @PathVariable hash: String,
     ) {
         permissionHelper.checkPathPermission(PermissionAction.WRITE)

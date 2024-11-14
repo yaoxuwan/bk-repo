@@ -35,6 +35,7 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.text.DecimalFormat
+import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
@@ -65,7 +66,7 @@ object StringPool {
     private val alphabet: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
     fun randomString(size: Int) = List(size) { alphabet.random() }.joinToString(EMPTY)
-    fun uniqueId() = UUID.randomUUID().toString().replace(DASH, EMPTY).toLowerCase()
+    fun uniqueId() = UUID.randomUUID().toString().replace(DASH, EMPTY).lowercase(Locale.getDefault())
 
     fun randomStringByLongValue(prefix: String? = null, suffix: String? = null): String {
         var randomLong = ThreadLocalRandom.current().nextLong()

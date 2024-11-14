@@ -2,10 +2,10 @@ package com.tencent.bkrepo.archive.metrics
 
 import com.tencent.bkrepo.archive.ArchiveStatus
 import com.tencent.bkrepo.archive.CompressStatus
-import com.tencent.bkrepo.archive.core.provider.FileStorageFileProvider
-import com.tencent.bkrepo.archive.core.provider.PriorityFileProvider
 import com.tencent.bkrepo.archive.core.archive.ArchiveManager
 import com.tencent.bkrepo.archive.core.compress.BDZipManager
+import com.tencent.bkrepo.archive.core.provider.FileStorageFileProvider
+import com.tencent.bkrepo.archive.core.provider.PriorityFileProvider
 import com.tencent.bkrepo.archive.model.TArchiveFile
 import com.tencent.bkrepo.archive.model.TCompressFile
 import com.tencent.bkrepo.archive.repository.ArchiveFileDao

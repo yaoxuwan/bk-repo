@@ -27,9 +27,9 @@
 
 package com.tencent.bkrepo.statemachine
 
-import org.junit.jupiter.api.Test
 import com.tencent.bkrepo.statemachine.builder.StateMachineBuilder.Companion.stateMachine
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 
 class StateMachineTest {
 

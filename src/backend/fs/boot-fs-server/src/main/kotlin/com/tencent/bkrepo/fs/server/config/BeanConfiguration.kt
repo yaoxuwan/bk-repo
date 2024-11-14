@@ -93,7 +93,8 @@ val beans = beans {
 
 class BeansInitializer : ServiceBeansInitializer() {
     override fun initialize(applicationContext: GenericApplicationContext) {
-        super.initialize(applicationContext)
+        print("=============================================")
+//        super.initialize(applicationContext)
         beans.initialize(applicationContext)
     }
 }

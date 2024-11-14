@@ -39,8 +39,8 @@ import com.tencent.bkrepo.analyst.statemachine.subtask.SubtaskEvent.CREATE
 import com.tencent.bkrepo.analyst.statemachine.subtask.SubtaskEvent.EXECUTE
 import com.tencent.bkrepo.analyst.statemachine.subtask.SubtaskEvent.NOTIFY
 import com.tencent.bkrepo.analyst.statemachine.subtask.SubtaskEvent.PULL
-import com.tencent.bkrepo.analyst.statemachine.subtask.SubtaskEvent.STOP
 import com.tencent.bkrepo.analyst.statemachine.subtask.SubtaskEvent.RETRY
+import com.tencent.bkrepo.analyst.statemachine.subtask.SubtaskEvent.STOP
 import com.tencent.bkrepo.analyst.statemachine.subtask.action.SubtaskAction
 import com.tencent.bkrepo.analyst.statemachine.task.ScanTaskEvent
 import com.tencent.bkrepo.analyst.statemachine.task.ScanTaskEvent.FINISH_STOP

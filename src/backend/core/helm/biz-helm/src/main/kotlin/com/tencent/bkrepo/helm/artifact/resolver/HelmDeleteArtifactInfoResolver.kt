@@ -39,9 +39,9 @@ import com.tencent.bkrepo.helm.constants.NAME
 import com.tencent.bkrepo.helm.constants.PACKAGE_KEY
 import com.tencent.bkrepo.helm.constants.VERSION
 import com.tencent.bkrepo.helm.pojo.artifact.HelmDeleteArtifactInfo
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerMapping
-import javax.servlet.http.HttpServletRequest
 
 @Component
 @Resolver(HelmDeleteArtifactInfo::class)

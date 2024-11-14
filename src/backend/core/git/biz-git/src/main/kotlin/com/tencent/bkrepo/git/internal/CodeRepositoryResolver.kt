@@ -13,12 +13,12 @@ import com.tencent.bkrepo.git.internal.storage.CodeRepositoryBuilder
 import com.tencent.bkrepo.git.internal.storage.DEFAULT_BLOCK_SIZE
 import com.tencent.bkrepo.git.internal.storage.DEFAULT_STREAM_PACK_BUFFER_SIZE
 import com.tencent.bkrepo.git.service.CodeRepositoryDataService
+import net.javacrumbs.shedlock.core.LockProvider
 import org.eclipse.jgit.internal.storage.dfs.DfsReaderOptions
 import org.eclipse.jgit.internal.storage.dfs.DfsRepositoryDescription
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
-import net.javacrumbs.shedlock.core.LockProvider
 
 /**
  * code git仓库解析器

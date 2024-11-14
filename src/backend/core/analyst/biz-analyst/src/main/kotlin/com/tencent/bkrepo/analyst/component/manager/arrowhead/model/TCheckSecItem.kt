@@ -27,8 +27,8 @@
 
 package com.tencent.bkrepo.analyst.component.manager.arrowhead.model
 
-import com.tencent.bkrepo.common.analysis.pojo.scanner.arrowhead.CheckSecItem
 import com.tencent.bkrepo.analyst.component.manager.ResultItem
+import com.tencent.bkrepo.common.analysis.pojo.scanner.arrowhead.CheckSecItem
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document("check_sec_item")

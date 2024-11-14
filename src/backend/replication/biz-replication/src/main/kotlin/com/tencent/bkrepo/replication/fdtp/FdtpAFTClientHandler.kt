@@ -27,14 +27,14 @@
 
 package com.tencent.bkrepo.replication.fdtp
 
-import com.tencent.bkrepo.udt.StatusUDT
 import com.tencent.bkrepo.fdtp.codec.FdtpHeaderFrame
 import com.tencent.bkrepo.fdtp.codec.FdtpHeaderNames
 import com.tencent.bkrepo.fdtp.codec.FdtpResponseStatus
 import com.tencent.bkrepo.fdtp.codec.FdtpStreamFrame
+import com.tencent.bkrepo.udt.StatusUDT
+import com.tencent.bkrepo.udt.netty.transport.nio.NioUdtProvider
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
-import com.tencent.bkrepo.udt.netty.transport.nio.NioUdtProvider
 import io.netty.util.concurrent.DefaultPromise
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
