@@ -112,7 +112,6 @@ class RouteConfiguration(
         }
 
         "/stream".nest{
-            filter(artifactFileCleanupFilterFunction::filter)
             PUT(DEFAULT_MAPPING_URI, fileOperationsHandler::stream)
             addMetrics(serverMetrics.uploadingCount)
         }

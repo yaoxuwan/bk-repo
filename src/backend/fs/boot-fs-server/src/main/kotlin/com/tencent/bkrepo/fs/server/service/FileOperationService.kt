@@ -52,6 +52,7 @@ import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeSetLengthRequest
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
+import org.slf4j.LoggerFactory
 import org.springframework.core.io.buffer.DataBuffer
 import org.springframework.core.io.buffer.DataBufferUtils
 import org.springframework.web.reactive.function.server.bodyToFlow
@@ -98,12 +99,14 @@ class FileOperationService(
         var reactiveArtifactFile = CoArtifactFileFactory.buildArtifactFile()
         val offset = AtomicLong(0)
         streamRequest.request.bodyToFlow<DataBuffer>().onCompletion {
+            logger.info("last size: ${reactiveArtifactFile.getSize()}")
             if (reactiveArtifactFile.getSize() > 0) {
                 storeBlockNode(reactiveArtifactFile, offset, user, streamRequest, true)
                 reactiveArtifactFile.close()
             }
         }.collect {
             try {
+                logger.info("size: ${reactiveArtifactFile.getSize()}")
                 reactiveArtifactFile.write(it)
                 val store = storeBlockNode(reactiveArtifactFile, offset, user, streamRequest)
                 if (store) {
@@ -138,6 +141,9 @@ class FileOperationService(
                 size = reactiveArtifactFile.getSize()
             )
             storageManager.storeBlock(reactiveArtifactFile, blockNode)
+            if (!reactiveArtifactFile.isInMemory()) {
+                reactiveArtifactFile.getFile()?.deleteOnExit()
+            }
             offset.addAndGet(blockSize)
             true
         } else {
@@ -208,5 +214,9 @@ class FileOperationService(
             lastModifiedDate = LocalDateTime.now(),
             nodeMetadata = listOf(fsAttr)
         )
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(FileOperationService::class.java)
     }
 }
