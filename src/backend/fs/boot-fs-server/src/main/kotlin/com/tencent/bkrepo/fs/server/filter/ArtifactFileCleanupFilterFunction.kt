@@ -43,6 +43,7 @@ class ArtifactFileCleanupFilterFunction : CoHandlerFilterFunction {
         try {
             return next(request)
         } finally {
+            logger.info("start clean up")
             cleanup(request)
         }
     }
