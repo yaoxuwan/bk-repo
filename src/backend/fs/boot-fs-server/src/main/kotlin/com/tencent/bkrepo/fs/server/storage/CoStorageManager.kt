@@ -37,15 +37,17 @@ import com.tencent.bkrepo.common.storage.credentials.StorageCredentials
 import com.tencent.bkrepo.common.storage.pojo.RegionResource
 import com.tencent.bkrepo.fs.server.RepositoryCache
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.reactor.mono
 import kotlinx.coroutines.withContext
+import reactor.core.publisher.Mono
 
 class CoStorageManager(
     private val blockNodeService: RBlockNodeService,
     private val storageService: StorageService
 ) {
 
-    suspend fun storeBlock(artifactFile: ArtifactFile, blockNode: TBlockNode) {
-        withContext(Dispatchers.IO) {
+    fun storeBlock(artifactFile: ArtifactFile, blockNode: TBlockNode): Mono<TBlockNode> {
+        val m = mono {
             val digest = artifactFile.getFileSha256()
             val repo = RepositoryCache.getRepoDetail(blockNode.projectId, blockNode.repoName)
             val storageCredentials = repo.storageCredentials
@@ -59,6 +61,8 @@ class CoStorageManager(
                 throw e
             }
         }
+        m.subscribe()
+        return m
     }
 
     suspend fun loadArtifactInputStream(

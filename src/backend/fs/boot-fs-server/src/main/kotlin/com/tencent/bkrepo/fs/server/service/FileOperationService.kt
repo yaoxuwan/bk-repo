@@ -52,10 +52,14 @@ import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.node.service.NodeSetLengthRequest
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.reactor.awaitSingle
+import org.slf4j.LoggerFactory
 import org.springframework.core.io.buffer.DataBuffer
 import org.springframework.core.io.buffer.DataBufferUtils
 import org.springframework.web.reactive.function.server.bodyToFlow
+import reactor.core.publisher.Mono
 import java.time.LocalDateTime
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 
 class FileOperationService(
@@ -88,60 +92,68 @@ class FileOperationService(
                 repoName = repoName,
                 size = artifactFile.getSize()
             )
-            storageManager.storeBlock(artifactFile, blockNode)
+            storageManager.storeBlock(artifactFile, blockNode).awaitSingle()
             return blockNode
         }
     }
 
     suspend fun stream(streamRequest: StreamRequest, user: String): NodeDetail {
         val nodeDetail = nodeService.createNode(buildNodeCreateRequest(streamRequest, user))
-        var reactiveArtifactFile = CoArtifactFileFactory.buildArtifactFile()
+        val artifactFiles = mutableListOf(CoArtifactFileFactory.buildArtifactFile())
+        val blockNodeMonos = mutableListOf<Mono<TBlockNode>>()
+        val index = AtomicInteger(0)
         val offset = AtomicLong(0)
         streamRequest.request.bodyToFlow<DataBuffer>().onCompletion {
-            if (reactiveArtifactFile.getSize() > 0) {
-                storeBlockNode(reactiveArtifactFile, offset, user, streamRequest, true)
-                reactiveArtifactFile.close()
+            val artifactFile = artifactFiles[index.get()]
+            if (artifactFile.getSize() > 0) {
+                storeBlockNode(artifactFiles, index, offset, user, streamRequest, true)?.let {
+                    blockNodeMonos.add(it)
+                }
             }
         }.collect {
             try {
-                reactiveArtifactFile.write(it)
-                val store = storeBlockNode(reactiveArtifactFile, offset, user, streamRequest)
-                if (store) {
-                    reactiveArtifactFile.close()
-                    reactiveArtifactFile = CoArtifactFileFactory.buildArtifactFile()
-                }
+                val artifactFile = artifactFiles[index.get()]
+                artifactFile.write(it)
+                storeBlockNode(artifactFiles, index, offset, user, streamRequest)?.let { m -> blockNodeMonos.add(m) }
             } finally {
                 DataBufferUtils.release(it)
             }
         }
+        blockNodeMonos.forEach { it.awaitSingle() }
+        artifactFiles.forEach { it.close() }
         return nodeDetail
     }
 
     private suspend fun storeBlockNode(
-        reactiveArtifactFile: CoArtifactFile,
+        artifactFiles: MutableList<CoArtifactFile>,
+        index: AtomicInteger,
         offset: AtomicLong,
         user: String,
         streamRequest: StreamRequest,
         lastBlock: Boolean = false
-    ): Boolean {
-        val blockSize = reactiveArtifactFile.getSize()
+    ): Mono<TBlockNode>? {
+        val artifactFile = artifactFiles[index.get()]
+        val blockSize = artifactFiles[index.get()].getSize()
         return if (blockSize >= streamProperties.blockSize.toBytes() || lastBlock) {
-            reactiveArtifactFile.finish()
+            artifactFiles.add(CoArtifactFileFactory.buildArtifactFile())
+            index.incrementAndGet()
+
+            artifactFile.finish()
             val blockNode = TBlockNode(
                 createdBy = user,
                 createdDate = LocalDateTime.now(),
                 nodeFullPath = streamRequest.fullPath,
                 startPos = offset.toLong(),
-                sha256 = reactiveArtifactFile.getFileSha256(),
+                sha256 = artifactFile.getFileSha256(),
                 projectId = streamRequest.projectId,
                 repoName = streamRequest.repoName,
-                size = reactiveArtifactFile.getSize()
+                size = artifactFile.getSize()
             )
-            storageManager.storeBlock(reactiveArtifactFile, blockNode)
+            val tBlockNodeMono = storageManager.storeBlock(artifactFile, blockNode)
             offset.addAndGet(blockSize)
-            true
+            tBlockNodeMono
         } else {
-            false
+            null
         }
     }
 
@@ -208,5 +220,9 @@ class FileOperationService(
             lastModifiedDate = LocalDateTime.now(),
             nodeMetadata = listOf(fsAttr)
         )
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(FileOperationService::class.java)
     }
 }
