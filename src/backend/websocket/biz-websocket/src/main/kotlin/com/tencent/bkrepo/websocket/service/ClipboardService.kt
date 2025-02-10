@@ -44,7 +44,6 @@ import com.tencent.bkrepo.common.service.util.okhttp.HttpClientBuilderFactory
 import com.tencent.bkrepo.fs.server.constant.JWT_CLAIMS_PERMIT
 import com.tencent.bkrepo.fs.server.constant.JWT_CLAIMS_REPOSITORY
 import com.tencent.bkrepo.websocket.dispatch.TransferDispatch
-import com.tencent.bkrepo.websocket.dispatch.push.CopyPDUTransferPush
 import com.tencent.bkrepo.websocket.dispatch.push.PastePDUTransferPush
 import com.tencent.bkrepo.websocket.pojo.fs.CopyPDU
 import com.tencent.bkrepo.websocket.pojo.fs.PastePDU
@@ -68,10 +67,13 @@ class ClipboardService(
 
     fun copy(userId: String, copyPDU: CopyPDU) {
         logger.info("userId: $userId, CopyPDU: $copyPDU")
-        val token = generateToken(userId, copyPDU)
-        copyPDU.token = token
-        val copyPDUTransferPush = CopyPDUTransferPush(copyPDU)
-        transferDispatch.dispatch(copyPDUTransferPush)
+//        val token = generateToken(userId, copyPDU)
+//        copyPDU.token = token
+//        val copyPDUTransferPush = CopyPDUTransferPush(copyPDU)
+//        transferDispatch.dispatch(copyPDUTransferPush)
+        val pastePDU = PastePDU(copyPDU.workspaceName, copyPDU.timestamp)
+        val pastePDUTransferPush = PastePDUTransferPush(pastePDU)
+        transferDispatch.dispatch(pastePDUTransferPush)
     }
 
     fun paste(pastePDU: PastePDU) {
