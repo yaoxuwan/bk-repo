@@ -32,6 +32,8 @@ import com.tencent.bk.audit.annotations.AuditAttribute
 import com.tencent.bk.audit.annotations.AuditEntry
 import com.tencent.bk.audit.annotations.AuditInstanceRecord
 import com.tencent.bkrepo.common.api.constant.StringPool
+import com.tencent.bkrepo.common.api.exception.ErrorCodeException
+import com.tencent.bkrepo.common.api.message.CommonMessageCode
 import com.tencent.bkrepo.common.artifact.api.ArtifactFile
 import com.tencent.bkrepo.common.artifact.api.ArtifactInfo
 import com.tencent.bkrepo.common.artifact.path.PathUtils.ROOT
@@ -50,6 +52,7 @@ import com.tencent.bkrepo.common.metadata.util.version.SemVersionParser
 import com.tencent.bkrepo.common.artifact.audit.ActionAuditContent
 import com.tencent.bkrepo.common.artifact.audit.NODE_DELETE_ACTION
 import com.tencent.bkrepo.common.artifact.audit.NODE_RESOURCE
+import com.tencent.bkrepo.common.artifact.repository.context.ArtifactContextHolder
 import com.tencent.bkrepo.common.query.enums.OperationType
 import com.tencent.bkrepo.common.query.model.PageLimit
 import com.tencent.bkrepo.common.query.model.QueryModel
@@ -77,6 +80,7 @@ import com.tencent.bkrepo.pypi.pojo.Basic
 import com.tencent.bkrepo.pypi.pojo.PypiArtifactVersionData
 import com.tencent.bkrepo.pypi.util.HtmlUtils
 import com.tencent.bkrepo.pypi.util.PypiVersionUtils.toPypiPackagePojo
+import com.tencent.bkrepo.pypi.util.UrlUtils
 import com.tencent.bkrepo.pypi.util.XmlUtils
 import com.tencent.bkrepo.pypi.util.XmlUtils.readXml
 import com.tencent.bkrepo.repository.constant.FULL_PATH
@@ -97,6 +101,7 @@ import com.tencent.bkrepo.repository.pojo.search.NodeQueryBuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import java.util.Locale
 
 @Component
 class PypiLocalRepository(
@@ -114,7 +119,7 @@ class PypiLocalRepository(
         val filename = (artifactFile as MultipartArtifactFile).getOriginalFilename()
         val sha256 = artifactFile.getFileSha256()
         val md5 = artifactFile.getFileMd5()
-        val name: String = context.request.getParameter("name")
+        val name: String = context.request.getParameter("name").normalize()
         val version: String = context.request.getParameter("version")
         val artifactFullPath = "/$name/$version/$filename"
 
@@ -135,7 +140,7 @@ class PypiLocalRepository(
     override fun onUpload(context: ArtifactUploadContext) {
         val nodeCreateRequest = buildNodeCreateRequest(context)
         val artifactFile = context.getArtifactFile("content")
-        val name: String = context.request.getParameter("name")
+        val name: String = context.request.getParameter("name").normalize()
         val version: String = context.request.getParameter("version")
         packageService.createPackageVersion(
             PackageVersionCreateRequest(
@@ -356,6 +361,11 @@ class PypiLocalRepository(
                 // 过滤掉'根节点',
                 return buildPypiPageContent(PACKAGE_INDEX_TITLE, buildPackageListContent(nodeList))
             }
+            if (packageName != packageName!!.normalize()) {
+                val urlPath = ArtifactContextHolder.getUrlPath(this.javaClass.name)!!
+                    .replace(packageName!!, packageName!!.normalize())
+                HttpContextHolder.getResponse().sendRedirect(UrlUtils.getRedirectUrl(pypiProperties.domain, urlPath))
+            }
             // 请求中带包名，返回对应包的文件列表。
             val nodes = nodeService.listNode(
                 ArtifactInfo(projectId, repoName, "/$packageName"),
@@ -482,7 +492,7 @@ class PypiLocalRepository(
         }
         // href中的包名需要根据PEP 503规范进行标准化，且以"/"结尾
         nodeList.forEachIndexed { i, node ->
-            val href = "\"${node.name.replace(nonAlphanumericSeqRegex, "-").toLowerCase()}/\""
+            val href = "\"${node.name.replace(nonAlphanumericSeqRegex, "-").lowercase(Locale.getDefault())}/\""
             builder.append("$INDENT<a href=$href rel=\"internal\">${node.name}</a>$LINE_BREAK")
             if (i != nodeList.size - 1) builder.append("\n")
         }
@@ -524,6 +534,14 @@ class PypiLocalRepository(
             val packageKey = PackageKeys.ofPypi(pypiPackagePojo.name)
             return packageService.findVersionByName(projectId, repoName, packageKey, pypiPackagePojo.version)
         }
+    }
+
+    private fun String.normalize(): String {
+        return this.replace("[^a-zA-Z0-9_.-]".toRegex(), "-")
+            .replace("[_\\-.]+".toRegex(), "-")
+            .replace("^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$".toRegex(), "")
+            .lowercase()
+            .takeIf { it.isNotEmpty() } ?: throw ErrorCodeException(CommonMessageCode.PARAMETER_INVALID, "name")
     }
 
     companion object {

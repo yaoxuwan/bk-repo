@@ -31,11 +31,10 @@
 
 package com.tencent.bkrepo.pypi.util
 
-import com.google.gson.JsonParser
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 object JsonUtil {
     infix fun String.jsonValue(param: String): String {
-        val jsonObject = JsonParser.parseString(this).asJsonObject
-        return jsonObject.get(param).asString
-    }
+        val jsonNode = jacksonObjectMapper().readTree(this)
+        return jsonNode.get(param).asText() }
 }

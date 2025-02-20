@@ -37,5 +37,4 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jsoup:jsoup:${Versions.Jsoup}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("com.google.code.gson:gson")
 }
