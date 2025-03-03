@@ -918,5 +918,6 @@
     "getShareConfigFailed": "Get share config failed",
     "shareFileDeleted": "The share file has been deleted",
     "getShareFileFailed": "Get share file failed",
-    "getDownloadUrlFailed": "Get download url failed"
+    "getDownloadUrlFailed": "Download failed",
+    "pendingApproval": "Pending Approval"
 }
