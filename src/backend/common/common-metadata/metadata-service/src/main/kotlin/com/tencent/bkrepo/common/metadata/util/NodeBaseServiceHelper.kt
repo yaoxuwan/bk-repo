@@ -4,6 +4,7 @@ import com.tencent.bkrepo.common.api.util.Preconditions
 import com.tencent.bkrepo.common.artifact.path.PathUtils
 import com.tencent.bkrepo.common.metadata.model.TNode
 import com.tencent.bkrepo.common.query.model.Sort
+import com.tencent.bkrepo.repository.pojo.metadata.label.MetadataLabelDetail
 import com.tencent.bkrepo.repository.pojo.node.NodeDetail
 import com.tencent.bkrepo.repository.pojo.node.NodeInfo
 import com.tencent.bkrepo.repository.pojo.node.NodeListOption
@@ -65,7 +66,7 @@ object NodeBaseServiceHelper {
         }
     }
 
-    fun convert(tNode: TNode?): NodeInfo? {
+    fun convert(tNode: TNode?, metadataLabels: List<MetadataLabelDetail> = emptyList()): NodeInfo? {
         return tNode?.let {
             val metadata = MetadataUtils.toMap(it.metadata)
             NodeInfo(
@@ -87,7 +88,7 @@ object NodeBaseServiceHelper {
                 sha256 = it.sha256,
                 md5 = it.md5,
                 metadata = metadata,
-                nodeMetadata = MetadataUtils.toList(it.metadata),
+                nodeMetadata = MetadataUtils.toList(it.metadata, metadataLabels),
                 copyFromCredentialsKey = it.copyFromCredentialsKey,
                 copyIntoCredentialsKey = it.copyIntoCredentialsKey,
                 deleted = it.deleted?.format(DateTimeFormatter.ISO_DATE_TIME),
@@ -99,8 +100,8 @@ object NodeBaseServiceHelper {
         }
     }
 
-    fun convertToDetail(tNode: TNode?): NodeDetail? {
-        return convert(tNode)?.let { NodeDetail(it) }
+    fun convertToDetail(tNode: TNode?, metadataLabels: List<MetadataLabelDetail> = emptyList()): NodeDetail? {
+        return convert(tNode, metadataLabels)?.let { NodeDetail(it) }
     }
 
     /**
