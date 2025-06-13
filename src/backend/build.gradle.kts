@@ -32,6 +32,7 @@
 plugins {
     id("com.tencent.devops.boot") version Versions.DevopsBoot
     id("com.tencent.devops.publish") version Versions.DevopsBoot apply false
+    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 allprojects {
