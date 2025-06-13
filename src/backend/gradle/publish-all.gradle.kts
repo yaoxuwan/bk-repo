@@ -38,7 +38,7 @@ allprojects {
         configure<PublishingExtension> {
             repositories {
                 maven {
-                    name = "allJar"
+                    name = "sonatype"
                     url = uri(allJarRepo.orEmpty())
                     credentials {
                         username = allJarUsername
