@@ -42,6 +42,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.Message
 import org.springframework.messaging.simp.config.ChannelRegistration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
+import org.springframework.scheduling.TaskScheduler
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
@@ -56,12 +57,14 @@ class WebsocketConfiguration(
     private val websocketService: WebsocketService,
     private val jwtAuthProperties: JwtAuthProperties,
     private val authenticationManager: AuthenticationManager,
-    private val webSocketMetrics: WebSocketMetrics
+    private val webSocketMetrics: WebSocketMetrics,
+    private val messageBrokerTaskScheduler: TaskScheduler
 ) : WebSocketMessageBrokerConfigurer {
 
     override fun configureMessageBroker(config: MessageBrokerRegistry) {
         config.setCacheLimit(webSocketProperties.cacheLimit)
         config.enableSimpleBroker("/topic")
+            .setTaskScheduler(messageBrokerTaskScheduler)
         config.setApplicationDestinationPrefixes("/app")
     }
 
