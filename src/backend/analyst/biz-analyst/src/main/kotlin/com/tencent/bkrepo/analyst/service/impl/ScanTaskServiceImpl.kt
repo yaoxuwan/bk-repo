@@ -356,7 +356,8 @@ class ScanTaskServiceImpl(
             -1
         }
         val queueTasks = unfinishSubTasks.filter { it.status != SubScanTaskStatus.EXECUTING.name }
-        val currentTaskExecuteTime = subTasks.maxOf { it.size } / taskScanner.scanRate
+        logger.info("queueTasks: $queueTasks, subTasks: $subTasks, taskScanner: ${taskScanner.scanRate}")
+        val currentTaskExecuteTime = subTasks.maxOf { it.size }/ taskScanner.scanRate
         // 没有排队时，返回当前任务预估执行时间
         if (queueTasks.isEmpty()) {
             return ScanTaskWaitingTime(0, currentTaskExecuteTime, expireDay)
