@@ -91,7 +91,7 @@ open class Scanner(
     @get:Schema(title = "不支持的制品名称正则列表")
     val unsupportedArtifactNameRegex: Set<String> = emptySet(),
     @get:Schema(title = "扫描器配置")
-    val scanRate: Long = DataSize.ofMegabytes(50).toBytes()
+    val scanRate: Long = DataSize.ofMegabytes(25).toBytes()
 ) {
     /**
      * 获取待扫描文件最大允许扫描时长

@@ -38,6 +38,7 @@ import com.tencent.bkrepo.analyst.dao.ScanPlanDao
 import com.tencent.bkrepo.analyst.dao.ScanTaskDao
 import com.tencent.bkrepo.analyst.dao.SubScanTaskDao
 import com.tencent.bkrepo.analyst.exception.ScanTaskNotFoundException
+import com.tencent.bkrepo.analyst.exception.SubScanTaskNotFoundException
 import com.tencent.bkrepo.analyst.model.LeakDetailExport
 import com.tencent.bkrepo.analyst.model.ScanPlanExport
 import com.tencent.bkrepo.analyst.pojo.ScanTask
@@ -347,6 +348,9 @@ class ScanTaskServiceImpl(
     override fun taskWaitTime(taskId: String): ScanTaskWaitingTime {
         val task = scanTaskDao.findById(taskId) ?: throw ScanTaskNotFoundException(taskId)
         val subTasks = subScanTaskDao.findByParentId(taskId)
+        if (subTasks.isEmpty()) {
+            throw SubScanTaskNotFoundException(taskId)
+        }
         val dispatcher = task.metadata.find { it.key == TASK_METADATA_DISPATCHER }?.value!!
         val unfinishSubTasks = subScanTaskDao.tasksCreatedBefore(task.createdDate, dispatcher)
         val taskScanner = scannerService.get(task.scanner)
@@ -356,7 +360,6 @@ class ScanTaskServiceImpl(
             -1
         }
         val queueTasks = unfinishSubTasks.filter { it.status != SubScanTaskStatus.EXECUTING.name }
-        logger.info("queueTasks: $queueTasks, subTasks: $subTasks, taskScanner: ${taskScanner.scanRate}")
         val currentTaskExecuteTime = subTasks.maxOf { it.size }/ taskScanner.scanRate
         // 没有排队时，返回当前任务预估执行时间
         if (queueTasks.isEmpty()) {

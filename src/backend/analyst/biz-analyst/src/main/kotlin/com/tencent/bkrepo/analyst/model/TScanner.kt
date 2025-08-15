@@ -80,5 +80,5 @@ data class TScanner(
     /**
      * 扫描速率
      */
-    val scanRate: Long? = DataSize.ofMegabytes(50).toBytes()
+    val scanRate: Long? = DataSize.ofMegabytes(20).toBytes()
 )

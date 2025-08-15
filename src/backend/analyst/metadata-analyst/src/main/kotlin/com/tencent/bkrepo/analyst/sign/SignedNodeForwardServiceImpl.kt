@@ -89,6 +89,7 @@ class SignedNodeForwardServiceImpl(
             val forwardNode = nodeService.getNodeDetail(
                 ArtifactInfo(node.projectId, signProperties.signedRepoName, traceableApkPath)
             ) ?: getOldForwardNode(traceableApkPath, config) ?: throw throwException(node, config, userId)
+            logger.info("forward node: ${forwardNode.fullPath}, ${forwardNode.createdDate}")
             clearTask(node, userId)
             return forwardNode
         }
@@ -114,14 +115,14 @@ class SignedNodeForwardServiceImpl(
             ErrorCodeException(
                 messageCode = SignedNodeForwardMessageCode.SIGN_TASK_IN_QUEUE,
                 waitingTime.order,
-                HumanReadable.time(waitingTime.waitingTime, TimeUnit.SECONDS),
+                HumanReadable.time(waitingTime.waitingTime, TimeUnit.SECONDS, TIME_FORMAT),
                 waitingTime.expireDay,
                 status = HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS,
             )
         } else {
             ErrorCodeException(
                 messageCode = SignedNodeForwardMessageCode.SIGN_TASK_EXECUTING,
-                HumanReadable.time(waitingTime.waitingTime, TimeUnit.SECONDS),
+                HumanReadable.time(waitingTime.waitingTime, TimeUnit.SECONDS, TIME_FORMAT),
                 waitingTime.expireDay,
                 status = HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS,
             )
@@ -247,6 +248,7 @@ class SignedNodeForwardServiceImpl(
             )
             metadataService.saveMetadata(createMetadataRequest)
             logger.info("Save task metadata successful.")
+            Thread.sleep(TimeUnit.SECONDS.toMillis(3))
             return scanClient.getTaskWaitingTime(task.taskId).data!!
         }
     }
@@ -257,5 +259,6 @@ class SignedNodeForwardServiceImpl(
 
     companion object {
         private val logger = LoggerFactory.getLogger(SignedNodeForwardServiceImpl::class.java)
+        private const val TIME_FORMAT = "%.2g"
     }
 }
