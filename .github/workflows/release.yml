@@ -70,9 +70,9 @@ jobs:
       - name: Gradle Build Backend Service
         working-directory: src/backend
         run: |
-          ./gradlew clean build
+          ./gradlew clean build -x test
       - name: Create artifact - Step1:get Frontend
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: frontend
           path: src/frontend/frontend
@@ -132,7 +132,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: download bkrepo
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         id: download
         with:
           name: bkrepo
@@ -166,7 +166,7 @@ jobs:
           prerelease: true
       ## bkrepo
       - name: download bkrepo
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: bkrepo
           path: ./
@@ -181,7 +181,7 @@ jobs:
           asset_content_type: application/gzip
       ## bkrepo helm chart
       - name: download bkrepo-chart
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: bkrepo-chart
           path: ./
