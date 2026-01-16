@@ -97,6 +97,7 @@ data class TNode(
     var archived: Boolean? = null,
     var compressed: Boolean? = null,
     var federatedSource: String? = null,
+    var parentId: String? = null,
 
     @ShardingKey(count = SHARDING_COUNT)
     var projectId: String,

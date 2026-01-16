@@ -33,6 +33,7 @@ import com.tencent.bkrepo.common.artifact.stream.Range
 import com.tencent.bkrepo.common.metadata.service.blocknode.RBlockNodeService
 import com.tencent.bkrepo.common.storage.credentials.StorageCredentials
 import com.tencent.bkrepo.common.storage.pojo.RegionResource
+import com.tencent.bkrepo.fs.server.pojo.DriveNode
 import com.tencent.bkrepo.fs.server.storage.CoStorageManager
 import com.tencent.bkrepo.repository.pojo.node.NodeDetail
 import org.springframework.stereotype.Service

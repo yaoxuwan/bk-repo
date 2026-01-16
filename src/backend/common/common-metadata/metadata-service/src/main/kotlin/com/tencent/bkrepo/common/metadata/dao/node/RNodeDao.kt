@@ -38,10 +38,13 @@ import com.tencent.bkrepo.common.metadata.model.TNode
 import com.tencent.bkrepo.common.metadata.util.NodeQueryHelper
 import com.tencent.bkrepo.common.mongo.dao.util.Pages
 import com.tencent.bkrepo.common.mongo.reactive.dao.HashShardingMongoReactiveDao
+import com.tencent.bkrepo.fs.server.pojo.DriveNode
 import com.tencent.bkrepo.repository.pojo.node.NodeListOption
 import org.springframework.context.annotation.Conditional
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.FindAndModifyOptions
+import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.and
@@ -145,9 +148,84 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
         return pageWithoutShardingKey(pageRequest, query)
     }
 
+    suspend fun findNodeById(projectId: String, repoName: String, id: String): TNode? {
+        if (id == "1") {
+            return buildRootNode(projectId, repoName)
+        }
+        val query = Query(Criteria.where(ID).isEqualTo(id)
+            .and(TNode::projectId).isEqualTo(projectId)
+            .and(TNode::repoName).isEqualTo(repoName)
+            .and(TNode::deleted).isEqualTo(null)
+        )
+        return this.findOne(query)
+    }
+
+    suspend fun listNodesById(projectId: String, repoName: String, id: String, offset: Long): List<TNode> {
+        val query = Query(where(TNode::parentId).isEqualTo(id)
+            .and(TNode::projectId).isEqualTo(projectId)
+            .and(TNode::repoName).isEqualTo(repoName)
+            .and(TNode::deleted).isEqualTo(null)
+        ).with(Sort.by(Sort.Direction.ASC, ID)).skip(offset)
+        return this.find(query)
+    }
+
+    suspend fun createNode(userId: String, projectId: String, repoName: String, name: String, folder: Boolean, size: Long, parent: TNode): TNode {
+        val node = TNode(
+            projectId = projectId,
+            repoName = repoName,
+            parentId = parent.id!!,
+            name = name,
+            folder = folder,
+            size = size,
+            createdBy = userId,
+            createdDate = LocalDateTime.now(),
+            lastModifiedBy = userId,
+            lastModifiedDate = LocalDateTime.now(),
+            lastAccessDate = LocalDateTime.now(),
+            path = parent.fullPath,
+            fullPath = PathUtils.combineFullPath(parent.fullPath, name),
+        )
+        return this.insert(node)
+    }
+
+    suspend fun deleteNode(userId: String, projectId: String, repoName: String, id: String): Boolean {
+        val query = Query(where(TNode::parentId).isEqualTo(id)
+            .and(TNode::projectId).isEqualTo(projectId)
+            .and(TNode::repoName).isEqualTo(repoName)
+        )
+        val update = Update().set(TNode::deleted.name, LocalDateTime.now())
+            .set(TNode::lastModifiedBy.name, userId)
+            .set(TNode::lastModifiedDate.name, LocalDateTime.now())
+        return this.updateFirst(query, update).modifiedCount == 1L
+    }
+
+    suspend fun findNodeByParentIdAndName(projectId: String, repoName: String, parentId: String, name: String): TNode? {
+        val query = Query(where(TNode::parentId).isEqualTo(parentId)
+            .and(TNode::projectId).isEqualTo(projectId)
+            .and(TNode::repoName).isEqualTo(repoName)
+            .and(TNode::name).isEqualTo(name)
+            .and(TNode::deleted).isEqualTo(null)
+        )
+        return this.findOne(query)
+    }
+
+    suspend fun renameNode(userId: String, projectId: String, repoName: String, srcId: String, dstNode: DriveNode, dstName: String): Boolean {
+        val query = Query(where(TNode::id).isEqualTo(srcId)
+            .and(TNode::projectId).isEqualTo(projectId)
+            .and(TNode::repoName).isEqualTo(repoName)
+            .and(TNode::deleted).isEqualTo(null)
+        )
+        val update = Update().set(TNode::name.name, dstName)
+            .set(TNode::parentId.name, dstNode.id)
+            .set(TNode::path.name, dstNode.fullPath)
+            .set(TNode::fullPath.name, PathUtils.combineFullPath(dstNode.fullPath, dstName))
+        return this.updateFirst(query, update).modifiedCount == 1L
+    }
+
     companion object {
         fun buildRootNode(projectId: String, repoName: String): TNode {
             return TNode(
+                id = "1",
                 createdBy = StringPool.EMPTY,
                 createdDate = LocalDateTime.now(),
                 lastModifiedBy = StringPool.EMPTY,

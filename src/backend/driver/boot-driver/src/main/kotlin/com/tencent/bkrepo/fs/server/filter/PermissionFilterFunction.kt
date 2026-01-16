@@ -32,6 +32,7 @@ import com.tencent.bkrepo.common.api.constant.PLATFORM_KEY
 import com.tencent.bkrepo.common.api.constant.USER_KEY
 import com.tencent.bkrepo.common.artifact.constant.PROJECT_ID
 import com.tencent.bkrepo.common.artifact.constant.REPO_NAME
+import com.tencent.bkrepo.common.security.http.core.HttpAuthProperties
 import com.tencent.bkrepo.fs.server.constant.JWT_CLAIMS_PERMIT
 import com.tencent.bkrepo.fs.server.constant.JWT_CLAIMS_REPOSITORY
 import com.tencent.bkrepo.fs.server.service.PermissionService
@@ -48,13 +49,17 @@ import org.springframework.web.reactive.function.server.buildAndAwait
 @Component
 class PermissionFilterFunction(
     private val securityManager: SecurityManager,
-    private val permissionService: PermissionService
+    private val permissionService: PermissionService,
+    private val httpAuthProperties: HttpAuthProperties
 ) : CoHandlerFilterFunction {
     private val matcher = AntPathMatcher()
     override suspend fun filter(
         request: ServerRequest,
         next: suspend (ServerRequest) -> ServerResponse,
     ): ServerResponse {
+        if (!httpAuthProperties.enabled) {
+            return next(request)
+        }
         if (uncheckedUrlPrefixList.any { request.path().startsWith(it) }) {
             return next(request)
         }

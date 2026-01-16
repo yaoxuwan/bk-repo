@@ -43,6 +43,7 @@ import com.tencent.bkrepo.fs.server.handler.ClientHandler
 import com.tencent.bkrepo.fs.server.handler.FileOperationsHandler
 import com.tencent.bkrepo.fs.server.handler.LoginHandler
 import com.tencent.bkrepo.fs.server.handler.NodeOperationsHandler
+import com.tencent.bkrepo.fs.server.handler.V2NodeOperationsHandler
 import com.tencent.bkrepo.fs.server.handler.service.FsNodeHandler
 import com.tencent.bkrepo.fs.server.metrics.ServerMetrics
 import org.slf4j.LoggerFactory
@@ -66,6 +67,7 @@ import kotlin.coroutines.cancellation.CancellationException
 @Configuration
 class RouteConfiguration(
     private val nodeOperationsHandler: NodeOperationsHandler,
+    private val v2NodeOperationsHandler: V2NodeOperationsHandler,
     private val fileOperationsHandler: FileOperationsHandler,
     private val loginHandler: LoginHandler,
     private val fsNodeHandler: FsNodeHandler,
@@ -105,6 +107,17 @@ class RouteConfiguration(
             GET("/info$DEFAULT_MAPPING_URI", nodeOperationsHandler::info)
             GET("/page$DEFAULT_MAPPING_URI", nodeOperationsHandler::listNodes)
             GET(DEFAULT_MAPPING_URI, nodeOperationsHandler::getNode)
+        }
+
+        "/v2/node".nest {
+            GET("/attr/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::getNode)
+            GET("/list/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::listNodes)
+            DELETE("/delete/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::deleteNode)
+            POST("/move/{projectId}/{repoName}", v2NodeOperationsHandler::move)
+            POST("/create/{projectId}/{repoName}", v2NodeOperationsHandler::createNode)
+            PUT("/change/attribute/{projectId}/{repoName}", v2NodeOperationsHandler::changeAttribute)
+            GET("/stat/{projectId}/{repoName}", v2NodeOperationsHandler::getStat)
+            PUT("/set-length/{projectId}/{repoName}", v2NodeOperationsHandler::setLength)
         }
 
         PUT("/block/flush$DEFAULT_MAPPING_URI", fileOperationsHandler::flush)
