@@ -5,4 +5,5 @@ import org.springframework.web.reactive.function.server.queryParamOrNull
 
 class UserNodePageRequest(request: ServerRequest) : UserNodeRequest(request) {
     val offset: Long = request.queryParamOrNull("offset")?.toLong() ?: 0L
+    val name: String? = request.queryParamOrNull("name")
 }

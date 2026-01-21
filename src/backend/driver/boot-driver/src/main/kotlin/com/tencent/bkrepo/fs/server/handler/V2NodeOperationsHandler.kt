@@ -55,7 +55,11 @@ class V2NodeOperationsHandler(
     suspend fun listNodes(request: ServerRequest): ServerResponse {
         val pageRequest = UserNodePageRequest(request)
         with(pageRequest) {
-            val nodes = nodeService.listNode(projectId, repoName, id, offset)
+            val nodes = if (name.isNullOrBlank()) {
+                nodeService.listNode(projectId, repoName, id, offset)
+            } else {
+                nodeService.getNode(projectId, repoName, id, name)?.let { listOf(it) } ?: emptyList()
+            }
             return ReactiveResponseBuilder.success(nodes)
         }
     }

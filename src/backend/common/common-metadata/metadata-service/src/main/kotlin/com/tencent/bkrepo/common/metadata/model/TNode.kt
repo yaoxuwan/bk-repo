@@ -46,6 +46,10 @@ import com.tencent.bkrepo.common.metadata.model.TNode.Companion.FOLDER_IDX
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.FOLDER_IDX_DEF
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.FULL_PATH_IDX
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.FULL_PATH_IDX_DEF
+import com.tencent.bkrepo.common.metadata.model.TNode.Companion.PARENT_ID_IDX
+import com.tencent.bkrepo.common.metadata.model.TNode.Companion.PARENT_ID_IDX_DEF
+import com.tencent.bkrepo.common.metadata.model.TNode.Companion.PARENT_ID_NAME_IDX
+import com.tencent.bkrepo.common.metadata.model.TNode.Companion.PARENT_ID_NAME_IDX_DEF
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.METADATA_IDX
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.METADATA_IDX_DEF
 import com.tencent.bkrepo.common.metadata.model.TNode.Companion.PATH_IDX
@@ -70,6 +74,8 @@ import java.time.LocalDateTime
     CompoundIndex(name = CLUSTER_NAMES_IDX, def = CLUSTER_NAMES_IDX_DEF, background = true),
     CompoundIndex(name = ARCHIVED_IDX, def = ARCHIVED_IDX_DEF, background = true),
     CompoundIndex(name = COMPRESSED_IDX, def = COMPRESSED_IDX_DEF, background = true),
+    CompoundIndex(name = PARENT_ID_IDX, def = PARENT_ID_IDX_DEF, background = true),
+    CompoundIndex(name = PARENT_ID_NAME_IDX, def = PARENT_ID_NAME_IDX_DEF, background = true),
 )
 data class TNode(
     var id: String? = null,
@@ -123,5 +129,9 @@ data class TNode(
         const val FOLDER_IDX_DEF = "{'folder': 1}"
         const val CLUSTER_NAMES_IDX = "cluster_names_idx"
         const val CLUSTER_NAMES_IDX_DEF = "{'clusterNames': 1}"
+        const val PARENT_ID_IDX = "projectId_repoName_parentId_id_idx"
+        const val PARENT_ID_IDX_DEF = "{'projectId': 1, 'repoName': 1, 'parentId': 1, 'deleted': 1, '_id': 1}"
+        const val PARENT_ID_NAME_IDX = "projectId_repoName_parentId_name_idx"
+        const val PARENT_ID_NAME_IDX_DEF = "{'projectId': 1, 'repoName': 1, 'parentId': 1, 'name': 1, 'deleted': 1}"
     }
 }
