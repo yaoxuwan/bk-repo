@@ -43,6 +43,7 @@ import com.tencent.bkrepo.fs.server.handler.ClientHandler
 import com.tencent.bkrepo.fs.server.handler.FileOperationsHandler
 import com.tencent.bkrepo.fs.server.handler.LoginHandler
 import com.tencent.bkrepo.fs.server.handler.NodeOperationsHandler
+import com.tencent.bkrepo.fs.server.handler.V2BlockOperationsHandler
 import com.tencent.bkrepo.fs.server.handler.V2NodeOperationsHandler
 import com.tencent.bkrepo.fs.server.handler.service.FsNodeHandler
 import com.tencent.bkrepo.fs.server.metrics.ServerMetrics
@@ -69,6 +70,7 @@ class RouteConfiguration(
     private val nodeOperationsHandler: NodeOperationsHandler,
     private val v2NodeOperationsHandler: V2NodeOperationsHandler,
     private val fileOperationsHandler: FileOperationsHandler,
+    private val v2BlockOperationsHandler: V2BlockOperationsHandler,
     private val loginHandler: LoginHandler,
     private val fsNodeHandler: FsNodeHandler,
     private val clientHandler: ClientHandler,
@@ -118,6 +120,14 @@ class RouteConfiguration(
             PUT("/change/attribute/{projectId}/{repoName}", v2NodeOperationsHandler::changeAttribute)
             GET("/stat/{projectId}/{repoName}", v2NodeOperationsHandler::getStat)
             PUT("/set-length/{projectId}/{repoName}", v2NodeOperationsHandler::setLength)
+        }
+
+        "/v2/block".nest {
+            filter(artifactFileCleanupFilterFunction::filter)
+            PUT("/write-flush/{projectId}/{repoName}/{id}/{offset}", v2BlockOperationsHandler::writeAndFlush)
+            PUT("/flush/{projectId}/{repoName}/{id}", v2BlockOperationsHandler::flush)
+            PUT("/{projectId}/{repoName}/{id}/{offset}", v2BlockOperationsHandler::write)
+            addMetrics(serverMetrics.uploadingCount)
         }
 
         PUT("/block/flush$DEFAULT_MAPPING_URI", fileOperationsHandler::flush)

@@ -29,8 +29,8 @@ package com.tencent.bkrepo.fs.server.request
 
 import org.springframework.web.reactive.function.server.ServerRequest
 
-class BlockRequest(request: ServerRequest) : NodeRequest(request) {
-    val offset: Long
+class BlockRequest(request: ServerRequest) : NodeRequest(request), BlockWriteRequest {
+    override val offset: Long
     init {
         offset = request.pathVariable("offset").toLong()
     }

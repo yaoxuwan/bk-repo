@@ -189,7 +189,7 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
     }
 
     suspend fun deleteNode(userId: String, projectId: String, repoName: String, id: String): Boolean {
-        val query = Query(where(TNode::parentId).isEqualTo(id)
+        val query = Query(Criteria.where(ID).isEqualTo(id)
             .and(TNode::projectId).isEqualTo(projectId)
             .and(TNode::repoName).isEqualTo(repoName)
         )

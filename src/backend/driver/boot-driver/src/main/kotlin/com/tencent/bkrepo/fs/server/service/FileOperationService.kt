@@ -39,9 +39,11 @@ import com.tencent.bkrepo.common.metadata.service.metadata.RMetadataService
 import com.tencent.bkrepo.fs.server.config.properties.StreamProperties
 import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
 import com.tencent.bkrepo.fs.server.context.ReactiveArtifactContextHolder
-import com.tencent.bkrepo.fs.server.request.BlockRequest
+import com.tencent.bkrepo.fs.server.request.BlockWriteRequest
 import com.tencent.bkrepo.fs.server.request.FlushRequest
 import com.tencent.bkrepo.fs.server.request.StreamRequest
+import com.tencent.bkrepo.fs.server.request.v2.user.UserBlockRequest
+import com.tencent.bkrepo.fs.server.request.v2.user.UserFlushRequest
 import com.tencent.bkrepo.fs.server.service.node.RNodeService
 import com.tencent.bkrepo.fs.server.storage.CoArtifactFile
 import com.tencent.bkrepo.fs.server.storage.CoArtifactFileFactory
@@ -67,6 +69,7 @@ class FileOperationService(
     private val metadataService: RMetadataService,
     private val fsService: FsService,
     private val nodeService: RNodeService,
+    private val v2NodeService: NodeService,
 ) {
 
     suspend fun read(nodeDetail: NodeDetail, range: Range): ArtifactInputStream? {
@@ -78,7 +81,7 @@ class FileOperationService(
         )
     }
 
-    suspend fun write(artifactFile: CoArtifactFile, request: BlockRequest, user: String): TBlockNode {
+    suspend fun write(artifactFile: CoArtifactFile, request: BlockWriteRequest, user: String): TBlockNode {
         with(request) {
             val blockNode = TBlockNode(
                 createdBy = user,
@@ -94,6 +97,19 @@ class FileOperationService(
             storageManager.storeBlock(artifactFile, blockNode)
             return blockNode
         }
+    }
+
+    suspend fun writeByNodeId(
+        artifactFile: CoArtifactFile,
+        projectId: String,
+        repoName: String,
+        nodeId: String,
+        offset: Long,
+        user: String
+    ): V2BlockWriteResult {
+        val fullPath = resolveNodeFullPath(projectId, repoName, nodeId)
+        val blockNode = write(artifactFile, UserBlockRequest(projectId, repoName, fullPath, offset), user)
+        return V2BlockWriteResult(blockNode, fullPath)
     }
 
     suspend fun stream(streamRequest: StreamRequest, user: String): NodeDetail {
@@ -182,6 +198,26 @@ class FileOperationService(
         }
     }
 
+    suspend fun flushByNodeId(
+        projectId: String,
+        repoName: String,
+        nodeId: String,
+        length: Long,
+        user: String,
+        fullPath: String? = null
+    ): String {
+        val resolvedFullPath = fullPath ?: resolveNodeFullPath(projectId, repoName, nodeId)
+        val nodeSetLengthRequest = NodeSetLengthRequest(
+            projectId = projectId,
+            repoName = repoName,
+            fullPath = resolvedFullPath,
+            newLength = length,
+            operator = user
+        )
+        fsService.setLength(nodeSetLengthRequest)
+        return resolvedFullPath
+    }
+
     private fun buildNodeCreateRequest(
         request: StreamRequest,
         user: String
@@ -214,4 +250,13 @@ class FileOperationService(
             nodeMetadata = listOf(fsAttr)
         )
     }
+
+    private suspend fun resolveNodeFullPath(projectId: String, repoName: String, nodeId: String): String {
+        return v2NodeService.getNode(projectId, repoName, nodeId).fullPath
+    }
 }
+
+data class V2BlockWriteResult(
+    val blockNode: TBlockNode,
+    val fullPath: String
+)

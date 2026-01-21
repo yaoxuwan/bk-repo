@@ -129,6 +129,7 @@ class PermissionFilterFunction(
             "/node/mkdir/**",
             "/node/set-length/**",
             "/block/**",
+            "/v2/block/**",
             "/stream/**"
         )
         private val uncheckedUrlPrefixList = listOf(
