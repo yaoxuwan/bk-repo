@@ -15,4 +15,11 @@ data class DriveNode(
     val lastModifiedBy: String,
     val lastModifiedDate: LocalDateTime,
     val lastAccessDate: LocalDateTime? = null,
+    // 文件系统属性
+    val uid: String? = null,
+    val gid: String? = null,
+    val mode: Int? = null,
+    val flags: Int? = null,
+    val rdev: Int? = null,
+    val type: Int? = null,
 )

@@ -34,11 +34,13 @@ package com.tencent.bkrepo.common.metadata.dao.node
 import com.tencent.bkrepo.common.api.constant.StringPool
 import com.tencent.bkrepo.common.artifact.path.PathUtils
 import com.tencent.bkrepo.common.metadata.condition.ReactiveCondition
+import com.tencent.bkrepo.common.metadata.model.TMetadata
 import com.tencent.bkrepo.common.metadata.model.TNode
 import com.tencent.bkrepo.common.metadata.util.NodeQueryHelper
 import com.tencent.bkrepo.common.mongo.dao.util.Pages
 import com.tencent.bkrepo.common.mongo.reactive.dao.HashShardingMongoReactiveDao
 import com.tencent.bkrepo.fs.server.pojo.DriveNode
+import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
 import com.tencent.bkrepo.repository.pojo.node.NodeListOption
 import org.springframework.context.annotation.Conditional
 import org.springframework.data.domain.Page
@@ -169,8 +171,19 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
         return this.find(query)
     }
 
-    suspend fun createNode(userId: String, projectId: String, repoName: String, name: String, folder: Boolean, size: Long, parent: TNode): TNode {
+    suspend fun createNode(
+        userId: String,
+        projectId: String,
+        repoName: String,
+        name: String,
+        folder: Boolean,
+        size: Long,
+        parent: TNode,
+        id: String? = null,
+        nodeMetadata: List<MetadataModel> = emptyList()
+    ): TNode {
         val node = TNode(
+            id = id,
             projectId = projectId,
             repoName = repoName,
             parentId = parent.id!!,
@@ -184,6 +197,7 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
             lastAccessDate = LocalDateTime.now(),
             path = parent.fullPath,
             fullPath = PathUtils.combineFullPath(parent.fullPath, name),
+            metadata = nodeMetadata.map { TMetadata(it.key, it.value) }.toMutableList()
         )
         return this.insert(node)
     }
@@ -210,7 +224,7 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
     }
 
     suspend fun renameNode(userId: String, projectId: String, repoName: String, srcId: String, dstNode: DriveNode, dstName: String): Boolean {
-        val query = Query(where(TNode::id).isEqualTo(srcId)
+        val query = Query(Criteria.where(ID).isEqualTo(srcId)
             .and(TNode::projectId).isEqualTo(projectId)
             .and(TNode::repoName).isEqualTo(repoName)
             .and(TNode::deleted).isEqualTo(null)

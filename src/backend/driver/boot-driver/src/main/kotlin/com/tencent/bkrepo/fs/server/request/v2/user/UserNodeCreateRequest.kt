@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.server.awaitBodyOrNull
  * 用户节点创建请求处理类
  * 用于从 ServerRequest 中提取路径参数和请求体
  */
-class UserNodeCreateRequest(private val request: ServerRequest) : UserBaseRequest(request) {
+class UserNodeCreateRequest(private val request: ServerRequest) : UserNodeRequest(request) {
 
     private suspend fun getBody(): UserNodeCreateRequestBody {
         return request.awaitBodyOrNull() ?: throw ErrorCodeException(CommonMessageCode.REQUEST_CONTENT_INVALID)
@@ -19,12 +19,17 @@ class UserNodeCreateRequest(private val request: ServerRequest) : UserBaseReques
     suspend fun toNodeCreateRequest(): NodeCreateRequest {
         val body = getBody()
         return NodeCreateRequest(
+            id = id,
             projectId = projectId,
             repoName = repoName,
             parentId = body.parentId,
             name = body.name,
             folder = body.folder,
-            size = body.size
+            size = body.size,
+            mode = body.mode,
+            flags = body.flags,
+            rdev = body.rdev,
+            type = body.type,
         )
     }
 }

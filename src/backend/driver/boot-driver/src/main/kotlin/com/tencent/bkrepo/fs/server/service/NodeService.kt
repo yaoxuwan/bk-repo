@@ -6,10 +6,14 @@ import com.tencent.bkrepo.common.artifact.exception.NodeNotFoundException
 import com.tencent.bkrepo.common.artifact.message.ArtifactMessageCode
 import com.tencent.bkrepo.common.artifact.path.PathUtils
 import com.tencent.bkrepo.common.metadata.dao.node.RNodeDao
+import com.tencent.bkrepo.common.metadata.model.NodeAttribute
+import com.tencent.bkrepo.common.metadata.model.NodeAttribute.Companion.NOBODY
 import com.tencent.bkrepo.common.metadata.model.TNode
+import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
 import com.tencent.bkrepo.fs.server.pojo.DriveNode
 import com.tencent.bkrepo.fs.server.request.v2.service.NodeCreateRequest
 import com.tencent.bkrepo.fs.server.utils.ReactiveSecurityUtils
+import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
 
@@ -43,6 +47,18 @@ class NodeService(
                     ArtifactMessageCode.NODE_CONFLICT, parentNode.fullPath
                 )
             }
+            val attributes = NodeAttribute(
+                uid = NOBODY,
+                gid = NOBODY,
+                mode = mode ,
+                flags = flags,
+                rdev = rdev,
+                type = type
+            )
+            val fsAttr = MetadataModel(
+                key = FS_ATTR_KEY,
+                value = attributes
+            )
             return try {
                 nodeDao.createNode(
                     userId = userId,
@@ -51,7 +67,9 @@ class NodeService(
                     name = name,
                     folder = folder,
                     size = size,
-                    parent = parentNode
+                    parent = parentNode,
+                    id = id,
+                    nodeMetadata = listOf(fsAttr)
                 ).convert()
             } catch (_: DuplicateKeyException) {
                 throw ErrorCodeException(
@@ -72,7 +90,13 @@ class NodeService(
     }
 
 
+    @Suppress("UNCHECKED_CAST")
     private fun TNode.convert(): DriveNode {
+        // 从 metadata 中提取文件系统属性
+        val nodeAttribute = this.metadata
+            ?.find { it.key == FS_ATTR_KEY }
+            ?.value as? NodeAttribute
+
         return DriveNode(
             id = this.id!!,
             fullPath = this.fullPath,
@@ -86,6 +110,12 @@ class NodeService(
             lastModifiedBy = this.lastModifiedBy,
             lastModifiedDate = this.lastModifiedDate,
             lastAccessDate = this.lastAccessDate,
+            uid = nodeAttribute?.uid,
+            gid = nodeAttribute?.gid,
+            mode = nodeAttribute?.mode,
+            flags = nodeAttribute?.flags,
+            rdev = nodeAttribute?.rdev,
+            type = nodeAttribute?.type,
         )
     }
 }

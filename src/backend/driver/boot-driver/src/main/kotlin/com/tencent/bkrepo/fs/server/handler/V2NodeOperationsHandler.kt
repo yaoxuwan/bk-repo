@@ -1,17 +1,16 @@
 package com.tencent.bkrepo.fs.server.handler
 
 import com.tencent.bkrepo.common.metadata.model.NodeAttribute
-import com.tencent.bkrepo.common.metadata.model.NodeAttribute.Companion.DEFAULT_MODE
 import com.tencent.bkrepo.common.metadata.model.NodeAttribute.Companion.NOBODY
 import com.tencent.bkrepo.common.metadata.service.fs.FsService
 import com.tencent.bkrepo.common.metadata.service.metadata.RMetadataService
 import com.tencent.bkrepo.common.metadata.service.repo.RRepositoryService
 import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
 import com.tencent.bkrepo.fs.server.context.ReactiveArtifactContextHolder
-import com.tencent.bkrepo.fs.server.request.ChangeAttributeRequest
 import com.tencent.bkrepo.fs.server.request.SetLengthRequest
-import com.tencent.bkrepo.fs.server.request.v2.user.UserMoveRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserBaseRequest
+import com.tencent.bkrepo.fs.server.request.v2.user.UserChangeAttributeRequest
+import com.tencent.bkrepo.fs.server.request.v2.user.UserMoveRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeAttrRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeCreateRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeDeleteRequest
@@ -77,34 +76,26 @@ class V2NodeOperationsHandler(
 
     @Suppress("UNCHECKED_CAST")
     suspend fun changeAttribute(request: ServerRequest): ServerResponse {
-        with(ChangeAttributeRequest(request)) {
-            val preFsAttributeStr = metadataService.listMetadata(projectId, repoName, fullPath)[FS_ATTR_KEY]
-            val attrMap = preFsAttributeStr as? Map<String, Any> ?: mapOf()
-            val preFsAttribute = NodeAttribute(
-                uid = attrMap[NodeAttribute::uid.name] as? String ?: NOBODY,
-                gid = attrMap[NodeAttribute::gid.name] as? String ?: NOBODY,
-                mode = attrMap[NodeAttribute::mode.name] as? Int ?: DEFAULT_MODE,
-                flags = attrMap[NodeAttribute::flags.name] as? Int,
-                rdev = attrMap[NodeAttribute::rdev.name] as? Int,
-                type = attrMap[NodeAttribute::type.name] as? Int
-            )
+        with(UserChangeAttributeRequest(request)) {
+            val node = nodeService.getNode(projectId, repoName, id)
 
             val attributes = NodeAttribute(
-                uid = uid ?: preFsAttribute.uid,
-                gid = gid ?: preFsAttribute.gid,
-                mode = mode ?: preFsAttribute.mode,
-                flags = flags ?: preFsAttribute.flags,
-                rdev = rdev ?: preFsAttribute.rdev,
-                type = type ?: preFsAttribute.type
+                uid = uid ?: node.uid ?: NOBODY,
+                gid = gid ?: node.gid ?: NOBODY,
+                mode = mode ?: node.mode,
+                flags = flags ?: node.flags,
+                rdev = rdev ?: node.rdev,
+                type = type ?: node.type
             )
             val fsAttr = MetadataModel(
                 key = FS_ATTR_KEY,
                 value = attributes
             )
+            // TODO: 根据id保存metadata
             val saveMetaDataRequest = MetadataSaveRequest(
                 projectId = projectId,
                 repoName = repoName,
-                fullPath = fullPath,
+                fullPath = node.fullPath,
                 nodeMetadata = listOf(fsAttr),
                 operator = ReactiveSecurityUtils.getUser()
             )

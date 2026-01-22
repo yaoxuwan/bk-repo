@@ -15,4 +15,12 @@ data class UserNodeCreateRequestBody(
     val folder: Boolean,
     @get:Schema(title = "文件大小（字节）", required = true)
     val size: Long,
+    @get:Schema(title = "文件权限（八进制）", required = false)
+    val mode: Int?,
+    @get:Schema(title = "Windows文件标志（十六进制）", required = false)
+    val flags: Int?,
+    @get:Schema(title = "设备ID", required = false)
+    val rdev: Int?,
+    @get:Schema(title = "文件类型", required = false)
+    val type: Int?,
 )

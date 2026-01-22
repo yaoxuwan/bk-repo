@@ -115,9 +115,9 @@ class RouteConfiguration(
             GET("/attr/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::getNode)
             GET("/list/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::listNodes)
             DELETE("/delete/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::deleteNode)
-            POST("/move/{projectId}/{repoName}", v2NodeOperationsHandler::move)
-            POST("/create/{projectId}/{repoName}", v2NodeOperationsHandler::createNode)
-            PUT("/change/attribute/{projectId}/{repoName}", v2NodeOperationsHandler::changeAttribute)
+            POST("/move/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::move)
+            POST("/create/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::createNode)
+            PUT("/change/attribute/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::changeAttribute)
             GET("/stat/{projectId}/{repoName}", v2NodeOperationsHandler::getStat)
             PUT("/set-length/{projectId}/{repoName}", v2NodeOperationsHandler::setLength)
         }
