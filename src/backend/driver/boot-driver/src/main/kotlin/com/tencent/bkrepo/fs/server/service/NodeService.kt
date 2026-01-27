@@ -89,6 +89,10 @@ class NodeService(
         nodeDao.renameNode(userId,  projectId, repoName, srcNode.id, dstParentNode, destName)
     }
 
+    suspend fun updateSize(projectId: String, repoName: String, id: String, size: Long): Boolean {
+        return nodeDao.updateSize(projectId, repoName, id, size)
+    }
+
 
     @Suppress("UNCHECKED_CAST")
     private fun TNode.convert(): DriveNode {

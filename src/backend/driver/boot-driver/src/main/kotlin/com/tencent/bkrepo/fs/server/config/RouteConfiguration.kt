@@ -119,7 +119,7 @@ class RouteConfiguration(
             POST("/create/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::createNode)
             PUT("/change/attribute/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::changeAttribute)
             GET("/stat/{projectId}/{repoName}", v2NodeOperationsHandler::getStat)
-            PUT("/set-length/{projectId}/{repoName}", v2NodeOperationsHandler::setLength)
+            PUT("/set-length/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::setLength)
         }
 
         "/v2/block".nest {

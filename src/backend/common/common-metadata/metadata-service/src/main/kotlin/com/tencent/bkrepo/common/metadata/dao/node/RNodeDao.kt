@@ -236,6 +236,15 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
         return this.updateFirst(query, update).modifiedCount == 1L
     }
 
+    suspend fun updateSize(projectId: String, repoName: String, id: String, size: Long): Boolean {
+        val query = Query(Criteria.where(ID).isEqualTo(id)
+            .and(TNode::projectId).isEqualTo(projectId)
+            .and(TNode::repoName).isEqualTo(repoName)
+        )
+        val update = Update().set(TNode::size.name, size)
+        return this.updateFirst(query, update).modifiedCount == 1L
+    }
+
     companion object {
         fun buildRootNode(projectId: String, repoName: String): TNode {
             return TNode(

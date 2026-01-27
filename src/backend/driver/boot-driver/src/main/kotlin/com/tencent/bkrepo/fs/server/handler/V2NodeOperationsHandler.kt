@@ -7,7 +7,7 @@ import com.tencent.bkrepo.common.metadata.service.metadata.RMetadataService
 import com.tencent.bkrepo.common.metadata.service.repo.RRepositoryService
 import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
 import com.tencent.bkrepo.fs.server.context.ReactiveArtifactContextHolder
-import com.tencent.bkrepo.fs.server.request.SetLengthRequest
+import com.tencent.bkrepo.fs.server.request.v2.user.UserSetLengthRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserBaseRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserChangeAttributeRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserMoveRequest
@@ -212,16 +212,8 @@ class V2NodeOperationsHandler(
 //    }
 
     suspend fun setLength(request: ServerRequest): ServerResponse {
-        with(SetLengthRequest(request)) {
-            val user = ReactiveSecurityUtils.getUser()
-            val nodeSetLengthRequest = NodeSetLengthRequest(
-                projectId = projectId,
-                repoName = repoName,
-                fullPath = fullPath,
-                newLength = length,
-                operator = user
-            )
-            fsService.setLength(nodeSetLengthRequest)
+        with(UserSetLengthRequest(request)) {
+            nodeService.updateSize(projectId, repoName, id, length)
             return ReactiveResponseBuilder.success()
         }
     }
