@@ -32,6 +32,7 @@
 package com.tencent.bkrepo.common.metadata.dao.node
 
 import com.tencent.bkrepo.common.api.constant.StringPool
+import com.tencent.bkrepo.common.api.constant.ensureSuffix
 import com.tencent.bkrepo.common.artifact.path.PathUtils
 import com.tencent.bkrepo.common.metadata.condition.ReactiveCondition
 import com.tencent.bkrepo.common.metadata.model.TMetadata
@@ -195,7 +196,7 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
             lastModifiedBy = userId,
             lastModifiedDate = LocalDateTime.now(),
             lastAccessDate = LocalDateTime.now(),
-            path = parent.fullPath,
+            path = PathUtils.normalizePath(parent.fullPath),
             fullPath = PathUtils.combineFullPath(parent.fullPath, name),
             metadata = nodeMetadata.map { TMetadata(it.key, it.value) }.toMutableList()
         )
@@ -223,18 +224,18 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
         return this.findOne(query)
     }
 
-//    suspend fun renameNode(userId: String, projectId: String, repoName: String, srcId: String, dstNode: DriveNode, dstName: String): Boolean {
-//        val query = Query(Criteria.where(ID).isEqualTo(srcId)
-//            .and(TNode::projectId).isEqualTo(projectId)
-//            .and(TNode::repoName).isEqualTo(repoName)
-//            .and(TNode::deleted).isEqualTo(null)
-//        )
-//        val update = Update().set(TNode::name.name, dstName)
-//            .set(TNode::parentId.name, dstNode.id)
-//            .set(TNode::path.name, dstNode.fullPath)
-//            .set(TNode::fullPath.name, PathUtils.combineFullPath(dstNode.fullPath, dstName))
-//        return this.updateFirst(query, update).modifiedCount == 1L
-//    }
+    suspend fun renameNode(userId: String, projectId: String, repoName: String, srcId: String, dstNode: TNode, dstName: String): Boolean {
+        val query = Query(Criteria.where(ID).isEqualTo(srcId)
+            .and(TNode::projectId).isEqualTo(projectId)
+            .and(TNode::repoName).isEqualTo(repoName)
+            .and(TNode::deleted).isEqualTo(null)
+        )
+        val update = Update().set(TNode::name.name, dstName)
+            .set(TNode::parentId.name, dstNode.id)
+            .set(TNode::path.name, PathUtils.normalizePath(dstNode.fullPath))
+            .set(TNode::fullPath.name, PathUtils.combineFullPath(dstNode.fullPath, dstName))
+        return this.updateFirst(query, update).modifiedCount == 1L
+    }
 
     suspend fun updateSize(projectId: String, repoName: String, id: String, size: Long): Boolean {
         val query = Query(Criteria.where(ID).isEqualTo(id)

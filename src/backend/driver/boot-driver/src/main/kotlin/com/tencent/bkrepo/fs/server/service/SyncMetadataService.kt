@@ -1,6 +1,5 @@
 package com.tencent.bkrepo.fs.server.service
 
-import com.tencent.bkrepo.common.metadata.dao.node.NodeDao
 import com.tencent.bkrepo.common.metadata.dao.node.RNodeDao
 import com.tencent.bkrepo.common.metadata.model.NodeAttribute
 import com.tencent.bkrepo.common.metadata.service.metadata.RMetadataService
@@ -225,7 +224,7 @@ class SyncMetadataService(
         operator: String
     ): SyncOperationResult {
         // 检查源节点是否存在
-        val srcNode = nodeService.getNode(projectId, repoName, node.id)
+        val srcNode = nodeDao.findNodeById(projectId, repoName, node.id)
             ?: return SyncOperationResult.failure(
                 nodeId = node.id,
                 errorCode = SyncErrorCode.NODE_NOT_FOUND,
@@ -233,7 +232,7 @@ class SyncMetadataService(
             )
 
         // 检查目标父节点是否存在
-        val dstParentNode = nodeService.getNode(projectId, repoName, node.parentId)
+        val dstParentNode = nodeDao.findNodeById(projectId, repoName, node.parentId)
             ?: return SyncOperationResult.failure(
                 nodeId = node.id,
                 errorCode = SyncErrorCode.PARENT_NOT_FOUND,

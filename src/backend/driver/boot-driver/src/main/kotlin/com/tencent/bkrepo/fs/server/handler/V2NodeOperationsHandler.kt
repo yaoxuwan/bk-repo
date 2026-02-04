@@ -9,7 +9,6 @@ import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
 import com.tencent.bkrepo.fs.server.context.ReactiveArtifactContextHolder
 import com.tencent.bkrepo.fs.server.request.v2.user.UserBaseRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserChangeAttributeRequest
-import com.tencent.bkrepo.fs.server.request.v2.user.UserMoveRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeAttrRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeCreateRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeDeleteRequest
@@ -19,9 +18,7 @@ import com.tencent.bkrepo.fs.server.response.StatResponse
 import com.tencent.bkrepo.fs.server.service.FileNodeService
 import com.tencent.bkrepo.fs.server.service.NodeService
 import com.tencent.bkrepo.fs.server.utils.ReactiveResponseBuilder
-import com.tencent.bkrepo.fs.server.utils.ReactiveSecurityUtils
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
-import com.tencent.bkrepo.repository.pojo.metadata.MetadataSaveRequest
 import com.tencent.bkrepo.repository.pojo.node.NodeSizeInfo
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -126,19 +123,18 @@ class V2NodeOperationsHandler(
     /**
      * 移动节点
      * */
-    suspend fun move(request: ServerRequest): ServerResponse {
-        with(UserMoveRequest(request)) {
-            val src = nodeService.getNode(projectId, repoName, id)!!
-            val dstParent = nodeService.getNode(projectId, repoName, dstParentId)!!
-            val dst = nodeService.getNode(projectId, repoName, dstParentId, dstName)
-            if (overwrite) {
-                dst?.run { nodeService.deleteNode(projectId, repoName, dst.id) }
-            }
-            nodeService.renameNode(projectId, repoName, src, dstParent, dstName)
-//            fileNodeService.renameNodeBlocks(projectId, repoName, fullPath, dst)
-            return ReactiveResponseBuilder.success()
-        }
-    }
+//    suspend fun move(request: ServerRequest): ServerResponse {
+//        with(UserMoveRequest(request)) {
+//            val src = nodeService.getNode(projectId, repoName, id)!!
+//            val dstParent = nodeService.getNode(projectId, repoName, dstParentId)!!
+//            val dst = nodeService.getNode(projectId, repoName, dstParentId, dstName)
+//            if (overwrite) {
+//                dst?.run { nodeService.deleteNode(projectId, repoName, dst.id) }
+//            }
+//            nodeService.renameNode(projectId, repoName, src, dstParent, dstName)
+//            return ReactiveResponseBuilder.success()
+//        }
+//    }
 
 //    suspend fun info(request: ServerRequest): ServerResponse {
 //        with(V2NodeRequest(request)) {

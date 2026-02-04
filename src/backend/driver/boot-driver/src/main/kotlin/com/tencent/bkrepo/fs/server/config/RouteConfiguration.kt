@@ -101,6 +101,7 @@ class RouteConfiguration(
         // 阶段二：元数据同步 API
         "/v2/node".nest {
             POST("/sync/{projectId}/{repoName}", syncMetadataHandler::syncMetadata)
+            GET("/stat/{projectId}/{repoName}", v2NodeOperationsHandler::getStat)
         }
 
         "/node".nest {
@@ -121,12 +122,6 @@ class RouteConfiguration(
         "/v2/node".nest {
             GET("/attr/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::getNode)
             GET("/list/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::listNodes)
-            DELETE("/delete/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::deleteNode)
-            POST("/move/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::move)
-            POST("/create/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::createNode)
-            PUT("/change/attribute/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::changeAttribute)
-            GET("/stat/{projectId}/{repoName}", v2NodeOperationsHandler::getStat)
-            PUT("/set-length/{projectId}/{repoName}/{id}", v2NodeOperationsHandler::setLength)
         }
 
         "/v2/block".nest {

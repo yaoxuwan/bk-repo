@@ -85,9 +85,9 @@ class NodeService(
         return nodeDao.deleteNode(userId, projectId, repoName, id)
     }
 
-    suspend fun renameNode(projectId:String, repoName: String, srcNode: DriveNode, dstParentNode: DriveNode, destName: String) {
+    suspend fun renameNode(projectId:String, repoName: String, srcNode: TNode, dstParentNode: TNode, destName: String) {
         val userId = ReactiveSecurityUtils.getUser()
-//        nodeDao.renameNode(userId,  projectId, repoName, srcNode.id, dstParentNode, destName)
+        nodeDao.renameNode(userId,  projectId, repoName, srcNode.id!!, dstParentNode, destName)
     }
 
     suspend fun updateSize(projectId: String, repoName: String, id: String, size: Long): Boolean {
