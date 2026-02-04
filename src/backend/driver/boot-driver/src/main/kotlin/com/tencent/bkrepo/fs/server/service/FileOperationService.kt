@@ -43,7 +43,6 @@ import com.tencent.bkrepo.fs.server.request.BlockWriteRequest
 import com.tencent.bkrepo.fs.server.request.FlushRequest
 import com.tencent.bkrepo.fs.server.request.StreamRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserBlockRequest
-import com.tencent.bkrepo.fs.server.request.v2.user.UserFlushRequest
 import com.tencent.bkrepo.fs.server.service.node.RNodeService
 import com.tencent.bkrepo.fs.server.storage.CoArtifactFile
 import com.tencent.bkrepo.fs.server.storage.CoArtifactFileFactory
@@ -252,7 +251,7 @@ class FileOperationService(
     }
 
     private suspend fun resolveNodeFullPath(projectId: String, repoName: String, nodeId: String): String {
-        return v2NodeService.getNode(projectId, repoName, nodeId).fullPath
+        return v2NodeService.getNode(projectId, repoName, nodeId)!!.fullPath
     }
 }
 

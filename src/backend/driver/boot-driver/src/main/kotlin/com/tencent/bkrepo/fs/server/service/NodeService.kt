@@ -16,14 +16,15 @@ import com.tencent.bkrepo.fs.server.utils.ReactiveSecurityUtils
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class NodeService(
     private val nodeDao: RNodeDao
 ) {
 
-    suspend fun getNode(projectId: String, repoName: String, id: String): DriveNode {
-        return nodeDao.findNodeById(projectId, repoName, id)?.convert() ?: throw NodeNotFoundException(id)
+    suspend fun getNode(projectId: String, repoName: String, id: String): DriveNode? {
+        return nodeDao.findNodeById(projectId, repoName, id)?.convert()
     }
 
     suspend fun getNode(projectId: String, repoName: String, parentId: String, name: String): DriveNode? {
@@ -113,13 +114,16 @@ class NodeService(
             createdDate = this.createdDate,
             lastModifiedBy = this.lastModifiedBy,
             lastModifiedDate = this.lastModifiedDate,
-            lastAccessDate = this.lastAccessDate,
-            uid = nodeAttribute?.uid,
-            gid = nodeAttribute?.gid,
-            mode = nodeAttribute?.mode,
-            flags = nodeAttribute?.flags,
-            rdev = nodeAttribute?.rdev,
-            type = nodeAttribute?.type,
+            lastAccessDate = this.lastAccessDate ?: LocalDateTime.now(),
+            uid = nodeAttribute?.uid ?: NOBODY,
+            gid = nodeAttribute?.gid ?: NOBODY,
+            mode = nodeAttribute?.mode  ?: 0,
+            flags = nodeAttribute?.flags ?: 0,
+            rdev = nodeAttribute?.rdev  ?: 0,
+            type = nodeAttribute?.type  ?: 0,
+            deleted = false,
+            deletedAt = LocalDateTime.MIN,
+            nlink = 0
         )
     }
 }

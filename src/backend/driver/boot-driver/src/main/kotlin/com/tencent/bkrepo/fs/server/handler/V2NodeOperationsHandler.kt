@@ -7,7 +7,6 @@ import com.tencent.bkrepo.common.metadata.service.metadata.RMetadataService
 import com.tencent.bkrepo.common.metadata.service.repo.RRepositoryService
 import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
 import com.tencent.bkrepo.fs.server.context.ReactiveArtifactContextHolder
-import com.tencent.bkrepo.fs.server.request.v2.user.UserSetLengthRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserBaseRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserChangeAttributeRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserMoveRequest
@@ -15,6 +14,7 @@ import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeAttrRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeCreateRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodeDeleteRequest
 import com.tencent.bkrepo.fs.server.request.v2.user.UserNodePageRequest
+import com.tencent.bkrepo.fs.server.request.v2.user.UserSetLengthRequest
 import com.tencent.bkrepo.fs.server.response.StatResponse
 import com.tencent.bkrepo.fs.server.service.FileNodeService
 import com.tencent.bkrepo.fs.server.service.NodeService
@@ -23,7 +23,6 @@ import com.tencent.bkrepo.fs.server.utils.ReactiveSecurityUtils
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataSaveRequest
 import com.tencent.bkrepo.repository.pojo.node.NodeSizeInfo
-import com.tencent.bkrepo.repository.pojo.node.service.NodeSetLengthRequest
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
@@ -77,7 +76,7 @@ class V2NodeOperationsHandler(
     @Suppress("UNCHECKED_CAST")
     suspend fun changeAttribute(request: ServerRequest): ServerResponse {
         with(UserChangeAttributeRequest(request)) {
-            val node = nodeService.getNode(projectId, repoName, id)
+            val node = nodeService.getNode(projectId, repoName, id)!!
 
             val attributes = NodeAttribute(
                 uid = uid ?: node.uid ?: NOBODY,
@@ -129,8 +128,8 @@ class V2NodeOperationsHandler(
      * */
     suspend fun move(request: ServerRequest): ServerResponse {
         with(UserMoveRequest(request)) {
-            val src = nodeService.getNode(projectId, repoName, id)
-            val dstParent = nodeService.getNode(projectId, repoName, dstParentId)
+            val src = nodeService.getNode(projectId, repoName, id)!!
+            val dstParent = nodeService.getNode(projectId, repoName, dstParentId)!!
             val dst = nodeService.getNode(projectId, repoName, dstParentId, dstName)
             if (overwrite) {
                 dst?.run { nodeService.deleteNode(projectId, repoName, dst.id) }

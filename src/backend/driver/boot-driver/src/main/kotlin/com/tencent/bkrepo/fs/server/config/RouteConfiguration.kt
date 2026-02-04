@@ -43,6 +43,7 @@ import com.tencent.bkrepo.fs.server.handler.ClientHandler
 import com.tencent.bkrepo.fs.server.handler.FileOperationsHandler
 import com.tencent.bkrepo.fs.server.handler.LoginHandler
 import com.tencent.bkrepo.fs.server.handler.NodeOperationsHandler
+import com.tencent.bkrepo.fs.server.handler.SyncMetadataHandler
 import com.tencent.bkrepo.fs.server.handler.V2BlockOperationsHandler
 import com.tencent.bkrepo.fs.server.handler.V2NodeOperationsHandler
 import com.tencent.bkrepo.fs.server.handler.service.FsNodeHandler
@@ -74,6 +75,7 @@ class RouteConfiguration(
     private val loginHandler: LoginHandler,
     private val fsNodeHandler: FsNodeHandler,
     private val clientHandler: ClientHandler,
+    private val syncMetadataHandler: SyncMetadataHandler,
     private val authHandlerFilterFunction: AuthHandlerFilterFunction,
     private val serverMetrics: ServerMetrics,
     private val devXAccessFilter: DevXAccessFilter,
@@ -94,6 +96,11 @@ class RouteConfiguration(
 
         "/service/block".nest {
             GET("/list$DEFAULT_MAPPING_URI", fsNodeHandler::listBlocks)
+        }
+
+        // 阶段二：元数据同步 API
+        "/v2/node".nest {
+            POST("/sync/{projectId}/{repoName}", syncMetadataHandler::syncMetadata)
         }
 
         "/node".nest {
