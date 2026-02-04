@@ -116,7 +116,7 @@ class SyncMetadataService(
             repoName = repoName,
             parentId = node.parentId,
             name = node.name,
-            folder = node.type == 2,
+            folder = node.folder,
             size = node.size,
             mode = node.mode,
             flags = node.flags,

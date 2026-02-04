@@ -97,5 +97,5 @@ data class DriveNode(
     /**
      * 删除时间（纳秒精度）
      */
-    val deletedAt: LocalDateTime,
+    val deletedAt: LocalDateTime?,
 )
