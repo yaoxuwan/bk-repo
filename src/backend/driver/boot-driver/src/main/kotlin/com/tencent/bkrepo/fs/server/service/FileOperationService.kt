@@ -251,7 +251,8 @@ class FileOperationService(
     }
 
     private suspend fun resolveNodeFullPath(projectId: String, repoName: String, nodeId: String): String {
-        return v2NodeService.getNode(projectId, repoName, nodeId)!!.fullPath
+//        return v2NodeService.getNode(projectId, repoName, nodeId)!!.fullPath
+        return ""
     }
 }
 

@@ -87,7 +87,7 @@ class NodeService(
 
     suspend fun renameNode(projectId:String, repoName: String, srcNode: DriveNode, dstParentNode: DriveNode, destName: String) {
         val userId = ReactiveSecurityUtils.getUser()
-        nodeDao.renameNode(userId,  projectId, repoName, srcNode.id, dstParentNode, destName)
+//        nodeDao.renameNode(userId,  projectId, repoName, srcNode.id, dstParentNode, destName)
     }
 
     suspend fun updateSize(projectId: String, repoName: String, id: String, size: Long): Boolean {
@@ -104,12 +104,10 @@ class NodeService(
 
         return DriveNode(
             id = this.id!!,
-            fullPath = this.fullPath,
             size = this.size,
             parentId = this.parentId ?: StringPool.EMPTY,
             name = this.name,
             folder = this.folder,
-            path = this.path,
             createdBy = this.createdBy,
             createdDate = this.createdDate,
             lastModifiedBy = this.lastModifiedBy,

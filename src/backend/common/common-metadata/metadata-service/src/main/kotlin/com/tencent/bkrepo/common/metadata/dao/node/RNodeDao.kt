@@ -223,18 +223,18 @@ class RNodeDao: HashShardingMongoReactiveDao<TNode>() {
         return this.findOne(query)
     }
 
-    suspend fun renameNode(userId: String, projectId: String, repoName: String, srcId: String, dstNode: DriveNode, dstName: String): Boolean {
-        val query = Query(Criteria.where(ID).isEqualTo(srcId)
-            .and(TNode::projectId).isEqualTo(projectId)
-            .and(TNode::repoName).isEqualTo(repoName)
-            .and(TNode::deleted).isEqualTo(null)
-        )
-        val update = Update().set(TNode::name.name, dstName)
-            .set(TNode::parentId.name, dstNode.id)
-            .set(TNode::path.name, dstNode.fullPath)
-            .set(TNode::fullPath.name, PathUtils.combineFullPath(dstNode.fullPath, dstName))
-        return this.updateFirst(query, update).modifiedCount == 1L
-    }
+//    suspend fun renameNode(userId: String, projectId: String, repoName: String, srcId: String, dstNode: DriveNode, dstName: String): Boolean {
+//        val query = Query(Criteria.where(ID).isEqualTo(srcId)
+//            .and(TNode::projectId).isEqualTo(projectId)
+//            .and(TNode::repoName).isEqualTo(repoName)
+//            .and(TNode::deleted).isEqualTo(null)
+//        )
+//        val update = Update().set(TNode::name.name, dstName)
+//            .set(TNode::parentId.name, dstNode.id)
+//            .set(TNode::path.name, dstNode.fullPath)
+//            .set(TNode::fullPath.name, PathUtils.combineFullPath(dstNode.fullPath, dstName))
+//        return this.updateFirst(query, update).modifiedCount == 1L
+//    }
 
     suspend fun updateSize(projectId: String, repoName: String, id: String, size: Long): Boolean {
         val query = Query(Criteria.where(ID).isEqualTo(id)

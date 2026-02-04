@@ -91,14 +91,14 @@ class V2NodeOperationsHandler(
                 value = attributes
             )
             // TODO: 根据id保存metadata
-            val saveMetaDataRequest = MetadataSaveRequest(
-                projectId = projectId,
-                repoName = repoName,
-                fullPath = node.fullPath,
-                nodeMetadata = listOf(fsAttr),
-                operator = ReactiveSecurityUtils.getUser()
-            )
-            metadataService.saveMetadata(saveMetaDataRequest)
+//            val saveMetaDataRequest = MetadataSaveRequest(
+//                projectId = projectId,
+//                repoName = repoName,
+//                fullPath = node.fullPath,
+//                nodeMetadata = listOf(fsAttr),
+//                operator = ReactiveSecurityUtils.getUser()
+//            )
+//            metadataService.saveMetadata(saveMetaDataRequest)
             return ReactiveResponseBuilder.success(attributes)
         }
     }

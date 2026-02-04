@@ -19,19 +19,9 @@ data class DriveNode(
     val name: String,
 
     /**
-     * 完整路径
-     */
-    val fullPath: String,
-
-    /**
      * 是否为目录
      */
     val folder: Boolean,
-
-    /**
-     * 路径（不含文件名）
-     */
-    val path: String,
 
     /**
      * 文件大小（字节）

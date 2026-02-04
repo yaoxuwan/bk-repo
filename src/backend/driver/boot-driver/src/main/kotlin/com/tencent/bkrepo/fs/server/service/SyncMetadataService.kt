@@ -1,5 +1,7 @@
 package com.tencent.bkrepo.fs.server.service
 
+import com.tencent.bkrepo.common.metadata.dao.node.NodeDao
+import com.tencent.bkrepo.common.metadata.dao.node.RNodeDao
 import com.tencent.bkrepo.common.metadata.model.NodeAttribute
 import com.tencent.bkrepo.common.metadata.service.metadata.RMetadataService
 import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service
 class SyncMetadataService(
     private val nodeService: NodeService,
     private val metadataService: RMetadataService,
+    private val nodeDao: RNodeDao,
 ) {
     /**
      * 同步元数据
@@ -168,7 +171,7 @@ class SyncMetadataService(
         val saveRequest = MetadataSaveRequest(
             projectId = projectId,
             repoName = repoName,
-            fullPath = existingNode.fullPath,
+            fullPath = nodeDao.findNodeById(projectId, repoName, node.id)!!.fullPath,
             nodeMetadata = listOf(fsAttr),
             operator = operator
         )
