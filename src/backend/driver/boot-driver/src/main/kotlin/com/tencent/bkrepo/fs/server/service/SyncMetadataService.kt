@@ -1,18 +1,22 @@
 package com.tencent.bkrepo.fs.server.service
 
+import com.tencent.bkrepo.common.artifact.exception.NodeNotFoundException
+import com.tencent.bkrepo.common.artifact.path.PathUtils
+import com.tencent.bkrepo.common.metadata.constant.FAKE_CRC64_ECMA
+import com.tencent.bkrepo.common.metadata.constant.FAKE_MD5
+import com.tencent.bkrepo.common.metadata.constant.FAKE_SHA256
 import com.tencent.bkrepo.common.metadata.dao.node.RNodeDao
 import com.tencent.bkrepo.common.metadata.model.NodeAttribute
+import com.tencent.bkrepo.common.metadata.model.TMetadata
+import com.tencent.bkrepo.common.metadata.model.TNode
 import com.tencent.bkrepo.common.metadata.service.metadata.RMetadataService
 import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
 import com.tencent.bkrepo.fs.server.pojo.DriveNode
 import com.tencent.bkrepo.fs.server.request.SyncMetadataRequest
 import com.tencent.bkrepo.fs.server.request.SyncOperation
-import com.tencent.bkrepo.fs.server.request.v2.service.NodeCreateRequest
 import com.tencent.bkrepo.fs.server.response.SyncErrorCode
 import com.tencent.bkrepo.fs.server.response.SyncMetadataResponse
 import com.tencent.bkrepo.fs.server.response.SyncOperationResult
-import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
-import com.tencent.bkrepo.repository.pojo.metadata.MetadataSaveRequest
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -95,36 +99,8 @@ class SyncMetadataService(
         node: DriveNode,
         operator: String
     ): SyncOperationResult {
-        // 构建文件属性
-        val attributes = NodeAttribute(
-            uid = node.uid,
-            gid = node.gid,
-            mode = node.mode,
-            flags = node.flags,
-            rdev = node.rdev,
-            type = node.type
-        )
-        val fsAttr = MetadataModel(
-            key = FS_ATTR_KEY,
-            value = attributes
-        )
-
-        val createRequest = NodeCreateRequest(
-            id = node.id,
-            projectId = projectId,
-            repoName = repoName,
-            parentId = node.parentId,
-            name = node.name,
-            folder = node.folder,
-            size = node.size,
-            mode = node.mode,
-            flags = node.flags,
-            rdev = node.rdev,
-            type = node.type
-        )
-
-        val createdNode = nodeService.createNode(createRequest)
-        logger.info("Created node: $projectId/$repoName/${createdNode.id}")
+        nodeDao.save(node.convert(projectId, repoName))
+        logger.info("Created node: $projectId/$repoName/${node.id}")
 
         return SyncOperationResult.success(
             nodeId = node.id,
@@ -140,42 +116,7 @@ class SyncMetadataService(
         node: DriveNode,
         operator: String
     ): SyncOperationResult {
-        // 检查节点是否存在
-        val existingNode = nodeService.getNode(projectId, repoName, node.id)
-            ?: return SyncOperationResult.failure(
-                nodeId = node.id,
-                errorCode = SyncErrorCode.NODE_NOT_FOUND,
-                error = "Node not found: ${node.id}"
-            )
-
-        // 更新节点大小（如果有变化）
-        if (node.size != existingNode.size) {
-            nodeService.updateSize(projectId, repoName, node.id, node.size)
-        }
-
-        // 更新元数据
-        val attributes = NodeAttribute(
-            uid = node.uid,
-            gid = node.gid,
-            mode = node.mode,
-            flags = node.flags,
-            rdev = node.rdev,
-            type = node.type
-        )
-        val fsAttr = MetadataModel(
-            key = FS_ATTR_KEY,
-            value = attributes
-        )
-
-        val saveRequest = MetadataSaveRequest(
-            projectId = projectId,
-            repoName = repoName,
-            fullPath = nodeDao.findNodeById(projectId, repoName, node.id)!!.fullPath,
-            nodeMetadata = listOf(fsAttr),
-            operator = operator
-        )
-        metadataService.saveMetadata(saveRequest)
-
+        nodeDao.save(node.convert(projectId, repoName))
         logger.info("Updated node: $projectId/$repoName/${node.id}")
 
         return SyncOperationResult.success(
@@ -192,24 +133,7 @@ class SyncMetadataService(
         node: DriveNode,
         operator: String
     ): SyncOperationResult {
-        // 检查节点是否存在
-        val existingNode = nodeService.getNode(projectId, repoName, node.id)
-        if (existingNode == null) {
-            // 节点不存在，可能已经被删除，返回成功
-            logger.warn("Node already deleted or not found: $projectId/$repoName/${node.id}")
-            return SyncOperationResult.success(nodeId = node.id)
-        }
-
-        // 删除节点
-        val deleted = nodeService.deleteNode(projectId, repoName, node.id)
-        if (!deleted) {
-            return SyncOperationResult.failure(
-                nodeId = node.id,
-                errorCode = SyncErrorCode.INTERNAL_ERROR,
-                error = "Failed to delete node: ${node.id}"
-            )
-        }
-
+        nodeDao.save(node.convert(projectId, repoName))
         logger.info("Deleted node: $projectId/$repoName/${node.id}")
         return SyncOperationResult.success(nodeId = node.id)
     }
@@ -223,22 +147,6 @@ class SyncMetadataService(
         node: DriveNode,
         operator: String
     ): SyncOperationResult {
-        // 检查源节点是否存在
-        val srcNode = nodeDao.findNodeById(projectId, repoName, node.id)
-            ?: return SyncOperationResult.failure(
-                nodeId = node.id,
-                errorCode = SyncErrorCode.NODE_NOT_FOUND,
-                error = "Source node not found: ${node.id}"
-            )
-
-        // 检查目标父节点是否存在
-        val dstParentNode = nodeDao.findNodeById(projectId, repoName, node.parentId)
-            ?: return SyncOperationResult.failure(
-                nodeId = node.id,
-                errorCode = SyncErrorCode.PARENT_NOT_FOUND,
-                error = "Target parent node not found: ${node.parentId}"
-            )
-
         // 检查目标位置是否已存在同名节点
         val existingTarget = nodeService.getNode(projectId, repoName, node.parentId, node.name)
         if (existingTarget != null && existingTarget.id != node.id) {
@@ -249,13 +157,50 @@ class SyncMetadataService(
             )
         }
 
-        // 执行重命名/移动操作
-        nodeService.renameNode(projectId, repoName, srcNode, dstParentNode, node.name)
+        nodeDao.save(node.convert(projectId, repoName))
 
         logger.info("Moved node: $projectId/$repoName/${node.id} to ${node.parentId}/${node.name}")
 
         return SyncOperationResult.success(
             nodeId = node.id,
+        )
+    }
+
+    suspend fun DriveNode.convert(projectId: String, repoName: String): TNode {
+        val parentNode = nodeDao.findNodeById(projectId, repoName, parentId)
+            ?: throw NodeNotFoundException(parentId)
+        val attributes = NodeAttribute(
+            uid = uid,
+            gid = gid,
+            mode = mode,
+            flags = flags,
+            rdev = rdev,
+            type = type
+        )
+        val fsAttr = TMetadata(
+            key = FS_ATTR_KEY,
+            value = attributes
+        )
+        return TNode(
+            id = id,
+            createdBy = createdBy,
+            createdDate = createdDate,
+            lastModifiedBy = lastModifiedBy,
+            lastModifiedDate = lastModifiedDate,
+            lastAccessDate = lastAccessDate,
+            folder = folder,
+            path = PathUtils.normalizePath(parentNode.fullPath),
+            name = name,
+            fullPath = PathUtils.combineFullPath(parentNode.fullPath, name),
+            size = size,
+            sha256 = FAKE_SHA256,
+            md5 = FAKE_MD5,
+            crc64ecma = FAKE_CRC64_ECMA,
+            deleted = deletedAt,
+            metadata = mutableListOf(fsAttr),
+            parentId = parentId,
+            projectId = projectId,
+            repoName = repoName
         )
     }
 
