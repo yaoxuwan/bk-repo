@@ -1,14 +1,29 @@
 package com.tencent.bkrepo.media.stream
 
+import com.tencent.bk.audit.context.ActionAuditContext
+import com.tencent.bkrepo.common.api.exception.SystemErrorException
+import com.tencent.bkrepo.common.api.message.CommonMessageCode
+import com.tencent.bkrepo.common.api.util.CRC64
 import com.tencent.bkrepo.common.artifact.api.ArtifactFile
 import com.tencent.bkrepo.common.artifact.api.ArtifactInfo
 import com.tencent.bkrepo.common.artifact.api.toArtifactFile
 import com.tencent.bkrepo.common.artifact.manager.StorageManager
+import com.tencent.bkrepo.common.metadata.constant.FAKE_MD5
+import com.tencent.bkrepo.common.metadata.constant.FAKE_SHA256
+import com.tencent.bkrepo.common.metadata.model.NodeAttribute
+import com.tencent.bkrepo.common.metadata.model.TBlockNode
+import com.tencent.bkrepo.common.metadata.service.blocknode.BlockNodeService
+import com.tencent.bkrepo.common.metadata.service.node.NodeService
+import com.tencent.bkrepo.common.storage.core.StorageService
+import com.tencent.bkrepo.fs.server.constant.FS_ATTR_KEY
+import com.tencent.bkrepo.fs.server.constant.UPLOADID_KEY
 import com.tencent.bkrepo.media.service.TranscodeService
 import com.tencent.bkrepo.repository.pojo.metadata.MetadataModel
 import com.tencent.bkrepo.repository.pojo.node.service.NodeCreateRequest
 import com.tencent.bkrepo.repository.pojo.repo.RepositoryDetail
+import org.slf4j.LoggerFactory
 import java.io.File
+import java.time.LocalDateTime
 
 /**
  * 将文件保存为制品构件
@@ -21,6 +36,9 @@ class MediaArtifactFileConsumer(
     private val author: String,
     private val path: String,
     private val transcodeConfig: TranscodeConfig? = null,
+    private val storageService: StorageService,
+    private val blockNodeService: BlockNodeService,
+    private val nodeService: NodeService
 ) : FileConsumer {
 
     private val startTime = System.currentTimeMillis()
@@ -58,6 +76,123 @@ class MediaArtifactFileConsumer(
         return artifactInfo
     }
 
+
+    /**
+     * 视频流异常中断时，存储分块节点
+     * @param uploadId 上传id，用于关联分块节点
+     */
+    private fun storeBlockNode(artifactInfo: ArtifactInfo, file: ArtifactFile, uploadId: String) {
+        with(artifactInfo) {
+            val oldBlockNodes = blockNodeService.listBlocksInUploadId(
+                projectId,
+                repoName,
+                getArtifactFullPath(),
+                uploadId = uploadId
+            )
+            val startPos = if (oldBlockNodes.isEmpty()) {
+                0L
+            } else {
+                oldBlockNodes.maxBy { it.endPos }.endPos
+            }
+            val blockNode = TBlockNode(
+                projectId = artifactInfo.projectId,
+                repoName = artifactInfo.repoName,
+                nodeFullPath = artifactInfo.getArtifactFullPath(),
+                size = file.getSize(),
+                sha256 = file.getFileSha256(),
+                crc64ecma = file.getFileCrc64ecma(),
+                startPos = startPos,
+                uploadId = uploadId,
+                createdBy = userId,
+                createdDate = LocalDateTime.now(),
+            )
+            val digest = file.getFileSha256()
+            val stored = storageService.store(digest, file, repo.storageCredentials)
+            try {
+                blockNodeService.createBlock(blockNode, repo.storageCredentials)
+            } catch (e: Exception) {
+                if (stored > 1) {
+                    storageService.delete(digest, repo.storageCredentials)
+                }
+                throw e
+            }
+        }
+    }
+
+    /**
+     * 视频流正常结束时，完成分块存储，创建对应node
+     */
+    // TODO 需要一个定时任务，定时检查分块节点是否完成。防止视频流异常退出后再没有重连
+    private fun completeBlockNode(artifactInfo: ArtifactInfo, uploadId: String) {
+        with(artifactInfo) {
+            val blockNodes = blockNodeService.listBlocksInUploadId(
+                projectId,
+                repoName,
+                getArtifactFullPath(),
+                uploadId = uploadId
+            )
+            if (blockNodes.isEmpty()) {
+                return
+            }
+            val totalSize = blockNodes.sumOf { it.size }
+            val crc64ecma = crc64ecma(blockNodes)
+            blockBaseNodeCreate(userId, artifactInfo, uploadId, totalSize, crc64ecma)
+            blockNodeService.updateBlockUploadId(projectId, repoName, getArtifactFullPath(), uploadId)
+        }
+    }
+
+    fun blockBaseNodeCreate(
+        userId: String,
+        artifactInfo: ArtifactInfo,
+        uploadId: String,
+        fileSize: Long,
+        crc64ecma: String
+    ) {
+        val attributes = NodeAttribute(
+            uid = NodeAttribute.NOBODY,
+            gid = NodeAttribute.NOBODY,
+            mode = NodeAttribute.DEFAULT_MODE
+        )
+        val metadata = mutableListOf<MetadataModel>()
+        metadata.add(MetadataModel(UPLOADID_KEY, uploadId, system = true))
+        metadata.add(MetadataModel(key = FS_ATTR_KEY, value = attributes))
+
+        val request = NodeCreateRequest(
+            projectId = artifactInfo.projectId,
+            repoName = artifactInfo.repoName,
+            folder = false,
+            fullPath = artifactInfo.getArtifactFullPath(),
+            sha256 = FAKE_SHA256,
+            md5 = FAKE_MD5,
+            crc64ecma = crc64ecma,
+            operator = userId,
+            size = fileSize,
+            overwrite = false,
+            nodeMetadata = metadata,
+            separate = true,
+        )
+        ActionAuditContext.current().setInstance(request)
+        nodeService.createNode(request)
+    }
+
+    private fun crc64ecma(blocks: List<TBlockNode>): String {
+        var crc64ecma = 0L
+        blocks.sortedBy { it.startPos }.forEachIndexed { index, block ->
+            val blockCrc64ecma = block.crc64ecma?.let { CRC64.fromUnsignedString(it).value }
+            if (blockCrc64ecma == null) {
+                logger.error("crc64ecma not found for block node[$block]")
+                throw SystemErrorException(CommonMessageCode.SYSTEM_ERROR)
+            }
+            crc64ecma = if (index == 0) {
+                blockCrc64ecma
+            } else {
+                CRC64.combine(crc64ecma, blockCrc64ecma, block.size)
+            }
+        }
+
+        return CRC64(crc64ecma).unsignedStringValue()
+    }
+
     private fun buildNodeCreateRequest(
         artifactInfo: ArtifactInfo,
         file: ArtifactFile,
@@ -89,5 +224,6 @@ class MediaArtifactFileConsumer(
         private const val METADATA_KEY_MEDIA_START_TIME = "media.startTime"
         private const val METADATA_KEY_MEDIA_STOP_TIME = "media.stopTime"
         private const val METADATA_KEY_MEDIA_AUTHOR = "media.author"
+        private val logger = LoggerFactory.getLogger(MediaArtifactFileConsumer::class.java)
     }
 }
