@@ -54,6 +54,7 @@ import com.tencent.bkrepo.fs.server.service.PermissionService
 import com.tencent.bkrepo.fs.server.utils.DevxWorkspaceUtils
 import com.tencent.bkrepo.fs.server.utils.IoaUtils
 import com.tencent.bkrepo.fs.server.utils.ReactiveResponseBuilder
+import com.tencent.bkrepo.fs.server.utils.ReactiveSecurityUtils
 import com.tencent.bkrepo.fs.server.utils.ReactiveSecurityUtils.bearerToken
 import com.tencent.bkrepo.fs.server.utils.SecurityManager
 import kotlinx.coroutines.reactor.awaitSingle
@@ -96,7 +97,17 @@ class LoginHandler(
     }
 
     /**
-     * 用户态登录，客户端页面登录后用ticket/token换取jwt token
+     * 使用个人身份的jwt token登录，获取带仓库权限的token
+     */
+    suspend fun tokenLogin(request: ServerRequest): ServerResponse {
+        val projectId = request.pathVariable(PROJECT_ID)
+        val repoName = request.pathVariable(REPO_NAME)
+        val userId = ReactiveSecurityUtils.getUser()
+        return ReactiveResponseBuilder.success(createToken(projectId, repoName, userId))
+    }
+
+    /**
+     * 用户态登录，客户端页面登录后用ticket/token换取个人身份的jwt token，没有仓库权限
      */
     suspend fun userLogin(request: ServerRequest): ServerResponse {
         val userId = request.attribute(USER_KEY).getOrNull()?.toString()
