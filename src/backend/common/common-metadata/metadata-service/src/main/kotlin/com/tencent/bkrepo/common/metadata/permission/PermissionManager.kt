@@ -280,6 +280,9 @@ open class PermissionManager(
         }
         val platformId = SecurityUtils.getPlatformId()
         checkAnonymous(userId, platformId)
+        if (repoInfo.visibility == RepositoryVisibility.SYSTEM) {
+            return true
+        }
         // 加载仓库信息
         val systemValue = repoInfo.configuration.settings["system"]
         val system = try {

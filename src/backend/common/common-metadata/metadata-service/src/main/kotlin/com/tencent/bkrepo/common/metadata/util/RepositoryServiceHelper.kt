@@ -373,9 +373,13 @@ class RepositoryServiceHelper(
                             and(TRepository::display).isEqualTo(option.display)
                         }
                     }
-                    // 展示 visibility 为空或为 PROJECT 的仓库，以及 visibility 为 PERSONAL 且 owner 为本人的仓库
+                    // 展示项目级和系统级仓库，以及 visibility 为 PERSONAL 且 owner 为本人的仓库
                     orOperator(
-                        where(TRepository::visibility).`in`(null, RepositoryVisibility.PROJECT),
+                        where(TRepository::visibility).`in`(
+                            null,
+                            RepositoryVisibility.PROJECT,
+                            RepositoryVisibility.SYSTEM
+                        ),
                         where(TRepository::visibility).isEqualTo(RepositoryVisibility.PERSONAL)
                             .and(TRepository::owner.name).isEqualTo(operator)
                     )
